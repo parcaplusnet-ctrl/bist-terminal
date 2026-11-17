@@ -1,6 +1,6 @@
 {
   "adim": "Tamamlandı",
-  "at": "2026-11-17T11:24:30Z",
+  "at": "2026-11-17T12:30:00Z",
   "durum": "bitti",
   "en_iyi": [
     {
@@ -8,31 +8,23 @@
       "puan": 7.75
     },
     {
-      "kod": "BSOKE",
+      "kod": "PAHOL",
       "puan": 7.5
     },
     {
-      "kod": "KLRHO",
+      "kod": "ISKPL",
+      "puan": 7.25
+    },
+    {
+      "kod": "CITAS",
       "puan": 7.25
     },
     {
       "kod": "IHLAS",
-      "puan": 7.25
-    },
-    {
-      "kod": "TKNKA",
       "puan": 7
     },
     {
-      "kod": "KRGYO",
-      "puan": 7
-    },
-    {
-      "kod": "ENERY",
-      "puan": 7
-    },
-    {
-      "kod": "TCELL",
+      "kod": "BAHKM",
       "puan": 7
     }
   ],
@@ -40,15 +32,15 @@
   "islenen": 625,
   "oturum": "Öğleden sonra",
   "sayac": {
-    "elenen": 617,
-    "kap": 8,
+    "elenen": 609,
+    "kap": 16,
     "puanlanan": 625,
-    "uygun": 8
+    "uygun": 16
   },
   "son": [],
   "stop_olan": [],
   "suresi_dolan": [],
-  "tarama": "17.11 14:21",
+  "tarama": "17.11 15:23",
   "toplam": 625,
   "ulak": {
     "1S": 0,
