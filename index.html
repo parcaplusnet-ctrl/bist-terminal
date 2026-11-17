@@ -621,6 +621,10 @@ let SP=[];function onLive(d){LIVE=d;const was=liveOn;liveOn=d&&d.durum==="tarani
 function load(){fetch("veri.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;D=j;eskiDuzelt(D);applyFiyat();render()}).catch(()=>txt($("tT"),"Tarama verisi okunamadı, sayfayı yenileyin."))}
 load();setInterval(()=>{if(!liveOn)load()},60000);setInterval(()=>{if(LIVE)onLive(LIVE);txt($("nxt"),nextScan())},60000);
 (async()=>{try{const db=await window.claude?.use?.("db");if(!db)return;db.doc("canli/durum").onSnapshot(s=>{if(s.exists)onLive(s.data())},()=>{});db.doc("canli/fiyat").onSnapshot(s=>{if(s.exists)onFiyat(s.data())},()=>{});db.doc("canli/lab").onSnapshot(s=>{if(s.exists){LC=s.data();labSec()}},()=>{})}catch(e){}})();
+/* GitHub: Claude veritabanı yok; canlı belgeler depodaki canli/*.json dosyalarından okunur (eşitleme görevi günceller) */
+(function(){if(window.claude)return;const son={};async function oku(ad,fn){try{const r=await fetch("canli/"+ad+".json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const t=await r.text();if(son[ad]===t)return;son[ad]=t;fn(JSON.parse(t))}catch(e){}}
+function tur(){oku("durum",d=>onLive(d));oku("fiyat",d=>onFiyat(d));oku("lab",d=>{LC=d;labSec()})}
+setTimeout(tur,1500);setInterval(tur,60000)})();
 </script>
 <script>
 /* sektör rotasyon haritası */
