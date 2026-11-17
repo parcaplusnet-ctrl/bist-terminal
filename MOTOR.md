@@ -137,3 +137,8 @@ Genel isabet = (hedefe ulaşan "Başarılı" + "Kâr korundu") / sonuçlanan (Ba
 - Lab puanında iç içe özellikler (parçaları birbirinin alt kümesi) aynı kanıtı iki kez saymaz; yalnız en değerlisi puana girer.
 - `adaylar` her çalışmada veri.json içine `saglik` yazar (lab puan tarihi, eşleşen hisse sayısı, uyarılar). Sayfa kırmızı "SİSTEM UYARISI" bandını uyarı varsa ya da hafta içi 10:40-19:00 arasında veri 100 dakikadan eskiyse gösterir.
 - Eski `dogrulama` alanı kaldırıldı (silinmiş görevden kalan bayat rapor).
+
+## 17.11 Güncelleme zamanı kuralları
+- Her bölümün "veri" açıklaması motor tarafından gerçek veri zamanından üretilir (kripto, endeks, sektör); elle yazılmış sabit metin kalmaz.
+- Sektör projeksiyon görevi Cumartesi 10:16'da çalışır: Cuma günü ABD kapanışı (00:00 İstanbul) ancak o zaman oluşur, bu yüzden ABD satırları artık aynı hafta sonuçlanır. Önceki Cuma 18:46 saatinde ABD seansı henüz açıktı.
+- Sayfada kontrol tarihi geçmiş ve sonucu hâlâ "Bekliyor" olan projeksiyon satırı "ölçüm gecikti" yazar.

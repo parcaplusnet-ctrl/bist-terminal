@@ -735,7 +735,7 @@ def cmd_kaydet(a):
     if os.path.exists(kp) and "kripto" in a.kodlar:
         C = json.load(open(kp)); K = V.setdefault("kripto", {})
         K.setdefault("gecmis", []).append({"tarama": K.get("tarama"), "btc": K.get("btc"), "grup": K.get("grup")})
-        K["tarama"] = t; K["btc"] = {**C["btc"], "puan": None}; K["grup"] = C["grup"]
+        K["tarama"] = t; K["btc"] = {**C["btc"], "puan": None}; K["grup"] = C["grup"]; K["veri"] = f"TradingView verisi {C.get('tarih', t)} (15 dk gecikmeli); BTC anlık (Bitstamp)"
         acik = {h["kod"]: h for h in K.get("hisseler", []) if h.get("sonuc") == "Bekliyor"}
         yeni = []
         for h in C["hisseler"]:
@@ -755,7 +755,7 @@ def cmd_kaydet(a):
         if L.get("bist"):
             L.setdefault("gecmis", []).append({"tarama": L.get("tarama"), "bist": [{k: x[k] for k in ("kod", "kadran", "rs", "ivme", "kayma", "net_akis", "hafta", "ay")} for x in L["bist"]["sektorler"]],
                                                "abd": [{k: x[k] for k in ("kod", "kadran", "rs", "ivme", "kayma", "net_akis", "hafta", "ay")} for x in L["abd"]["sektorler"]], "makro": L.get("makro")})
-        L["tarama"] = t; L["veri"] = "TradingView · bulut"; L["bist"] = S["bist"]; L["abd"] = S["abd"]; L["makro"] = S["makro"]
+        L["tarama"] = t; L["veri"] = f"TradingView · bulut · veri {t}"; L["bist"] = S["bist"]; L["abd"] = S["abd"]; L["makro"] = S["makro"]
         eski = [p for p in L.get("projeksiyon", []) if p.get("sonuc") == "Bekliyor"]
         L.setdefault("projeksiyon_arsiv", []).extend([p for p in L.get("projeksiyon", []) if p.get("sonuc") != "Bekliyor"])
         L["projeksiyon"] = eski + ([] if eski else S["projeksiyon"]); yap.append("sektor")
@@ -769,7 +769,7 @@ def cmd_kaydet(a):
                                "rv": s["rv"], "puan": s["puan"], "pk": s["pk"], "tk": s["tk"], "stop": s["stop"], "stop_yuzde": s["stop_yuzde"], "hedef": s["hedef"], "rsi": s["rsi"],
                                "sebep": s["sebep"], "tarama": t, "bitis": bitis_b, "sonuc": "Bekliyor", "degisim": None, "max_degisim": None, "min_degisim": None, "kontrol": None, "kontrol_fiyat": None}
                               for k, L2 in E["secim"].items() for s in L2]
-            LB["tarama"] = t; yap.append("endeks")
+            LB["tarama"] = t; LB["veri"] = f"{E.get('tarih', t)} BIST taraması"; yap.append("endeks")
     json.dump(V, open(a.veri, "w"), ensure_ascii=False); print("KAYDET:", yap or "değişiklik yok")
 
 # ---------------------------------------------------------------------------
