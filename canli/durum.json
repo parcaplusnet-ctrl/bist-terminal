@@ -1,0 +1,851 @@
+{
+  "adim": "Tamamlandı",
+  "at": "2026-11-17T10:26:32Z",
+  "durum": "bitti",
+  "en_iyi": [
+    {
+      "kod": "LIDER",
+      "puan": 7.452
+    },
+    {
+      "kod": "PRZMA",
+      "puan": 7.452
+    },
+    {
+      "kod": "GRTHO",
+      "puan": 7.053
+    },
+    {
+      "kod": "BINBN",
+      "puan": 6.73
+    },
+    {
+      "kod": "SVGYO",
+      "puan": 6.432
+    },
+    {
+      "kod": "INFO",
+      "puan": 6.067
+    },
+    {
+      "kod": "SELEC",
+      "puan": 6.013
+    },
+    {
+      "kod": "ODINE",
+      "puan": 5.983
+    },
+    {
+      "kod": "EGEGY",
+      "puan": 5.471
+    },
+    {
+      "kod": "KUYAS",
+      "puan": 5.398
+    }
+  ],
+  "hedefe_ulasan": [],
+  "islenen": 618,
+  "oturum": "Öğle",
+  "sayac": {
+    "elenen": 597,
+    "kap": 46,
+    "puanlanan": 618,
+    "uygun": 21
+  },
+  "son": [
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 6.14,
+      "kap": null,
+      "kod": "BSOKE",
+      "nihai": 5.296,
+      "not": "10/12 ölçüt, Supertrend yukarı · zarardan kâra · model %53",
+      "parca": {
+        "Grafik": -0.5,
+        "KAP": 0,
+        "Kural": 2.1,
+        "Lab": 0,
+        "Model": 3.696,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 7,
+      "rsi": 48.1,
+      "sebep": null,
+      "t": "2026-11-17T10:25:03.021Z",
+      "tk": {
+        "1S": [
+          0,
+          0.93,
+          0.47
+        ],
+        "4S": [
+          0.18,
+          0.4,
+          0.29
+        ],
+        "G": [
+          0,
+          0,
+          0
+        ]
+      },
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 8.65,
+      "kap": null,
+      "kod": "BULGS",
+      "nihai": 5.229,
+      "not": "9/12 ölçüt, Supertrend yukarı · kârdan zarara · model %60",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 1.05,
+        "Lab": 0,
+        "Model": 4.179,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 3.5,
+      "rsi": 50.1,
+      "sebep": "tavanda kilitli, alınamaz",
+      "t": "2026-11-17T10:25:03.022Z",
+      "tk": {
+        "1S": [
+          0.09,
+          0.8,
+          0.45
+        ],
+        "4S": [
+          0.09,
+          0.27,
+          0.18
+        ],
+        "G": [
+          0.18,
+          0,
+          0.09
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 27.72,
+      "kap": null,
+      "kod": "LYDHO",
+      "nihai": 5.177,
+      "not": "8/12 ölçüt, Supertrend yukarı · kârdan zarara · model %61",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 0.9,
+        "Lab": 0,
+        "Model": 4.277,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 3,
+      "rsi": 43,
+      "sebep": "tavanda kilitli, alınamaz",
+      "t": "2026-11-17T10:25:03.023Z",
+      "tk": {
+        "1S": [
+          0.09,
+          0.8,
+          0.45
+        ],
+        "4S": [
+          0,
+          0.4,
+          0.2
+        ],
+        "G": [
+          0.18,
+          -0.13,
+          0.02
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 243,
+      "kap": null,
+      "kod": "BURVA",
+      "nihai": 5.102,
+      "not": "5/12 ölçüt, Supertrend yukarı · ciro +%379 · model %51",
+      "parca": {
+        "Grafik": 1,
+        "KAP": 0,
+        "Kural": 0.525,
+        "Lab": 0,
+        "Model": 3.577,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 1.75,
+      "rsi": 38.5,
+      "sebep": "işlem hacmi düşük (20 gün ort. 16,4 mn ₺, alt sınır 20 mn ₺)",
+      "t": "2026-11-17T10:25:03.024Z",
+      "tk": {
+        "1S": [
+          0,
+          0,
+          0
+        ],
+        "4S": [
+          0,
+          0.13,
+          0.07
+        ],
+        "G": [
+          -0.09,
+          -0.4,
+          -0.25
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 59.9,
+      "kap": null,
+      "kod": "BIGTK",
+      "nihai": 5.066,
+      "not": "8/12 ölçüt, Supertrend aşağı · ciro -%15 · model %51",
+      "parca": {
+        "Grafik": 0.5,
+        "KAP": 0,
+        "Kural": 0.975,
+        "Lab": 0,
+        "Model": 3.591,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 3.25,
+      "rsi": 48.1,
+      "sebep": null,
+      "t": "2026-11-17T10:25:03.025Z",
+      "tk": {
+        "1S": [
+          -0.18,
+          0.93,
+          0.38
+        ],
+        "4S": [
+          0,
+          0.4,
+          0.2
+        ],
+        "G": [
+          0,
+          -0.13,
+          -0.07
+        ]
+      },
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 6.07,
+      "kap": null,
+      "kod": "TDGYO",
+      "nihai": 5.066,
+      "not": "9/12 ölçüt, Supertrend yukarı · ciro +%1336 · model %56",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 1.125,
+        "Lab": 0,
+        "Model": 3.941,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 3.75,
+      "rsi": 49.9,
+      "sebep": "tavanda kilitli, alınamaz",
+      "t": "2026-11-17T10:25:03.026Z",
+      "tk": {
+        "1S": [
+          0.18,
+          0.8,
+          0.49
+        ],
+        "4S": [
+          0.09,
+          0.53,
+          0.31
+        ],
+        "G": [
+          0.18,
+          0,
+          0.09
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 1.4,
+      "kap": null,
+      "kod": "MARTI",
+      "nihai": 5.051,
+      "not": "12/12 ölçüt, Supertrend yukarı · kârdan zarara · model %44",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 1.95,
+        "Lab": 0,
+        "Model": 3.101,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 6.5,
+      "rsi": 53.1,
+      "sebep": "model olasılığı düşük (%44)",
+      "t": "2026-11-17T10:25:03.027Z",
+      "tk": {
+        "1S": [
+          -0.09,
+          0.8,
+          0.35
+        ],
+        "4S": [
+          0,
+          0.53,
+          0.27
+        ],
+        "G": [
+          0.18,
+          0.13,
+          0.16
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 29.34,
+      "kap": null,
+      "kod": "GIPTA",
+      "nihai": 5.026,
+      "not": "10/12 ölçüt, Supertrend aşağı · net kâr yıllık -%92 (sektörden zayıf) · model %39",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 1,
+        "Kural": 1.275,
+        "Lab": 0,
+        "Model": 2.751,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 4.25,
+      "rsi": 54.7,
+      "sebep": "model olasılığı düşük (%39)",
+      "t": "2026-11-17T10:25:03.028Z",
+      "tk": {
+        "1S": [
+          0.09,
+          0.4,
+          0.25
+        ],
+        "4S": [
+          0,
+          0.4,
+          0.2
+        ],
+        "G": [
+          -0.36,
+          0,
+          -0.18
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 4.3,
+      "kap": null,
+      "kod": "MANAS",
+      "nihai": 4.961,
+      "not": "9/12 ölçüt, Supertrend yukarı · ciro -%5 · model %62",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 0.6,
+        "Lab": 0,
+        "Model": 4.361,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 2,
+      "rsi": 42.2,
+      "sebep": "tavanda kilitli, alınamaz",
+      "t": "2026-11-17T10:25:03.029Z",
+      "tk": {
+        "1S": [
+          0.09,
+          0.8,
+          0.45
+        ],
+        "4S": [
+          0.09,
+          0.53,
+          0.31
+        ],
+        "G": [
+          0.27,
+          0,
+          0.14
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 7.79,
+      "kap": null,
+      "kod": "HEDEF",
+      "nihai": 4.953,
+      "not": "7/12 ölçüt, Supertrend yukarı · kârdan zarara · model %53",
+      "parca": {
+        "Grafik": 0.5,
+        "KAP": 0,
+        "Kural": 0.75,
+        "Lab": 0,
+        "Model": 3.703,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 2.5,
+      "rsi": 32,
+      "sebep": null,
+      "t": "2026-11-17T10:25:03.030Z",
+      "tk": {
+        "1S": [
+          -0.18,
+          0.67,
+          0.24
+        ],
+        "4S": [
+          -0.18,
+          0,
+          -0.09
+        ],
+        "G": [
+          0.18,
+          -0.53,
+          -0.18
+        ]
+      },
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 3.23,
+      "kap": null,
+      "kod": "DAPGM",
+      "nihai": 4.95,
+      "not": "11/12 ölçüt, Supertrend yukarı · net kâr yıllık -%41 (sektörden zayıf) · model %50",
+      "parca": {
+        "Grafik": -0.5,
+        "KAP": 0,
+        "Kural": 1.95,
+        "Lab": 0,
+        "Model": 3.5,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 6.5,
+      "rsi": 59.1,
+      "sebep": null,
+      "t": "2026-11-17T10:25:03.031Z",
+      "tk": {
+        "1S": [
+          0.18,
+          0.93,
+          0.56
+        ],
+        "4S": [
+          -0.18,
+          0.53,
+          0.18
+        ],
+        "G": [
+          0.09,
+          0.13,
+          0.11
+        ]
+      },
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 28.26,
+      "kap": null,
+      "kod": "IZINV",
+      "nihai": 4.94,
+      "not": "11/12 ölçüt, Supertrend yukarı · ciro -%2 · model %47",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 1.65,
+        "Lab": 0,
+        "Model": 3.29,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 5.5,
+      "rsi": 55.8,
+      "sebep": "işlem hacmi düşük (20 gün ort. 5,8 mn ₺, alt sınır 20 mn ₺)",
+      "t": "2026-11-17T10:25:03.032Z",
+      "tk": {
+        "1S": [
+          0,
+          0.8,
+          0.4
+        ],
+        "4S": [
+          0,
+          0.67,
+          0.33
+        ],
+        "G": [
+          0.18,
+          0.13,
+          0.16
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 33.02,
+      "kap": null,
+      "kod": "CELHA",
+      "nihai": 4.937,
+      "not": "11/12 ölçüt, Supertrend yukarı · ciro +%8 · model %42",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 2.025,
+        "Lab": 0,
+        "Model": 2.912,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 6.75,
+      "rsi": 72.7,
+      "sebep": "model olasılığı düşük (%42)",
+      "t": "2026-11-17T10:25:03.033Z",
+      "tk": {
+        "1S": [
+          0.18,
+          0.93,
+          0.56
+        ],
+        "4S": [
+          0.27,
+          0.93,
+          0.6
+        ],
+        "G": [
+          0.27,
+          0.93,
+          0.6
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 3.7,
+      "kap": null,
+      "kod": "SEKFK",
+      "nihai": 4.918,
+      "not": "11/12 ölçüt, Supertrend yukarı · net kâr yıllık -%3 (sektörden zayıf) · model %42",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 1.95,
+        "Lab": 0,
+        "Model": 2.968,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 6.5,
+      "rsi": 63.8,
+      "sebep": "model olasılığı düşük (%42)",
+      "t": "2026-11-17T10:25:03.034Z",
+      "tk": {
+        "1S": [
+          0.18,
+          0.8,
+          0.49
+        ],
+        "4S": [
+          0,
+          0.53,
+          0.27
+        ],
+        "G": [
+          0.09,
+          0.4,
+          0.25
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "Grafik kontrolü 1S - 4S - Günlük",
+      "fiyat": 107.1,
+      "kap": null,
+      "kod": "ONCSM",
+      "nihai": 4.915,
+      "not": "12/12 ölçüt, Supertrend yukarı · net kâr yıllık +%15599 · model %37",
+      "parca": {
+        "Grafik": 0,
+        "KAP": 0,
+        "Kural": 2.325,
+        "Lab": 0,
+        "Model": 2.59,
+        "Tekrar": 0,
+        "Temel": 0
+      },
+      "periyot": "3P",
+      "puan": 7.75,
+      "rsi": 58.1,
+      "sebep": "model olasılığı düşük (%37)",
+      "t": "2026-11-17T10:25:03.035Z",
+      "tk": {
+        "1S": [
+          0,
+          0.93,
+          0.47
+        ],
+        "4S": [
+          0.18,
+          0.67,
+          0.42
+        ],
+        "G": [
+          0.09,
+          0.13,
+          0.11
+        ]
+      },
+      "ulak": null,
+      "uygun": false
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 9.76,
+      "kap": "olumlu: 09.11 ve 13.11 pay geri alımı (şirket kendi hissesini alıyor); 12.11-13.11 finansman bonosu kupon bildirimleri nötr",
+      "kod": "LIDER",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 6.75,
+      "rsi": 54,
+      "sebep": null,
+      "t": "2026-11-17T10:27:32Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 10.31,
+      "kap": "nötr: son 30 günde önemli KAP bildirimi yok",
+      "kod": "PRZMA",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 5,
+      "rsi": 40.1,
+      "sebep": null,
+      "t": "2026-11-17T10:27:33Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 86.3,
+      "kap": "olumlu: 09.11-16.11 her gün pay geri alımı (şirket kendi hissesini alıyor); not: 21.10 iştiraki Ral Enerji'nin %51 hissedarı için konkordato başvurusu (şirketin kendisi değil)",
+      "kod": "GRTHO",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 6.75,
+      "rsi": 51,
+      "sebep": null,
+      "t": "2026-11-17T10:27:34Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 46.76,
+      "kap": "nötr: son 30 günde önemli KAP bildirimi yok",
+      "kod": "BINBN",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 7,
+      "rsi": 55.2,
+      "sebep": null,
+      "t": "2026-11-17T10:27:35Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 3.75,
+      "kap": "olumlu: 11.11 pay geri alım programı, 12.11 pay geri alımı; 09.11 değerleme raporu nötr",
+      "kod": "SVGYO",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 5.75,
+      "rsi": 56.9,
+      "sebep": null,
+      "t": "2026-11-17T10:27:36Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 0.99,
+      "kap": "olumsuz: 09.11 9 aylık net kâr 248 mn TL (önceki yıl 776 mn TL, yaklaşık %68 düşüş); 16.11 personel sayısı %29,7 azaldı; 11.11-13.11 finansman bonosu geri alımı ve varant itfaları nötr-olumlu",
+      "kod": "INFO",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 6.75,
+      "rsi": 53.7,
+      "sebep": null,
+      "t": "2026-11-17T10:27:37Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 113.4,
+      "kap": "olumlu: 12.11 pay geri alım programı tamamlandı; 09.11 finansal rapor nötr",
+      "kod": "SELEC",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 3.75,
+      "rsi": 64.2,
+      "sebep": null,
+      "t": "2026-11-17T10:27:38Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 97.35,
+      "kap": "nötr: 09.11 9 aylık finansal rapor ve faaliyet raporu",
+      "kod": "ODINE",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 3.25,
+      "rsi": 34.2,
+      "sebep": null,
+      "t": "2026-11-17T10:27:39Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 19.14,
+      "kap": "olumlu: 11.11 pay geri alımı; 13.11 halka arz varsayım değerlendirme raporu nötr",
+      "kod": "EGEGY",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 6,
+      "rsi": 70.2,
+      "sebep": null,
+      "t": "2026-11-17T10:27:40Z",
+      "ulak": null,
+      "uygun": true
+    },
+    {
+      "adim": "KAP",
+      "fiyat": 13.16,
+      "kap": "nötr: son 30 günde önemli KAP bildirimi yok",
+      "kod": "KUYAS",
+      "not": "KAP sınıflandırması",
+      "periyot": null,
+      "puan": 3.75,
+      "rsi": 44.4,
+      "sebep": null,
+      "t": "2026-11-17T10:27:41Z",
+      "ulak": null,
+      "uygun": true
+    }
+  ],
+  "stop_olan": [
+    {
+      "degisim": -0.0246,
+      "fiyat": 130.7,
+      "giris": 134,
+      "kod": "KAPLM",
+      "max_degisim": 0.0351,
+      "tarama": "13.11 12:16",
+      "zaman": "16.11 17:00"
+    },
+    {
+      "degisim": -0.0771,
+      "fiyat": 37.82,
+      "giris": 40.98,
+      "kod": "EUPWR",
+      "max_degisim": 0.039,
+      "tarama": "13.11 19:00",
+      "zaman": "16.11 10:00"
+    }
+  ],
+  "suresi_dolan": [
+    {
+      "degisim": 0.0187,
+      "fiyat": 3.82,
+      "giris": 3.75,
+      "kod": "MEGMT",
+      "max_degisim": 0.0427,
+      "tarama": "12.11 17:31",
+      "zaman": "16.11"
+    }
+  ],
+  "tarama": "17.11 13:16",
+  "toplam": 618,
+  "ulak": {
+    "1S": 0,
+    "4S": 0,
+    "G": 0
+  }
+}
