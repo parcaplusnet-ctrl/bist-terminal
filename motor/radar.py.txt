@@ -599,6 +599,19 @@ def _ogrenme_asamasi(V, tarih):
     else: aktif = False; sebep = f"{n} sonuçta isabet %{oran*100:.1f}, stop %{sor*100:.1f}: ileri test koşulları sağlandı"
     return {"aktif": aktif, "sebep": sebep, "sonuc": n, "isabet": oran, "stop": sor, "gerekli_sonuc": mn, "gerekli_isabet": mi, "en_cok_stop": ms, "guncelleme": tarih}
 
+def _lab_puan():
+    """Özellik laboratuvarının hisse puanları (lab.py -> lab_puan.json). Sırayla: ./lab_puan.json, ./lab/puan.json, depo klonu. Üç günden eski ya da yoksa boş."""
+    for p in ("lab_puan.json", "lab/puan.json", "/home/claude/bist-terminal/lab/puan.json"):
+        try:
+            L = json.load(open(p, encoding="utf-8"))
+            if (simdi().date() - datetime.date.fromisoformat(L.get("tarih", "2000-01-01"))).days <= 3: return L.get("hisse") or {}, L.get("tarih")
+        except Exception: continue
+    return {}, None
+
+def _lab_agirlik():
+    try: return float(json.load(open("rules.json", encoding="utf-8")).get("lab_agirlik", 0.05))
+    except Exception: return 0.05
+
 PORTFOY_MAX = 10   # sanal portföy üst sınırı (kullanıcı kuralı). Takip için elle sayı sınırı yoktur: sınırları model öğrenir (gunluk_n, kademe_yuzde)
 
 def cmd_adaylar(a):
@@ -634,20 +647,24 @@ def cmd_adaylar(a):
     else:
         # Seçim kuralı (öğrenilmiş): evren içi sıralamada ilk %kademe_yuzde içinde olan ve radar filtrelerinden (KAP, derinlik, puan) geçen hisseler; günlük sayı ve kademe model tarafından öğrenilir (egit.py)
         dg = MJ.get("dogrulama") or {}; gn = int(dg.get("gunluk_n") or 3); q = int(dg.get("kademe_yuzde") or 3)
-        sirali = sorted(KK.items(), key=lambda kv: -kv[1]); sira = {k: i + 1 for i, (k, v) in enumerate(sirali)}; kesim = max(1, round(len(sirali) * q / 100))
+        LABP, LABT = _lab_puan(); LW = _lab_agirlik()
+        KKL = {k: v + LW * float((LABP.get(k) or {}).get("skor", 0)) for k, v in KK.items()}   # kural 17.11: laboratuvarda öğrenilmiş özelliklerle eşleşen hisse, özelliğin kanıtıyla orantılı ilave puan alır
+        print(f"LAB ETKİSİ: {len(LABP)} hisse lab puanı taşıyor (veri {LABT}, ağırlık {LW}/puan)" + (": " + ", ".join(f"{k} +{LW*v['skor']:.2f}" for k, v in list(LABP.items())[:8]) if LABP else ""))
+        sirali = sorted(KKL.items(), key=lambda kv: -kv[1]); sira = {k: i + 1 for i, (k, v) in enumerate(sirali)}; kesim = max(1, round(len(sirali) * q / 100))
         bugun = simdi().strftime("%d.%m"); bugun_n = sum(1 for h in V.get("history", []) if str(h.get("tarama", "")).startswith(bugun))
         kalan = max(0, gn - bugun_n)
         gor = {h["kod"] for h in V.get("history", [])}; dk = simdi().hour * 60 + simdi().minute; ret = {"kademe dışı": 0, "ilk kez 10-12": 0, "sığ": 0, "puan yok": 0}
         gecen = []; kk_e = _kk_esik_gozden(V, tarih)
         for s in havuz:
-            s["model"] = KK.get(s["kod"]); s["sira"] = sira.get(s["kod"])
+            s["model"] = KK.get(s["kod"]); s["sira"] = sira.get(s["kod"]); lb = LABP.get(s["kod"])
             if s["model"] is None: ret["puan yok"] += 1; continue
-            if kk_e is not None and s["model"] < kk_e: ret["model eşiği"] = ret.get("model eşiği", 0) + 1; continue
+            s["lab"] = ({"skor": lb["skor"], "bonus": round(LW * lb["skor"], 3), "ozellikler": lb.get("detay") or lb.get("ozellikler"), "veri": LABT} if lb else None); s["model_lab"] = KKL[s["kod"]]
+            if kk_e is not None and s["model_lab"] < kk_e: ret["model eşiği"] = ret.get("model eşiği", 0) + 1; continue
             if s["sira"] > kesim: ret["kademe dışı"] += 1; continue
             if s["kod"] not in gor and dk < 720: ret["ilk kez 10-12"] += 1; continue   # kasa kuralı: ilk kez seçilen hisse 10:00-11:59 arası alınmaz (canlı isabet %40, stop %52); seçimle portföy aynı kalsın diye burada uygulanır
             if s.get("derinlik") == "Sığ": ret["sığ"] += 1; continue
             gecen.append(s)
-        gecen.sort(key=lambda s: -s["model"]); sec = gecen[:kalan]
+        gecen.sort(key=lambda s: -s["model_lab"]); sec = gecen[:kalan]
         print(f"KALİTE KAPISI: evren {len(sirali)} hisse, ilk %{q} = {kesim} hisse · radar havuzu {len(havuz)} → kuralı geçen {len(gecen)} → seçilen {len(sec)} (bugün {bugun_n}/{gn}) · elenenler {ret} · evrenin en iyisi: {', '.join(f'{k} {v}' for k, v in sirali[:5])}")
     picks = []; hist = []
     H0 = V.get("history", []) if a.piyasa == "bist" else V.get("yurtdisi", {}).get("history", [])
@@ -660,12 +677,15 @@ def cmd_adaylar(a):
              "likit_mn": s.get("likit_mn"), "kapasite_tl": s.get("kapasite_tl"), "derinlik": s.get("derinlik"), "model": s.get("model")}
         hist_model = s.get("model")
         if s.get("model") is not None: p["neden"] = f"Kalite kapısı: model skoru {s['model']:.2f}, evrende {s.get('sira')}. sırada. " + p["neden"]
+        if s.get("lab"):
+            p["lab"] = s["lab"]; d0 = (s["lab"]["ozellikler"] or [{}])[0]
+            if isinstance(d0, dict) and d0.get("aciklama"): p["neden"] = f"Laboratuvar: {d0['aciklama']} (geçmişte +%5 oranı tabandan {d0['fark']*100:+.1f} puan, son 60 günde {d0['fark_test']*100:+.1f}, {d0['ornek']} örnek, güven {d0['guven']}) → lab puanı {s['lab']['skor']}, seçim puanına +{s['lab']['bonus']:.2f}. " + p["neden"]
         if s["kod"] in son_basari:
             b0 = son_basari[s["kod"]]; p["trend_devam"] = {"onceki_tarama": b0["tarama"], "onceki_max": b0.get("max_degisim"), "onceki_giris": b0.get("giris")}
             yz2 = f"{(b0.get('max_degisim') or 0) * 100:.1f}".replace(".", ","); p["neden"] = f"Trend devam ediyor: {b0['tarama']} seçimi hedefe ulaştı (+%{yz2}). " + p["neden"]
         p["kap" if a.piyasa == "bist" else "haber"] = s["haber"]; picks.append(p)
         hist.append({"trend_devam": bool(p.get("trend_devam")), "model": hist_model, "tarama": tarih, "kod": s["kod"], "giris": s["fiyat"], "stop": s["stop"], "bitis": bitis, "kontrol": None, "kontrol_fiyat": None, "degisim": None,
-                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None,
+                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None, "lab_skor": (s.get("lab") or {}).get("skor", 0),
                      "likit_mn": s.get("likit_mn"), "kapasite_tl": s.get("kapasite_tl"), "derinlik": s.get("derinlik")})
     izl = [{"kod": s["kod"], "fiyat": s["fiyat"], "skor": s["puan"], "model": s.get("model"), "neden": (s.get("kk_neden") or "eşik üstü, ilk 10 dışında") + ": " + (", ".join(s["why"][:2]) or s["sebep"]) + (f"; {s['haber']}" if s["haber"] else "")} for s in izle]
     # İzleme listesi en az 10 hisse: eşik üstü ama ilk 10 dışında kalanlar + eşiğe yakın (eşik-1,5) ya da filtreye takılan güçlü hisseler

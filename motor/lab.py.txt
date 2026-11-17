@@ -344,10 +344,21 @@ def main():
             for j in np.where(m)[0]:
                 if B.alinamaz[j] > 0: continue
                 k = B.kod[j]; p = puan.setdefault(k, {"skor": 0.0, "ozellikler": []}); p["ozellikler"].append(i)
+        def deger(i):
+            """Özelliğin kanıta dayalı değeri (puan): hem tüm geçmişteki hem son 60 gündeki ileri test farkı ortalaması x10, güvenle çarpılır.
+            güven = min(1, örnek/3000) x min(1, ileri test örneği/300): az örnekle ölçülen özellik az puan verir. kapsam = örnek / tüm örnek (bilgi)."""
+            r = K["ozellik"][i]["son"]; f = 0.5 * r["fark"] + 0.5 * r.get("fark_test", 0)
+            g = min(1.0, r["ornek"] / 3000) * min(1.0, r.get("ornek_test", 0) / 300)
+            return round(max(0.0, f * 10 * g), 2), round(g, 2), round(r["ornek"] / max(1, len(D)), 4)
         for p in puan.values():
-            fs = sorted(p["ozellikler"], key=lambda i: -K["ozellik"][i]["son"]["fark"])
-            # puan = en güçlü özelliğin farkı x10 + her ek özellik için 0,5 (en fazla 5)
-            p["skor"] = round(min(5.0, K["ozellik"][fs[0]]["son"]["fark"] * 10 + 0.5 * (len(fs) - 1)), 2); p["ozellikler"] = fs[:6]
+            det = []
+            for i in p["ozellikler"]:
+                v, g, kap = deger(i); r = K["ozellik"][i]["son"]
+                det.append({"id": i, "aciklama": K["ozellik"][i]["aciklama"], "oran": r["oran"], "fark": r["fark"], "fark_test": r.get("fark_test"), "ornek": r["ornek"], "ornek_test": r.get("ornek_test"), "guven": g, "kapsam": kap, "deger": v})
+            det.sort(key=lambda x: -x["deger"])
+            # puan = en değerli özellik + diğerlerinin değerinin dörtte biri (en fazla 5)
+            p["skor"] = round(min(5.0, det[0]["deger"] + 0.25 * sum(x["deger"] for x in det[1:])), 2)
+            p["ozellikler"] = [x["id"] for x in det[:6]]; p["detay"] = det[:6]
     json.dump({"tarih": str(pd.Timestamp(son_gun).date()), "tur": tur, "hisse": puan}, open(a.puan, "w"), ensure_ascii=False)
     # terminal çıktısı
     sayac = {"kullaniliyor": 0, "test": 0, "elendi": 0, "az örnek": 0}

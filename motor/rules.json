@@ -107,5 +107,7 @@
   "min_isabet": 0.45,
   "max_stop": 0.45,
   "not": "17.11 kullanıcı kuralı: öneri yalnızca kalite kapısı ileri testi bu eşikleri sağlayınca açılır; o zamana kadar seçimler kasada sanal izlenir."
- }
+ },
+ "lab_agirlik": 0.05,
+ "lab_not": "Laboratuvar bonusu: seçim puanı = model skoru + lab_agirlik x lab puanı (lab/puan.json, en çok 5). Lab puanı özelliğin kanıtından gelir: (0,5 x geçmiş fark + 0,5 x ileri test farkı) x 10 x güven; güven = min(1, örnek/3000) x min(1, ileri test örneği/300). Kalite kapısı eşiği (model skoru) ve öğrenme aşaması kuralı değişmez."
 }
