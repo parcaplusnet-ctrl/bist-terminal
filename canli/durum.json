@@ -1,237 +1,234 @@
 {
  "durum": "bitti",
- "tarama": "17.11 BIST",
+ "tarama": "17.11 ABD",
  "oturum": "Bulut tarama",
- "toplam": 625,
- "islenen": 625,
+ "toplam": 1648,
+ "islenen": 1648,
  "adim": "Tamamlandı",
  "sayac": {
-  "puanlanan": 625,
-  "uygun": 32,
-  "elenen": 593,
+  "puanlanan": 1648,
+  "uygun": 8,
+  "elenen": 1640,
   "kap": 0
  },
  "en_iyi": [
   {
-   "kod": "LIDER",
-   "puan": 9.75
+   "kod": "VIK",
+   "puan": 8.0
   },
   {
-   "kod": "PASEU",
-   "puan": 9.25
+   "kod": "BRBR",
+   "puan": 7.5
   },
   {
-   "kod": "ISVEA",
-   "puan": 8.75
+   "kod": "KLAR",
+   "puan": 7.25
   },
   {
-   "kod": "MARMR",
-   "puan": 8.75
+   "kod": "PENN",
+   "puan": 7.25
   },
   {
-   "kod": "MRGYO",
-   "puan": 8.75
+   "kod": "CXW",
+   "puan": 7.0
   },
   {
-   "kod": "TKNKA",
-   "puan": 8.75
+   "kod": "RARE",
+   "puan": 7.0
   },
   {
-   "kod": "CELHA",
-   "puan": 8.5
+   "kod": "RSKD",
+   "puan": 7.0
   },
   {
-   "kod": "GRTHO",
-   "puan": 8.5
-  },
-  {
-   "kod": "BINHO",
-   "puan": 8.25
-  },
-  {
-   "kod": "CGCAM",
-   "puan": 8.25
+   "kod": "TSCO",
+   "puan": 7.0
   }
  ],
  "son": [
   {
-   "kod": "VAKFN",
+   "kod": "VIK",
    "periyot": "3P",
-   "puan": 6.0,
-   "rv": 1.33,
-   "fiyat": 0.88,
+   "puan": 8.0,
+   "rv": 1.82,
+   "fiyat": 93.07,
    "pk": {
     "RSI-MACD": 1,
-    "Trend": 0.5,
-    "Hacim": 1,
-    "Uyum": 2.5,
-    "Dip": 1,
+    "Trend": 1.5,
+    "Hacim": 2,
+    "Uyum": 3.0,
+    "Dip": 0.5,
     "KAP": 0,
     "Risk": 0
    },
    "tk": {
     "1S": [
-     0.09,
+     0,
      0.8,
-     0.45
+     0.4
     ],
     "4S": [
-     0,
-     0.4,
-     0.2
+     0.09,
+     0.93,
+     0.51
     ],
     "G": [
      0.27,
-     0,
-     0.14
+     0.93,
+     0.6
     ]
    },
-   "uygun": false,
-   "sebep": "puan düşük (6,0), günlük trend aşağı"
+   "uygun": true,
+   "sebep": "",
+   "para": "$"
   },
   {
-   "kod": "VESTL",
+   "kod": "XHR",
    "periyot": "3P",
-   "puan": 6.0,
-   "rv": 2.64,
-   "fiyat": 15.2,
+   "puan": 6.25,
+   "rv": 0.72,
+   "fiyat": 22.27,
    "pk": {
-    "RSI-MACD": 0,
-    "Trend": 1,
-    "Hacim": 1.5,
-    "Uyum": 2.5,
-    "Dip": 1,
+    "RSI-MACD": 1,
+    "Trend": 2.0,
+    "Hacim": 0,
+    "Uyum": 2.75,
+    "Dip": 0.5,
     "KAP": 0,
     "Risk": 0
    },
    "tk": {
     "1S": [
-     -0.09,
+     0,
      0.8,
-     0.35
+     0.4
     ],
     "4S": [
-     0.18,
-     0.4,
-     0.29
+     -0.18,
+     0.8,
+     0.31
     ],
     "G": [
-     -0.09,
-     0.13,
-     0.02
+     0,
+     0.93,
+     0.47
     ]
    },
    "uygun": false,
-   "sebep": "puan düşük (6,0), günlük trend aşağı"
+   "sebep": "puan düşük (6,25)",
+   "para": "$"
   },
   {
-   "kod": "YESIL",
+   "kod": "ZIM",
    "periyot": "3P",
-   "puan": 5.25,
-   "rv": 1.3,
-   "fiyat": 0.81,
+   "puan": 6.0,
+   "rv": 0.91,
+   "fiyat": 29.59,
+   "pk": {
+    "RSI-MACD": 1,
+    "Trend": 1.5,
+    "Hacim": 0,
+    "Uyum": 3.0,
+    "Dip": 0.5,
+    "KAP": 0,
+    "Risk": 0
+   },
+   "tk": {
+    "1S": [
+     0,
+     0.8,
+     0.4
+    ],
+    "4S": [
+     -0.18,
+     0.93,
+     0.38
+    ],
+    "G": [
+     -0.09,
+     0.8,
+     0.35
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (6,0)",
+   "para": "$"
+  },
+  {
+   "kod": "VIA",
+   "periyot": "3P",
+   "puan": 5.75,
+   "rv": 0.58,
+   "fiyat": 43.665,
    "pk": {
     "RSI-MACD": 1,
     "Trend": 1.5,
     "Hacim": 0,
     "Uyum": 2.75,
-    "Dip": 1,
+    "Dip": 0.5,
     "KAP": 0,
-    "Risk": -1
+    "Risk": 0
    },
    "tk": {
     "1S": [
-     0.09,
-     0.93,
-     0.51
-    ],
-    "4S": [
-     0.27,
-     0.53,
+     0,
+     0.8,
      0.4
     ],
-    "G": [
-     -0.09,
-     0.13,
-     0.02
-    ]
-   },
-   "uygun": false,
-   "sebep": "puan düşük (5,25), sığ hisse: günlük ort. ciro 9 mn ₺ (eşik 20 mn ₺), günlük trend aşağı"
-  },
-  {
-   "kod": "ZOREN",
-   "periyot": "3P",
-   "puan": 5.0,
-   "rv": 1.84,
-   "fiyat": 1.59,
-   "pk": {
-    "RSI-MACD": 0,
-    "Trend": 1.5,
-    "Hacim": 1,
-    "Uyum": 2.5,
-    "Dip": 0,
-    "KAP": 0,
-    "Risk": 0
-   },
-   "tk": {
-    "1S": [
-     0.09,
-     0.4,
-     0.25
-    ],
     "4S": [
-     0.18,
-     0.53,
-     0.36
+     -0.18,
+     0.8,
+     0.31
     ],
     "G": [
-     -0.09,
-     0.13,
-     0.02
+     0.09,
+     0.8,
+     0.45
     ]
    },
    "uygun": false,
-   "sebep": "puan düşük (5,0), günlük trend aşağı"
+   "sebep": "puan düşük (5,75)",
+   "para": "$"
   },
   {
-   "kod": "VAKKO",
+   "kod": "WH",
    "periyot": "3P",
-   "puan": 4.75,
-   "rv": 1.04,
-   "fiyat": 49.06,
+   "puan": 5.75,
+   "rv": 0.29,
+   "fiyat": 80.4,
    "pk": {
     "RSI-MACD": 1,
-    "Trend": 0.5,
+    "Trend": 1.5,
     "Hacim": 0,
-    "Uyum": 2.25,
-    "Dip": 1,
+    "Uyum": 2.75,
+    "Dip": 0.5,
     "KAP": 0,
     "Risk": 0
    },
    "tk": {
     "1S": [
-     0.27,
-     0.67,
-     0.47
+     0,
+     0.8,
+     0.4
     ],
     "4S": [
-     0.09,
-     0.27,
-     0.18
+     -0.18,
+     0.8,
+     0.31
     ],
     "G": [
-     0.18,
-     -0.13,
-     0.02
+     0,
+     0.93,
+     0.47
     ]
    },
    "uygun": false,
-   "sebep": "puan düşük (4,75), sığ hisse: günlük ort. ciro 8 mn ₺ (eşik 20 mn ₺), günlük trend aşağı"
+   "sebep": "puan düşük (5,75)",
+   "para": "$"
   }
  ],
  "hedefe_ulasan": [],
  "stop_olan": [],
  "suresi_dolan": [],
- "at": "2026-11-17T18:05:22Z"
+ "at": "2026-11-17T19:21:47Z"
 }
