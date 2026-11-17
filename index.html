@@ -471,7 +471,7 @@ function kasa(){const K=D.kasa;if(!K||!K.ozet){txt($("ksT"),"ilk tarama bekleniy
  const HC=h=>h.islem==="al"?["ALIM","new"]:h.tur==="stop"?["STOP","bad"]:h.tur==="hedef"?["HEDEF","ok"]:h.tur==="kâr korundu"?["KÂR KORUNDU","ok"]:h.tur==="süre doldu"?["SÜRE DOLDU","warn"]:h.tur==="değiştirildi"?["DEĞİŞTİRİLDİ","warn"]:["KAPATILDI · "+String(h.tur||"").toLocaleUpperCase("tr-TR"),"warn"];
  try{hareketSes(HR)}catch(e){}
  const H1=HR.slice(0,10),hs=H1.filter(h=>h.islem==="al").length,ht=H1.filter(h=>h.tur==="stop").length,hd=H1.filter(h=>h.islem==="sat"&&h.tur!=="stop").length;txt($("ksHrT"),`son ${H1.length} hareket · ${hs} alım · ${ht} stop · ${hd} diğer satış`);
-table($("ksHr"),["Hisse",["Hareket","l"],"Fiyat","Sonuç"],H1.map(h=>r=>{const[ad,c]=HC(h);const al=h.islem==="al";const taze=(()=>{const son=tsDM(o.tarih),t=tsDM(al?(h.alindi||h.tarama):h.kapanis);return son>0&&t>0&&son-t>=0&&son-t<3600000})();const lot=Number(h.adet||0).toLocaleString("tr-TR")+" lot";kodCell(r,h.kod,al&&h.hedef!=null?`${lot} · ${TL(h.maliyet)}`:lot);if(c==="bad")r.className="near";else if(c==="new")r.className="risk";else if(c==="ok")r.className="hit";if(taze)r.className=((r.className||"")+" fresh f-"+c).trim();
+table($("ksHr"),["Hisse",["Hareket","l"],"İşlem Fiyatı","Sonuç"],H1.map(h=>r=>{const[ad,c]=HC(h);const al=h.islem==="al";const taze=(()=>{const son=tsDM(o.tarih),t=tsDM(al?(h.alindi||h.tarama):h.kapanis);return son>0&&t>0&&son-t>=0&&son-t<3600000})();const lot=Number(h.adet||0).toLocaleString("tr-TR")+" lot";kodCell(r,h.kod,al&&h.hedef!=null?`${lot} · ${TL(h.maliyet)}`:lot);if(c==="bad")r.className="near";else if(c==="new")r.className="risk";else if(c==="ok")r.className="hit";if(taze)r.className=((r.className||"")+" fresh f-"+c).trim();
   const hc=el("span");hc.append(el("span","ch "+c,ad),el("span","sub",al?(h.alindi||h.tarama):(h.kapanis||"—")));cell(r,hc,"l");cell(r,tl(al?h.giris:h.cikis),"num");
   if(al)cell(r,h.hedef!=null?`hedef ${tl(h.hedef)}`:TL(h.maliyet),"num mut");else cell(r,`${sTL(h.kar_tl)}`,"num "+cls(h.kar_tl));if(al&&h.stop!=null)r.cells[3].appendChild(el("span","sub","stop "+tl(h.stop)));else if(!al)r.cells[3].appendChild(el("span","sub",pct(h.kar_yuzde)))}),"Henüz hareket yok.");
  const A=(K.acik||[]).slice().sort((a,b)=>(b.kar_yuzde||0)-(a.kar_yuzde||0));
@@ -1095,8 +1095,7 @@ $("tourB").addEventListener("click",()=>{if(!$("mod").hidden)modKapat();turBasla
    const ke=t.querySelector(".kod");const k=(ke?ke.textContent:"").trim();if(!k)return;
    if(ch[k]){c.classList.remove("fl-up","fl-dn");void c.offsetWidth;c.classList.add(ch[k])}
   });
-  document.querySelectorAll("#ksHr tr").forEach(tr=>{const c=tr.cells&&tr.cells[2],h=tr.cells&&tr.cells[1],t=tr.cells&&tr.cells[0];if(!c||!h||!t||!/AL[İI]M/i.test(h.textContent))return;const ke=t.querySelector(".kod");const k=(ke?ke.textContent:"").trim(),v=TV.f[k];if(!k)return;if(v==null)return;let l=c.querySelector(".lv");if(!l){l=document.createElement("div");l.className="lv";l.style.cssText="font-size:.78em;opacity:.85";c.appendChild(l)}l.textContent="şimdi "+Number(v).toLocaleString("tr-TR",{minimumFractionDigits:2,maximumFractionDigits:2})});
-       const f=document.getElementById("fyT");
+         const f=document.getElementById("fyT");
   if(f&&!document.getElementById("canliNokta")){const d=document.createElement("span");d.id="canliNokta";f.parentNode.insertBefore(d,f)}
  }
 const st2=document.createElement("style");
