@@ -1,0 +1,159 @@
+
+# ---------------------------------------------------------------- Özellik laboratuvarı (her grafik taramasından sonra)
+OZ_ACIKLAMA = {}
+
+def _oz_gunluk(kod):
+    """Yahoo günlük mumlar (2 yıl): (t, a, h, l, c, v) listesi."""
+    for host in ("query1", "query2"):
+        try:
+            j = http(f"https://{host}.finance.yahoo.com/v8/finance/chart/{kod}.IS?range=2y&interval=1d", deneme=2, bekle=1.5)
+            r = j["chart"]["result"][0]; q = r["indicators"]["quote"][0]
+            M = [(t, o, h, l, c, v or 0) for t, o, h, l, c, v in zip(r["timestamp"], q["open"], q["high"], q["low"], q["close"], q["volume"]) if None not in (o, h, l, c)]
+            if len(M) > 160: return M
+        except Exception: continue
+    return None
+
+def _ema(x, n):
+    k = 2 / (n + 1); o = []; e = None
+    for v in x:
+        e = v if e is None else e + k * (v - e); o.append(e)
+    return o
+
+def _wilder(x, n):
+    o = [None] * len(x)
+    if len(x) < n: return o
+    s = sum(x[:n]); o[n - 1] = s / n
+    for i in range(n, len(x)): o[i] = (o[i - 1] * (n - 1) + x[i]) / n
+    return o
+
+def _oz_ozellikler(M):
+    """Her gün için özellik kümesi ve +%5 / stop sonucu. Döner: [(gün_idx, tarih, {özellik: bool}, sonuc)]  sonuc: 'h' hedef, 's' stop, 'n' ikisi de değil."""
+    n = len(M); O = [m[1] for m in M]; Hh = [m[2] for m in M]; L = [m[3] for m in M]; C = [m[4] for m in M]; V = [m[5] for m in M]
+    tr = [max(Hh[i] - L[i], abs(Hh[i] - C[i - 1]), abs(L[i] - C[i - 1])) if i else Hh[i] - L[i] for i in range(n)]
+    atr = _wilder(tr, 14)
+    pdm = [max(Hh[i] - Hh[i - 1], 0) if (Hh[i] - Hh[i - 1] > L[i - 1] - L[i]) else 0 for i in range(1, n)]; pdm = [0] + pdm
+    mdm = [max(L[i - 1] - L[i], 0) if (L[i - 1] - L[i] > Hh[i] - Hh[i - 1]) else 0 for i in range(1, n)]; mdm = [0] + mdm
+    sp, sm, st_ = _wilder(pdm, 14), _wilder(mdm, 14), atr
+    pdi = [100 * sp[i] / st_[i] if st_[i] else None for i in range(n)]; mdi = [100 * sm[i] / st_[i] if st_[i] else None for i in range(n)]
+    dx = [abs(pdi[i] - mdi[i]) / (pdi[i] + mdi[i]) * 100 if pdi[i] is not None and (pdi[i] + mdi[i]) else 0 for i in range(n)]
+    adx = _wilder(dx, 14)
+    e12, e26 = _ema(C, 12), _ema(C, 26); macd = [a - b for a, b in zip(e12, e26)]; sig = _ema(macd, 9)
+    e20, e50 = _ema(C, 20), _ema(C, 50)
+    g = [max(C[i] - C[i - 1], 0) if i else 0 for i in range(n)]; z = [max(C[i - 1] - C[i], 0) if i else 0 for i in range(n)]
+    ag, az = _wilder(g, 14), _wilder(z, 14); rsi = [100 - 100 / (1 + ag[i] / az[i]) if ag[i] is not None and az[i] else (100 if ag[i] else None) for i in range(n)]
+    obv = [0.0] * n
+    for i in range(1, n): obv[i] = obv[i - 1] + (V[i] if C[i] > C[i - 1] else -V[i] if C[i] < C[i - 1] else 0)
+    mfv = [((C[i] - L[i]) - (Hh[i] - C[i])) / (Hh[i] - L[i]) * V[i] if Hh[i] > L[i] else 0 for i in range(n)]
+    # supertrend (10,3)
+    atr10 = _wilder(tr, 10); fu = [None] * n; fl = [None] * n; trend = [1] * n
+    for i in range(10, n):
+        mid = (Hh[i] + L[i]) / 2; bu, bl = mid + 3 * atr10[i], mid - 3 * atr10[i]
+        pu, pl = fu[i - 1], fl[i - 1]
+        fu[i] = bu if (pu is None or bu < pu or C[i - 1] > pu) else pu
+        fl[i] = bl if (pl is None or bl > pl or C[i - 1] < pl) else pl
+        if pu is None: trend[i] = 1
+        elif trend[i - 1] == -1 and C[i] > fu[i]: trend[i] = 1
+        elif trend[i - 1] == 1 and C[i] < fl[i]: trend[i] = -1
+        else: trend[i] = trend[i - 1]
+    out = []
+    for i in range(130, n - 2):
+        c, pc = C[i], C[i - 1]; chg = c / pc - 1
+        av20 = sum(V[i - 20:i]) / 20 if i >= 20 else 0
+        bw = []
+        for k in range(i - 119, i + 1):
+            w = C[k - 19:k + 1]; m = sum(w) / 20; sd = (sum((x - m) ** 2 for x in w) / 20) ** .5; bw.append(4 * sd / m if m else 9)
+        ich = None
+        if i >= 78:
+            j = i - 26; t9 = (max(Hh[j - 8:j + 1]) + min(L[j - 8:j + 1])) / 2; k26 = (max(Hh[j - 25:j + 1]) + min(L[j - 25:j + 1])) / 2
+            sa = (t9 + k26) / 2; sb = (max(Hh[j - 51:j + 1]) + min(L[j - 51:j + 1])) / 2; ich = c > max(sa, sb)
+        cmf = sum(mfv[i - 19:i + 1]) / (sum(V[i - 19:i + 1]) or 1)
+        F = {
+            "adx_guclu_yukari": bool(adx[i] and adx[i] > 25 and pdi[i] > mdi[i]),
+            "bollinger_sikisma": bw[-1] <= min(bw) * 1.1,
+            "bosluklu_acilis": O[i] / pc - 1 >= .03,
+            "cmf_pozitif": cmf > 0,
+            "dipte_macd": bool(macd[i] < 0 and macd[i] - sig[i] > 0 and macd[i - 1] - sig[i - 1] <= 0),
+            "dunku_yukselis_ertesi": C[i - 1] / C[i - 2] - 1 >= .06,
+            "dusuk_oynaklik": bool(atr[i] and atr[i] / c < .03),
+            "gun_ici_6_ustu": chg >= .06,
+            "hacim2x_artida": bool(av20 and V[i] >= 2 * av20 and chg > 0),
+            "hacimsiz_bekleyis": bool(av20 and V[i] < av20 and abs(chg) < .01),
+            "ichimoku_bulut_ustu": bool(ich),
+            "kilitli_tavan": chg >= .095 and c >= Hh[i] * .9995,
+            "rsi_80_ustu": bool(rsi[i] and rsi[i] > 80),
+            "supertrend_gunluk_yukari": trend[i] == 1,
+            "tavan": chg >= .095,
+            "yuksek_oynaklik": bool(atr[i] and atr[i] / c > .06),
+            "gun_3_6": .03 <= chg < .06,
+            "gun_yuksegi_kapanis": Hh[i] > L[i] and (c - L[i]) / (Hh[i] - L[i]) >= .9,
+            "ema20_50_trend": e20[i] > e50[i],
+            "obv_artiyor": obv[i] > obv[i - 20],
+            "3_yesil_mum": all(C[k] > O[k] for k in (i, i - 1, i - 2)),
+            "zirveden_50_asagi": c < .5 * max(Hh[max(0, i - 251):i + 1]),
+        }
+        hed = c * 1.05; stp = c * .97; sonuc = "n"
+        for d in (1, 2):
+            if Hh[i + d] >= hed: sonuc = "h"; break
+            if C[i + d] <= stp: sonuc = "s"; break
+        out.append((i, time.strftime("%Y-%m-%d", time.gmtime(M[i][0])), F, sonuc, chg))
+    return out
+
+def cmd_ozlab(a):
+    """Özellik laboratuvarı: tüm BIST hisselerinin 2 yıllık günlük grafiğinde her özelliğin +%5 (2 işlem günü) / stop oranını yeniden ölçer.
+    Her grafik taramasından sonra otomatik çalışır (adaylar komutu çağırır). Sonuç veri.json → lab_ozellik içine yazılır."""
+    from concurrent.futures import ThreadPoolExecutor
+    t0 = time.time(); V = json.load(open(a.veri)); LO = V.setdefault("lab_ozellik", {})
+    kodlar = []
+    if a.girdi and os.path.exists(a.girdi):
+        try: kodlar = sorted({s["kod"] for s in json.load(open(a.girdi)).get("tum", [])})
+        except Exception: kodlar = []
+    if not kodlar and os.path.isdir(a.arsiv):
+        fs = sorted(f for f in os.listdir(a.arsiv) if f.startswith("gozlem_bist_") and f.endswith(".json"))
+        if fs:
+            G = json.load(open(os.path.join(a.arsiv, fs[-1]))); T = (G.get("taramalar") or [{}])[-1]
+            kodlar = sorted({r[0] for r in T.get("rows", [])})
+    if not kodlar:
+        print("ÖZLAB: hisse listesi bulunamadı (cikti/bist.json ya da arsiv/gozlem_bist_*.json yok), atlandı"); return
+    with ThreadPoolExecutor(max_workers=12) as ex: R = list(ex.map(_oz_gunluk, kodlar))
+    ok = [(k, M) for k, M in zip(kodlar, R) if M]
+    if len(ok) < 50:
+        print(f"ÖZLAB: yalnızca {len(ok)} grafik alınabildi, önceki sonuçlar korundu"); return
+    S = {}; gunler = set(); N = 0; H = 0; Sp = 0; adv = {}
+    tum = []
+    for k, M in ok:
+        for i, tarih, F, so, chg in _oz_ozellikler(M):
+            tum.append((tarih, F, so, chg)); adv.setdefault(tarih, [0, 0]); adv[tarih][0] += chg > 0; adv[tarih][1] += 1
+    for tarih, F, so, chg in tum:
+        a_, t_ = adv[tarih]; oran = a_ / t_ if t_ else .5
+        F["zayif_piyasa"] = oran < .35; F["guclu_piyasa"] = oran > .6
+        gunler.add(tarih); N += 1; H += so == "h"; Sp += so == "s"
+        for ad, v in F.items():
+            if v:
+                s = S.setdefault(ad, [0, 0, 0]); s[0] += 1; s[1] += so == "h"; s[2] += so == "s"
+    taban = H / N if N else 0
+    eski = {o["ad"]: o for o in LO.get("ozellikler", [])}; yeni_n = 0; yeni_liste = []
+    for ad, (n_, h_, s_) in S.items():
+        o = eski.get(ad) or {"ad": ad, "aciklama": ad, "durum": "test"}
+        oran = h_ / n_ if n_ else None; fark = oran - taban if oran is not None else None
+        d0 = o.get("durum")
+        if n_ < 100: d1 = "az örnek"
+        elif fark >= .10: d1 = "kullaniliyor"
+        elif fark <= -.04: d1 = "elendi"
+        else: d1 = "test"
+        if d0 != d1: o["degisim"] = f"{d0 or '—'} → {d1}"; yeni_n += 1; yeni_liste.append(ad)
+        o.update({"durum": d1, "oran": round(oran, 3), "stop": round(s_ / n_, 3), "fark": round(fark, 3), "ornek": n_})
+        eski[ad] = o
+    LO["ozellikler"] = list(eski.values()); LO["taban"] = round(taban, 3); LO["ornek"] = N
+    sayac = {"kullaniliyor": 0, "test": 0, "elendi": 0}
+    for o in LO["ozellikler"]: sayac[o["durum"]] = sayac.get(o["durum"], 0) + 1
+    onceki = LO.get("tur") or {}; no = (onceki.get("tur") or 18) + 1; sn = simdi()
+    ilk = sorted(S.items(), key=lambda kv: -(kv[1][1] / kv[1][0] - taban) if kv[1][0] >= 300 else 9)[:2]
+    bul = []
+    if ilk: bul.append("En güçlü sinyaller (n≥300): " + ", ".join(f"{eski[k]['aciklama']} (+%5 oranı %{round(v[1]/v[0]*100)}, taban %{round(taban*100)})" for k, v in ilk) + ".")
+    if yeni_liste: bul.append("Durumu değişen: " + ", ".join(yeni_liste) + ".")
+    bul.append(f"{len(ok)} hissenin günlük grafiği tarandı. 1 saatlik ve 4 saatlik grafikler bu turda taranmadı; OBV (1S) ve destek özellikleri önceki turdan korunuyor.")
+    LO["tur"] = {"tur": no, "zaman": sn.strftime("%d.%m %H:%M"), "at": sn.isoformat(), "sure_sn": int(time.time() - t0), "grafik": {"toplam": len(ok), "gunluk": len(ok), "s1": 0, "s4": 0},
+                 "ornek": N, "gun": len(gunler), "taban": round(taban, 3), "ozellik_toplam": len(LO["ozellikler"]), "yeni": yeni_n, "sayac": sayac, "bulgular": bul}
+    if isinstance(LO.get("model"), dict): LO["model"]["ornek"] = N
+    json.dump(V, open(a.veri, "w"), ensure_ascii=False)
+    print(f"ÖZLAB: tur #{no} · {len(ok)} grafik · {N} örnek · taban %{round(taban*100,1)} · {len(S)} özellik ölçüldü · {yeni_n} durum değişti · {int(time.time()-t0)} sn")

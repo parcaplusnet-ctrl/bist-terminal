@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""Kalite kapısı eğitimi (MOTOR.md §16). Gerekli: numpy, scikit-learn, radar.py. Kullanım: python3 egit.py <radar.py yolu> <bist hisse listesi json: gozlem arşivi> <çıktı model.json>
+Adımlar: BIST hisselerinin 2 yıllık günlük grafiği → özellik vektörleri (radar.py ile aynı fonksiyonlar) → ileri doğru (walk-forward) doğrulama → tüm veride son model → model.json."""
+import sys, json, pickle, time, math, importlib.util
+import numpy as np
+from sklearn.ensemble import HistGradientBoostingRegressor as G
+from concurrent.futures import ThreadPoolExecutor
+rp, gozlem, cikis = sys.argv[1:4]; eski_yol = sys.argv[4] if len(sys.argv) > 4 else cikis   # eski model: kapı testi için
+spec = importlib.util.spec_from_file_location("radar", rp); R = importlib.util.module_from_spec(spec); spec.loader.exec_module(R)
+Gz = json.load(open(gozlem))
+kodlar = sorted({r[0] for r in Gz["taramalar"][-1]["rows"]}) if "taramalar" in Gz else sorted({s["kod"] for s in Gz["tum"]})   # arşiv ya da cikti/bist.json
+ham = R._gunluk_hepsi(kodlar); print(len(ham), "hisse")
+satir = []
+for kod, M in ham.items():
+    for i, tarih, F, so, chg in R._oz_ozellikler(M, R.OZ_SIRA): satir.append((tarih, kod, F, so, i, M))
+gen = {}
+for t, k, F, so, i, M in satir: gen.setdefault(t, []).append(M[i][4] / M[i - 1][4] > 1)
+gen = {t: sum(v) / len(v) for t, v in gen.items()}
+recs = [R._oz_vektor(M, F, gen[t], i) for t, k, F, so, i, M in satir]
+names = sorted(recs[0].keys())
+X = np.array([[r.get(a, float("nan")) for a in names] for r in recs], float)
+y = np.array([r[3] == "h" for r in satir], int); s = np.array([r[3] == "s" for r in satir], int); d = np.array([r[0] for r in satir])
+net = 5 * y - 3 * s; ci = names.index("chg"); lt = X[:, names.index("lt")]
+tradeable = (X[:, ci] < .09) & (lt >= math.log(2e7))     # tavana yakın/kilitli ve sığ hisseler alınamaz
+ud = np.unique(d); n = len(ud); cuts = [int(n * f) for f in (.4, .55, .7, .85, 1.0)]
+mk = lambda: G(max_iter=250, learning_rate=.04, max_depth=4, min_samples_leaf=300, l2_regularization=10)
+tr_ok = X[:, ci] < .09
+P = np.full(len(y), np.nan)
+for a, b in zip(cuts[:-1], cuts[1:]):
+    tr = np.isin(d, ud[:a - 2]) & tr_ok; te = np.isin(d, ud[a:b])
+    P[te] = mk().fit(X[tr], net[tr]).predict(X[te])
+te = ~np.isnan(P) & tradeable
+def top(K, mask, smin=-99):
+    h = st = c = 0
+    for t in np.unique(d[mask]):
+        i = np.where((d == t) & mask & (P >= smin))[0]; j = i[np.argsort(-P[i])[:K]]; h += y[j].sum(); st += s[j].sum(); c += len(j)
+    return (h / c * 100, st / c * 100, (5 * h - 3 * st) / c, int(c)) if c else (0, 0, 0, 0)
+dog = {"taban_ev": float(net[te].mean()), "gun": int(len(np.unique(d[te]))), "dönemler": [], "top": {}, "kademe": {}}
+# günün en iyi %q'sı (evren içi sıralama): her gün alınabilir hisseler skora göre dizilir
+def kademe(q, mask):
+    h = st = c = 0
+    for t in np.unique(d[mask]):
+        i = np.where((d == t) & mask)[0]; k = max(1, int(round(len(i) * q / 100))); j = i[np.argsort(-P[i])[:k]]; h += y[j].sum(); st += s[j].sum(); c += len(j)
+    return (h / c * 100, st / c * 100, (5 * h - 3 * st) / c, int(c))
+for q in (1, 2, 3, 5, 10):
+    r = kademe(q, te); dog["kademe"][q] = {"hedef": round(r[0], 1), "stop": round(r[1], 1), "ev": round(r[2], 2), "n": r[3]}; print("evrenin en iyi %%%d: hedef %.1f stop %.1f EV %+.2f n=%d" % ((q,) + r))
+for K in (1, 2, 3, 5, 10):
+    r = top(K, te); dog["top"][K] = {"hedef": round(r[0], 1), "stop": round(r[1], 1), "ev": round(r[2], 2), "n": r[3]}; print("top", K, "hedef %.1f stop %.1f EV %+.2f n=%d" % r)
+for a, b in zip(cuts[:-1], cuts[1:]):
+    m = np.isin(d, ud[a:b]) & te; r = top(3, m); dog["dönemler"].append({"bas": str(ud[a]), "bit": str(ud[b - 1]), "hedef": round(r[0], 1), "stop": round(r[1], 1), "ev": round(r[2], 2), "taban_ev": round(float(net[m].mean()), 2)})
+    print("dönem", ud[a], ud[b - 1], "top3 hedef %.1f stop %.1f EV %+.2f" % r[:3], "taban EV %.2f" % net[m].mean())
+# öğrenilen sınırlar: EV'si en iyinin %95'inden düşük olmayan en geniş kademe ve günlük hisse sayısı (elle sayı verilmez)
+ev_k = {K: dog["top"][K]["ev"] for K in dog["top"]}; en = max(ev_k.values()); gunluk_n = max(K for K in ev_k if ev_k[K] >= .95 * en)
+ev_q = {q: dog["kademe"][q]["ev"] for q in dog["kademe"]}; enq = max(ev_q.values()); kademe_yuzde = max(q for q in ev_q if ev_q[q] >= .95 * enq)
+dog["gunluk_n"] = int(gunluk_n); dog["kademe_yuzde"] = int(kademe_yuzde); print("öğrenilen: günlük en fazla", gunluk_n, "hisse · evrenin en iyi %", kademe_yuzde)
+# skor eşiği: günlük en iyi 5 içinde skor dilimine göre isabet
+cand = []
+for t in np.unique(d[te]):
+    i = np.where((d == t) & te)[0]; cand += list(i[np.argsort(-P[i])[:5]])
+cand = np.array(cand); qs = np.quantile(P[cand], [0, .2, .4, .6, .8, 1])
+for lo, hi in zip(qs[:-1], qs[1:]):
+    k = cand[(P[cand] >= lo) & (P[cand] <= hi)]; print("skor %.2f-%.2f n=%d hedef %.1f stop %.1f" % (lo, hi, len(k), y[k].mean() * 100, s[k].mean() * 100))
+dog["skor_dilimleri"] = [{"alt": round(float(lo), 2), "ust": round(float(hi), 2), "hedef": round(float(y[cand[(P[cand] >= lo) & (P[cand] <= hi)]].mean() * 100), 1), "stop": round(float(s[cand[(P[cand] >= lo) & (P[cand] <= hi)]].mean() * 100), 1)} for lo, hi in zip(qs[:-1], qs[1:])]
+# son model: tüm veri
+m = mk().fit(X[tr_ok], net[tr_ok]); ag = []
+for it in m._predictors:
+    t = it[0].nodes; ag.append([[-1, float(x["value"])] + [0] * 4 if x["is_leaf"] else [int(x["feature_idx"]), float(x["value"]), float(x["num_threshold"]), int(x["left"]), int(x["missing_go_to_left"]), int(x["right"])] for x in t])
+mj = {"surum": time.strftime("%Y-%m-%d"), "names": names, "base": float(m._baseline_prediction.ravel()[0]), "trees": ag, "dogrulama": dog, "ornek": int(len(y)), "gun": int(len(ud)), "hisse": len(ham), "likit_min_tl": 2e7}
+# doğrulama: saf Python değerlendirici ile sklearn aynı sonucu vermeli
+chk = np.random.RandomState(0).choice(len(y), 200, replace=False); fark = max(abs(R._agac_tahmin(mj, dict(zip(names, X[i]))) - m.predict(X[i:i + 1])[0]) for i in chk); print("değerlendirici farkı", fark)
+assert fark < 1e-6
+# test kapısı: yeni model ancak testi geçerse eskinin yerine geçer
+t3 = dog["top"][3]; kabul = t3["hedef"] >= 45 and t3["stop"] <= 38 and t3["ev"] >= 1.0
+try:
+    eski = json.load(open(eski_yol))["dogrulama"]["top"]["3"]["ev"]
+    if t3["ev"] < eski - .25: kabul = False
+except Exception: eski = None
+if kabul:
+    json.dump(mj, open(cikis, "w"), ensure_ascii=False, separators=(",", ":")); print(f"MODEL: kabul edildi · en iyi 3 hedef %{t3['hedef']} stop %{t3['stop']} EV {t3['ev']} (eski EV {eski}) · günlük en fazla {gunluk_n} · evrenin en iyi %{kademe_yuzde} · {len(ham)} hisse {len(ud)} gün")
+else: print(f"MODEL: reddedildi (testi geçemedi) · en iyi 3 hedef %{t3['hedef']} stop %{t3['stop']} EV {t3['ev']} (eski EV {eski}); eski model korunuyor")
