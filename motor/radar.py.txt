@@ -536,6 +536,40 @@ def _kalite_kapisi(a, B, V):
     V["kalite_kapisi"]["skor"] = {k: out[k] for k in iz if k in out}   # portföy ve takip hisselerinin güncel model skoru (kasa değiştirme kararı için)
     return out, mj
 
+KK_ESIK_MIN_N = 20      # gözden geçirme için sonuçlanmış, model skorlu en az kayıt (MOTOR.md §16)
+KK_ESIK_YENI_N = 5      # son gözden geçirmeden bu kadar yeni sonuç birikmeden yeniden bakılmaz (gürültüyle oynamayı önler)
+KK_ESIK_MIN_USTU = 15   # eşiğin üstünde kalan en az kayıt (az örnekle eşik konmaz)
+
+def _kk_istat(L):
+    """Kayıt listesi → n, isabet (hedef ya da kârla kapanış), stop oranı, ortalama getiri (%)."""
+    if not L: return {"n": 0, "isabet": None, "stop": None, "ort_getiri": None}
+    ok = sum(1 for h in L if h["sonuc"] in ("Başarılı", "Kâr korundu") or (h["sonuc"] == "Erken kapandı" and h["degisim"] > 0))
+    st = sum(1 for h in L if h["sonuc"] == "Stop")
+    return {"n": len(L), "isabet": round(ok / len(L), 3), "stop": round(st / len(L), 3), "ort_getiri": round(sum(h["degisim"] for h in L) / len(L) * 100, 2)}
+
+def _kk_esik_gozden(V, zaman):
+    """Kalite kapısı model-skor eşiğinin OTOMATİK gözden geçirilmesi (MOTOR.md §16).
+    Girdi: history'deki sonuçlanmış, model skorlu kayıtlar. n >= 20 olunca, her +5 yeni sonuçta bir kez:
+    skor dağılımının alt %25 ve %50 kesimleri aday eşiktir; aday eşik ancak (üstünde en az 15 kayıt kalıyorsa) VE isabet tüm kayıtlardan >= 5 puan iyi
+    VE stop oranı daha yüksek değil VE ortalama getiri >= 0,4 puan iyiyse konur; kanıt yoksa eşik kaldırılır (None = eşik yok). Sonuç veri.json → kalite_kapisi_esik. Döner: eşik (ya da None)."""
+    S = V.setdefault("kalite_kapisi_esik", {})
+    Hs = [h for h in V.get("history", []) if h.get("model") is not None and h.get("sonuc") not in (None, "Bekliyor") and h.get("degisim") is not None]
+    n = len(Hs); S["n"] = n
+    if n < KK_ESIK_MIN_N:
+        S["durum"] = f"bekliyor: sonuçlanmış model skorlu kayıt {n}/{KK_ESIK_MIN_N}"; S.setdefault("esik", None); return S.get("esik")
+    if S.get("son_n") is not None and n - S["son_n"] < KK_ESIK_YENI_N: return S.get("esik")
+    skor = sorted(h["model"] for h in Hs); tum = _kk_istat(Hs); eski = S.get("esik"); yeni = None; gerekce = "eşik yok: veri bir eşiği desteklemiyor"
+    for q in (.5, .25):   # önce yüksek eşik, sonra düşük; ilk kanıtlanan kullanılır (yüksek eşik seçimi en çok daraltır, bu yüzden kanıt şartı en zor olandır)
+        c = round(skor[int(len(skor) * q)], 3); ust = [h for h in Hs if h["model"] >= c]; ist = _kk_istat(ust)
+        if ist["n"] >= KK_ESIK_MIN_USTU and ist["isabet"] - tum["isabet"] >= .05 and ist["stop"] <= tum["stop"] and ist["ort_getiri"] - tum["ort_getiri"] >= .4:
+            yeni = c; gerekce = f"eşik {c}: üstünde {ist['n']} kayıt, isabet %{ist['isabet']*100:.0f} (tümü %{tum['isabet']*100:.0f}), stop %{ist['stop']*100:.0f} (%{tum['stop']*100:.0f}), ort. getiri %{ist['ort_getiri']:+.2f} (%{tum['ort_getiri']:+.2f})"; gerekce = re.sub(r"(\d)\.(\d)", r"\1,\2", gerekce); break
+    ucl = [skor[0]] + [skor[int(len(skor) * q)] for q in (1 / 3, 2 / 3)] + [float("inf")]
+    dil = [{"aralik": f"{ucl[i]:.2f} ≤ skor < {('%.2f' % ucl[i + 1]) if ucl[i + 1] != float('inf') else '∞'}", **_kk_istat([h for h in Hs if ucl[i] <= h["model"] < ucl[i + 1]])} for i in range(3)]
+    S.update({"esik": yeni, "son_n": n, "guncelleme": zaman, "tum": tum, "ustu": _kk_istat([h for h in Hs if yeni is not None and h["model"] >= yeni]) if yeni is not None else None,
+              "dilimler": dil, "gerekce": gerekce, "durum": "otomatik gözden geçirildi", "onceki": eski})
+    print(f"KK EŞİK (otomatik gözden geçirme, n={n}): {eski} → {yeni} · {gerekce}")
+    return yeni
+
 PORTFOY_MAX = 10   # sanal portföy üst sınırı (kullanıcı kuralı). Takip için elle sayı sınırı yoktur: sınırları model öğrenir (gunluk_n, kademe_yuzde)
 
 def cmd_adaylar(a):
@@ -563,10 +597,11 @@ def cmd_adaylar(a):
         bugun = simdi().strftime("%d.%m"); bugun_n = sum(1 for h in V.get("history", []) if str(h.get("tarama", "")).startswith(bugun))
         kalan = max(0, gn - bugun_n)
         gor = {h["kod"] for h in V.get("history", [])}; dk = simdi().hour * 60 + simdi().minute; ret = {"kademe dışı": 0, "ilk kez 10-12": 0, "sığ": 0, "puan yok": 0}
-        gecen = []
+        gecen = []; kk_e = _kk_esik_gozden(V, tarih)
         for s in havuz:
             s["model"] = KK.get(s["kod"]); s["sira"] = sira.get(s["kod"])
             if s["model"] is None: ret["puan yok"] += 1; continue
+            if kk_e is not None and s["model"] < kk_e: ret["model eşiği"] = ret.get("model eşiği", 0) + 1; continue
             if s["sira"] > kesim: ret["kademe dışı"] += 1; continue
             if s["kod"] not in gor and dk < 720: ret["ilk kez 10-12"] += 1; continue   # kasa kuralı: ilk kez seçilen hisse 10:00-11:59 arası alınmaz (canlı isabet %40, stop %52); seçimle portföy aynı kalsın diye burada uygulanır
             if s.get("derinlik") == "Sığ": ret["sığ"] += 1; continue
