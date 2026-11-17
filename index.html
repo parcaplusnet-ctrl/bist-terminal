@@ -61,7 +61,7 @@ button{font:inherit;color:inherit}
 .best div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:3px 0}
 
 /* özet şeridi */
-.kpis{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:var(--panel);border:1px solid var(--line);border-radius:10px}
 .k{padding:12px 14px;border-right:1px solid var(--line);min-width:0}.k:last-child{border-right:0}
 .k small{display:block;font-size:11.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .k b{display:block;font:600 22px/1.25 var(--mono);font-variant-numeric:tabular-nums;margin-top:2px;white-space:nowrap}
@@ -137,7 +137,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .tk span{color:var(--mut)}
 
 /* kasa */
-.kasa{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun:empty{display:none}.ksGun .k{border-bottom:0}.ksGun .k:last-child{border-right:1px solid var(--line)}.ksGun .k b{font-size:20px}
+.kasa{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun:empty{display:none}.ksGun .k{border-bottom:0}.ksGun .k:last-child{border-right:1px solid var(--line)}.ksGun .k b{font-size:20px}
 .kasa .k{border-right:1px solid var(--line)}.kasa .k:last-child{border-right:0}
 .seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg button{cursor:pointer;background:transparent;border:1px solid var(--line2);border-radius:6px;padding:5px 12px;font-size:12.5px;color:var(--mut)}
@@ -253,6 +253,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    <div class="k"><small>Açık pozisyon</small><b id="ksAcik">—</b><em id="ksAcikL">—</em></div>
    <div class="k"><small>Nakit</small><b id="ksNak">—</b><em>yatırılmamış</em></div>
    <div class="k"><small>Kapanan işlem</small><b id="ksIs">—</b><em id="ksIsL">—</em></div>
+   <div class="k"><small>BIST 100</small><b id="kMkt">—</b><em id="kMktL">—</em></div>
   </div>
   <div class="ksG">
    <div class="ksL"><div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Açık pozisyonlar</h2><p id="ksAT">—</p></div>
@@ -272,7 +273,6 @@ details.ad[open] summary::after{transform:rotate(90deg)}
   <div class="k"><small>Stop</small><b id="kStop" class="dn">—</b><em>en fazla -%3</em></div>
   <div class="k"><small>Süresi doldu</small><b id="kExp" style="color:var(--warn)">—</b><em>hedef de stop da yok</em></div>
   <div class="k"><small>Genel isabet</small><b id="kRate">—</b><em id="kRateL">sonuçlananlar</em></div>
-  <div class="k"><small>BIST 100</small><b id="kMkt">—</b><em id="kMktL">—</em></div>
  </section>
 
  <nav class="tabs" role="tablist" aria-label="Bölümler">
@@ -1104,7 +1104,9 @@ const st2=document.createElement("style");
  function blink(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));const gun=n.getDay(),dk=n.getHours()*60+n.getMinutes();const acik=gun>=1&&gun<=5&&dk>=10*60&&dk<18*60+10;const bug=String(n.getDate()).padStart(2,"0")+"."+String(n.getMonth()+1).padStart(2,"0");
   document.querySelectorAll("#ksHr tr").forEach(tr=>{const h=tr.cells&&tr.cells[1];["bl-al","bl-he","bl-st","bl-sd"].forEach(x=>tr.classList.remove(x));if(!h||!acik)return;const t=h.textContent.toLocaleUpperCase("tr-TR");if(t.indexOf(bug)<0)return;
    const c=/AL[İI]M/.test(t)?"bl-al":/HEDEF/.test(t)?"bl-he":/STOP/.test(t)?"bl-st":/S[ÜU]RE|D[İI]ĞER|SAT/.test(t)?"bl-sd":"";if(c)tr.classList.add(c)})}
- const orig=tvCek; tvCek=async function(){await orig();flash();blink()}; setInterval(blink,5000); setTimeout(blink,2000);
+ async function xuCanli(){try{const r=await fetch("https://scanner.tradingview.com/turkey/scan",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({symbols:{tickers:["BIST:XU100"]},columns:["close","change"]})});if(!r.ok)return;const j=await r.json(),d=j.data&&j.data[0]&&j.data[0].d;if(!d||!(d[1]===d[1])||d[1]==null)return;const v=Number(d[1]),b=document.getElementById("kMkt"),l=document.getElementById("kMktL");if(!b)return;
+  b.textContent=(v>=0?"+":"")+v.toFixed(2).replace(".",",")+"%";b.className=v>=0?"up":"dn";const hm=new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});if(l)l.textContent="endeks "+Number(d[0]).toLocaleString("tr-TR",{maximumFractionDigits:0})+" · canlı "+hm;b.classList.remove("fl-up","fl-dn")}catch(e){}}
+ const orig=tvCek; tvCek=async function(){await orig();flash();blink();xuCanli()}; setInterval(blink,5000); setTimeout(blink,2000);
 })();
 </script>
 </body></html><!-- genel tarama 16.11 13:49 -->
