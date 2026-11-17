@@ -570,14 +570,42 @@ def _kk_esik_gozden(V, zaman):
     print(f"KK EŞİK (otomatik gözden geçirme, n={n}): {eski} → {yeni} · {gerekce}")
     return yeni
 
+def _ban_listesi():
+    """rules.json -> ban (liste ya da {kod: neden}); dosya yoksa boş."""
+    try:
+        r = json.load(open("rules.json", encoding="utf-8")).get("ban", [])
+        return {k: "" for k in r} if isinstance(r, list) else dict(r)
+    except Exception: return {}
+
+OGR_MIN_SONUC = 30; OGR_MIN_ISABET = 0.45; OGR_MAX_STOP = 0.45
+def _ogrenme_asamasi(V, tarih):
+    """Kullanıcı kuralı 17.11: yeni hisse önerisi yalnızca kalite kapısının ileri testi ölçülmüşse açılır.
+    Ölçüm: kalite kapısından geçerek seçilen (model skoru kaydı olan) ve sonuçlanan kayıtlar. Eşikler rules.json -> ogrenme_asamasi ile değiştirilir.
+    Öneri açık değilken seçimler yine yapılır ve kasada sanal izlenir; sayfa 'öğrenme aşaması' yazar."""
+    mn, mi, ms = OGR_MIN_SONUC, OGR_MIN_ISABET, OGR_MAX_STOP
+    try:
+        o = json.load(open("rules.json", encoding="utf-8")).get("ogrenme_asamasi") or {}
+        mn = int(o.get("min_sonuc", mn)); mi = float(o.get("min_isabet", mi)); ms = float(o.get("max_stop", ms))
+    except Exception: pass
+    R = [h for h in V.get("history", []) if h.get("model") is not None and h.get("sonuc") in ("Başarılı", "Kâr korundu", "Stop", "Başarısız")]
+    n = len(R); isa = sum(h["sonuc"] in ("Başarılı", "Kâr korundu") for h in R); st = sum(h["sonuc"] == "Stop" for h in R)
+    oran = round(isa / n, 3) if n else None; sor = round(st / n, 3) if n else None
+    if n < mn: aktif = True; sebep = f"kalite kapısıyla seçilip sonuçlanan {n}/{mn} kayıt; ileri test için en az {mn} sonuç gerekli"
+    elif oran < mi or sor > ms: aktif = True; sebep = f"{n} sonuçta isabet %{oran*100:.1f} (en az %{mi*100:.0f} gerekli), stop %{sor*100:.1f} (en çok %{ms*100:.0f})"
+    else: aktif = False; sebep = f"{n} sonuçta isabet %{oran*100:.1f}, stop %{sor*100:.1f}: ileri test koşulları sağlandı"
+    return {"aktif": aktif, "sebep": sebep, "sonuc": n, "isabet": oran, "stop": sor, "gerekli_sonuc": mn, "gerekli_isabet": mi, "en_cok_stop": ms, "guncelleme": tarih}
+
 PORTFOY_MAX = 10   # sanal portföy üst sınırı (kullanıcı kuralı). Takip için elle sayı sınırı yoktur: sınırları model öğrenir (gunluk_n, kademe_yuzde)
 
 def cmd_adaylar(a):
     B = json.load(open(a.girdi)); K = {k["kod"]: k for k in json.load(open(a.karar))}; V = json.load(open(a.veri))
     tarih = simdi().strftime("%d.%m %H:%M"); bitis = vade(a.piyasa)
     havuz = []; karar_eksik = []
+    BAN = _ban_listesi() if a.piyasa == "bist" else {}   # kural 17.11: yasaklı hisse (SPK tedbiri, kayyım, suç duyurusu vb.) hiçbir koşulda aday olamaz
+    ban_elenen = []
     ACIK0 = {h["kod"] for h in (V.get("history", []) if a.piyasa == "bist" else V.get("yurtdisi", {}).get("history", [])) if h.get("sonuc") == "Bekliyor"}
     for s in B["adaylar"]:
+        if s["kod"] in BAN: ban_elenen.append(s["kod"]); continue
         if s["kod"] in ACIK0: continue  # tarama sonrası yayınlanan başka çalışmada takibe alınmış hisse tekrar seçilmez
         k = K.get(s["kod"])
         if not k:
@@ -644,6 +672,11 @@ def cmd_adaylar(a):
         Y = V.setdefault("yurtdisi", {}); Y["picks"] = picks; Y["history"] = Y.get("history", []) + hist; Y["izleme"] = izl
         Y["son_tarama"] = {"tarama": tarih, "oturum": "Bulut tarama", "taranan": B["ozet"]["taranan"], "uygun": B["ozet"]["uygun"], "haber_kontrol": len(K), "puan_esigi": B["esik"]}
         Y["piyasa"] = B["ozet"]["piyasa"]; Y.setdefault("scans", []).append(sc)
+    if a.piyasa == "bist":
+        V["ogrenme_asamasi"] = _ogrenme_asamasi(V, tarih)
+        for p_ in V.get("picks", []): p_["asama"] = "öğrenme" if V["ogrenme_asamasi"]["aktif"] else "öneri"
+        if ban_elenen: V["son_tarama"]["ban_elenen"] = ban_elenen; print(f"YASAKLI LİSTE: aday olamayan hisseler {ban_elenen}")
+        print(f"AŞAMA: {'ÖĞRENME (öneri değildir, sanal izleme)' if V['ogrenme_asamasi']['aktif'] else 'ÖNERİ AÇIK'} · {V['ogrenme_asamasi']['sebep']}")
     if karar_eksik:
         (V["son_tarama"] if a.piyasa == "bist" else V["yurtdisi"]["son_tarama"])["karar_eksik"] = karar_eksik
         print(f"UYARI: karar dosyasında KAP/haber kararı olmayan aday(lar) elendi: {karar_eksik}. karar.json'a ekleyip adaylar'ı tekrar çalıştır.")

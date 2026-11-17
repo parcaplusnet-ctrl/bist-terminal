@@ -55,7 +55,8 @@
   "ABD borsası 'Yurt dışı hisseleri' alanında BIST ile aynı kurallarla takip edilecek.",
   "BTC piyasası yalnızca öğrenme amaçlı takip edilecek; işlem adayı üretmez.",
   "Sektörel para döngüsü, rotasyon kadranı, sektör hareketliliği, dış etkenler ve haftalık sektör projeksiyonu her taramada öğrenilecek; sistem en iyisine ulaşana kadar kullanıcıya sormadan deneme yapabilir.",
-  "Aday sayısı sabit değildir: yalnızca tüm kuralları geçen hisseler seçilir; 10'a tamamlamak için eşik gevşetilmez. Uygun hisse az ya da hiç yoksa bu bir piyasa riski sinyali olarak raporlanır (koruma önceliklidir). Hata kaçınılmazdır; amaç her taramada ölçerek hata oranını sürekli düşürmektir."
+  "Aday sayısı sabit değildir: yalnızca tüm kuralları geçen hisseler seçilir; 10'a tamamlamak için eşik gevşetilmez. Uygun hisse az ya da hiç yoksa bu bir piyasa riski sinyali olarak raporlanır (koruma önceliklidir). Hata kaçınılmazdır; amaç her taramada ölçerek hata oranını sürekli düşürmektir.",
+  "17.11: Yasaklı liste (rules.ban) motorda zorunlu: yasaklı hisse aday olamaz. Öğrenme aşaması: kalite kapısıyla seçilen en az 30 sonuç, isabet >= %45 ve stop <= %45 olmadan hiçbir seçim öneri sayılmaz; sayfa 'öğrenme aşaması' yazar, kasa sanal izlemeye devam eder."
  ],
  "weights": {
   "acilistan_beri_yukselis": 0.5,
@@ -100,5 +101,11 @@
   "puan_esigi": 7,
   "stop_max": 0.03,
   "stop_min": 0.01
+ },
+ "ogrenme_asamasi": {
+  "min_sonuc": 30,
+  "min_isabet": 0.45,
+  "max_stop": 0.45,
+  "not": "17.11 kullanıcı kuralı: öneri yalnızca kalite kapısı ileri testi bu eşikleri sağlayınca açılır; o zamana kadar seçimler kasada sanal izlenir."
  }
 }
