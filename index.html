@@ -603,7 +603,8 @@ async function tvCek(){const k=tvKodlar();if(!k.length)return;try{const r=await 
   const imza=JSON.stringify(f);TV={f,hm,et:gm+" "+hm.slice(0,5)};TVERR=0;tvApply();tvAlarm();TVIL=false;if(imza!==TVSON&&D){TVSON=imza;render()}else txt($("fyT"),TVET+" · 15 dk gecikmeli · sürekli")}
  catch(e){TVERR++;if(TVERR>=3&&!TV)txt($("fyT"),"TradingView bağlantısı yok · "+(FY_ET||"15 dk gecikmeli"))}}
 function tvDongu(){tvCek().finally(()=>{const t=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"})),g=t.getDay(),dk=t.getHours()*60+t.getMinutes(),acik=g>=1&&g<=5&&dk>=595&&dk<=1090;setTimeout(tvDongu,document.hidden?30000:acik?10000:300000)})}
-/* sayfa dışarıya bağlanamadığı için TradingView döngüsü kapalı; canlı akış bağımsız panoda (canli_pano) */
+/* GitHub Pages: TradingView canlı fiyat döngüsü açık (BIST 15 dk gecikmeli) */
+tvDongu();
 
 /* canlı tarama (canli/durum) */
 let SP=[];function onLive(d){LIVE=d;const was=liveOn;liveOn=d&&d.durum==="taraniyor"&&d.at&&(Date.now()-Date.parse(d.at))<30*60*1000;
