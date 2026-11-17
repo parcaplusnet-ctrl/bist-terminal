@@ -1096,7 +1096,8 @@ $("tourB").addEventListener("click",()=>{if(!$("mod").hidden)modKapat();turBasla
    const k=m[0];
    if(ch[k]){c.classList.remove("fl-up","fl-dn");void c.offsetWidth;c.classList.add(ch[k])}
   });
-  const f=document.getElementById("fyT");
+  document.querySelectorAll("#ksHr tr").forEach(tr=>{const c=tr.cells&&tr.cells[2],h=tr.cells&&tr.cells[1],t=tr.cells&&tr.cells[0];if(!c||!h||!t||!/AL[İI]M/i.test(h.textContent))return;const m=t.textContent.trim().match(/^[A-Z0-9]+/);if(!m)return;const k=m[0],v=TV.f[k];if(v==null)return;let l=c.querySelector(".lv");if(!l){l=document.createElement("div");l.className="lv";l.style.cssText="font-size:.78em;opacity:.85";c.appendChild(l)}l.textContent="şimdi "+Number(v).toLocaleString("tr-TR",{minimumFractionDigits:2,maximumFractionDigits:2});if(ch[k]){c.classList.remove("fl-up","fl-dn");void c.offsetWidth;c.classList.add(ch[k])}});
+       const f=document.getElementById("fyT");
   if(f&&!document.getElementById("canliNokta")){const d=document.createElement("span");d.id="canliNokta";f.parentNode.insertBefore(d,f)}
  }
  const orig=tvCek;
