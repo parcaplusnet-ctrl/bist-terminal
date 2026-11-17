@@ -1,0 +1,386 @@
+#!/usr/bin/env python3
+"""BIST Yükseliş Radarı - Sürekli Özellik Laboratuvarı. Sürüm 1.1 · 11.11
+Her turda tüm BIST hisselerinin grafiklerini (Günlük 2 yıl, 1 Saat ve 4 Saat son ~3 ay) indirir,
+yüzlerce özelliği ve her turda yeni kombinasyonları ölçer:
+  hedef: kapanıştan sonraki 2 işlem gününde +%5, önce -%3 görmeden (aynı gün ikisi de olursa stop sayılır).
+Her özellik için: örnek, +%5 oranı, stop oranı, taban farkı (puan) ve son 60 işlem gününde ileri test farkı.
+Durum: kullanılıyor (fark >= +10 ve ileri test >= +5, yeterli örnek) · elendi (fark <= -3) · test (arası).
+Kayıt dosyası turdan tura taşınır: her özelliğin ölçüm geçmişi, denenmiş kombinasyonlar, tur sayısı.
+Ayrıca bugünün son mumunda 'kullanılıyor' özellikleri taşıyan hisseler için lab puanı üretir.
+Kullanım: python3 lab.py --kayit kayit.json --cikti lab_canli.json --puan lab_puan.json [--temel is/temel.json] [--yeni 40]
+"""
+import argparse, json, subprocess, time, datetime as dt, random, itertools, os
+import concurrent.futures as cf
+import numpy as np, pandas as pd
+
+IST = dt.timezone(dt.timedelta(hours=3))
+UA = "Mozilla/5.0 (X11; Linux x86_64)"
+TEST_GUN = 60
+
+# ------------------------------------------------------------------ veri
+def curl(url, deneme=4):
+    for i in range(deneme):
+        r = subprocess.run(["curl", "-s", "-m", "25", "-A", UA, "-w", "\n%{http_code}", url], capture_output=True, text=True)
+        body, _, code = r.stdout.rpartition("\n")
+        if code == "200" and body:
+            return body
+        time.sleep(1.5 * (2 ** i) + random.random())
+    return None
+
+def evren():
+    q = {"filter": [{"left": "type", "operation": "equal", "right": "stock"}, {"left": "exchange", "operation": "equal", "right": "BIST"}],
+         "columns": ["name", "sector"], "range": [0, 1500]}
+    out = subprocess.run(["curl", "-s", "-m", "60", "https://scanner.tradingview.com/turkey/scan", "-d", json.dumps(q)], capture_output=True, text=True).stdout
+    return {r["s"].split(":")[1]: (r["d"][1] or "Bilinmiyor") for r in json.loads(out)["data"]}
+
+def yahoo(sym, interval, rng):
+    b = curl(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?interval={interval}&range={rng}")
+    if not b:
+        return None
+    try:
+        j = json.loads(b)["chart"]["result"][0]
+        q = j["indicators"]["quote"][0]
+        df = pd.DataFrame({"o": q["open"], "h": q["high"], "l": q["low"], "c": q["close"], "v": q["volume"]},
+                          index=pd.to_datetime(j["timestamp"], unit="s", utc=True).tz_convert(IST))
+        return df.dropna(subset=["c", "h", "l"])
+    except Exception:
+        return None
+
+def indir(kods, interval, rng, isci=12):
+    out = {}
+    with cf.ThreadPoolExecutor(isci) as ex:
+        fs = {ex.submit(yahoo, k + ".IS", interval, rng): k for k in kods}
+        for f in cf.as_completed(fs):
+            d = f.result()
+            if d is not None and len(d) > 30:
+                out[fs[f]] = d
+    return out
+
+# ------------------------------------------------------------------ göstergeler
+def ema(s, n): return s.ewm(span=n, adjust=False).mean()
+
+def rsi(c, n=14):
+    d = c.diff(); up = d.clip(lower=0).ewm(alpha=1 / n, adjust=False).mean(); dn = (-d.clip(upper=0)).ewm(alpha=1 / n, adjust=False).mean()
+    return 100 - 100 / (1 + up / dn.replace(0, np.nan))
+
+def gostergeler(df):
+    c, h, l, o, v = df.c, df.h, df.l, df.o, df.v.fillna(0)
+    f = pd.DataFrame(index=df.index)
+    for n in (1, 3, 5, 10, 20): f[f"ret{n}"] = c / c.shift(n) - 1
+    for n in (5, 10, 20, 50, 100, 200): f[f"ema{n}"] = ema(c, n) / c - 1  # negatif = fiyat ortalamanın üstünde
+    f["rsi"] = rsi(c); f["rsi_d"] = f.rsi.diff()
+    m = ema(c, 12) - ema(c, 26); sg = ema(m, 9); f["macd"] = m / c; f["macdh"] = (m - sg) / c; f["macdh_d"] = f.macdh.diff()
+    tr = pd.concat([h - l, (h - c.shift()).abs(), (l - c.shift()).abs()], axis=1).max(axis=1); atr = tr.ewm(alpha=1 / 14, adjust=False).mean()
+    f["atrp"] = atr / c
+    sma = c.rolling(20).mean(); sd = c.rolling(20).std(); f["bbw"] = 4 * sd / sma; f["pctb"] = (c - (sma - 2 * sd)) / (4 * sd)
+    f["bbw_min120"] = (f.bbw <= f.bbw.rolling(120).min() * 1.05).astype(float)
+    vm = v.rolling(20).mean().shift(1); f["rv"] = v / vm.replace(0, np.nan); f["vol_tl"] = (c * v).rolling(20).mean()
+    # likidite (12.11 kullanıcı kararı: alım satımda zorlanmamak için hacmi güçlü hisseler öne çıkacak)
+    tl_ = c * v; f["vol5_60"] = tl_.rolling(5).mean() / tl_.rolling(60).mean().replace(0, np.nan)
+    f["vol_gun_20mn"] = (tl_ >= 20e6).astype(float).rolling(20).sum()
+    adim_ = np.select([c < 20, c < 50, c < 100, c < 250, c < 500, c < 1000, c < 2500], [.01, .02, .05, .1, .25, .5, 1], 2.5)
+    f["adim_oran"] = adim_ / c
+    for n in (20, 55, 250): f[f"yeni_tepe{n}"] = (c >= h.rolling(n).max().shift(1)).astype(float)
+    f["dist250"] = c / h.rolling(250, min_periods=120).max() - 1; f["dist_dip20"] = c / l.rolling(20).min() - 1
+    rg = (h - l).replace(0, np.nan); f["clpos"] = (c - l) / rg; f["govde"] = (c - o) / o; f["bosluk"] = o / c.shift() - 1
+    f["ust_fitil"] = (h - np.maximum(o, c)) / rg; f["alt_fitil"] = (np.minimum(o, c) - l) / rg
+    up = (c > c.shift()).astype(int); f["seri_yukari"] = up.groupby((up != up.shift()).cumsum()).cumsum() * up
+    dn = (c < c.shift()).astype(int); f["seri_asagi"] = dn.groupby((dn != dn.shift()).cumsum()).cumsum() * dn
+    ll, hh = l.rolling(14).min(), h.rolling(14).max(); f["stoch"] = (c - ll) / (hh - ll).replace(0, np.nan) * 100; f["stoch_d"] = f.stoch.diff()
+    tp = (h + l + c) / 3; mf = tp * v; pos = mf.where(tp > tp.shift(), 0).rolling(14).sum(); neg = mf.where(tp < tp.shift(), 0).rolling(14).sum()
+    f["mfi"] = 100 - 100 / (1 + pos / neg.replace(0, np.nan))
+    obv = (np.sign(c.diff()).fillna(0) * v).cumsum(); f["obv_10"] = np.sign(obv - obv.shift(10))
+    mfm = ((c - l) - (h - c)) / rg; f["cmf"] = (mfm * v).rolling(20).sum() / v.rolling(20).sum().replace(0, np.nan)
+    pdm = h.diff().where((h.diff() > -l.diff()) & (h.diff() > 0), 0); mdm = (-l.diff()).where((-l.diff() > h.diff()) & (-l.diff() > 0), 0)
+    pdi = 100 * pdm.ewm(alpha=1 / 14, adjust=False).mean() / atr; mdi = 100 * mdm.ewm(alpha=1 / 14, adjust=False).mean() / atr
+    f["adx"] = (100 * (pdi - mdi).abs() / (pdi + mdi).replace(0, np.nan)).ewm(alpha=1 / 14, adjust=False).mean(); f["di_fark"] = pdi - mdi
+    # Supertrend (10,3)
+    hl2 = (h + l) / 2; a10 = tr.ewm(alpha=1 / 10, adjust=False).mean(); ub = (hl2 + 3 * a10).values; lb = (hl2 - 3 * a10).values; cv = c.values
+    yon = np.ones(len(c)); fu, fl = ub.copy(), lb.copy()
+    for i in range(1, len(c)):
+        fu[i] = ub[i] if (ub[i] < fu[i - 1] or cv[i - 1] > fu[i - 1]) else fu[i - 1]
+        fl[i] = lb[i] if (lb[i] > fl[i - 1] or cv[i - 1] < fl[i - 1]) else fl[i - 1]
+        yon[i] = 1 if cv[i] > fu[i - 1] else -1 if cv[i] < fl[i - 1] else yon[i - 1]
+    f["st"] = yon; f["st_don"] = ((yon == 1) & (np.roll(yon, 1) == -1)).astype(float)
+    f["fiyat"] = c; f["gun"] = df.index.dayofweek
+    # tavanda kilitli kapanış: kapanıştan alım yapılamaz, ölçüme alınmaz
+    f["alinamaz"] = ((f.ret1 >= 0.09) & (c >= h * 0.999)).astype(float)
+    # etiket: sonraki 2 gün +%5 önce -%3 olmadan (aynı gün ikisi olursa stop)
+    h1, h2, l1, l2 = h.shift(-1), h.shift(-2), l.shift(-1), l.shift(-2)
+    lab = np.where(l1 <= c * 0.97, -1, np.where(h1 >= c * 1.05, 1, np.where(l2 <= c * 0.97, -1, np.where(h2 >= c * 1.05, 1, 0)))).astype(float)
+    lab[-2:] = np.nan; f["etiket"] = lab
+    return f
+
+def gun_ici(d1):
+    """1 saatlik mumlardan her günün son 1S ve 4S durumunu çıkarır."""
+    c = d1.c; g = pd.DataFrame(index=d1.index)
+    g["rsi1"] = rsi(c); g["e1"] = (ema(c, 20) > ema(c, 50)).astype(float); g["m1"] = np.sign((ema(c, 12) - ema(c, 26)) - ema(ema(c, 12) - ema(c, 26), 9))
+    k = d1.copy(); k["gun"] = k.index.date; k["dilim"] = (k.index.hour >= 14).astype(int)
+    d4 = k.groupby(["gun", "dilim"]).agg(o=("o", "first"), h=("h", "max"), l=("l", "min"), c=("c", "last"))
+    c4 = d4.c; s4 = pd.DataFrame({"rsi4": rsi(c4), "e4": (ema(c4, 20) > ema(c4, 50)).astype(float)}, index=d4.index)
+    s4 = s4.groupby(level=0).last()
+    g["gun"] = g.index.date; s1 = g.groupby("gun").last()
+    out = s1.join(s4, how="left"); out.index = pd.to_datetime(out.index)
+    return out
+
+# ------------------------------------------------------------------ özellik kütüphanesi
+def kutuphane():
+    B = []  # (id, açıklama, ifade)  ifade: df -> bool Series
+    def ek(i, a, fn, tip="tek", kaynak="G"): B.append({"id": i, "aciklama": a, "fn": fn, "tip": tip, "kaynak": kaynak})
+    for a, b in [(0, 30), (30, 40), (40, 50), (50, 60), (60, 70), (70, 80), (80, 101)]:
+        ek(f"rsi_{a}_{b}", f"Günlük RSI {a}-{min(b,100)} arası", lambda d, a=a, b=b: (d.rsi >= a) & (d.rsi < b))
+    ek("rsi_yukari", "Günlük RSI yükseliyor (>3 puan)", lambda d: d.rsi_d > 3)
+    ek("rsi_dipten", "RSI 35 altından yukarı döndü", lambda d: (d.rsi.shift(1) < 35) & (d.rsi_d > 0))
+    for x in (1.5, 2, 3, 5): ek(f"hacim_{x}x", f"Hacim 20 gün ortalamasının {x} katı ve üstü", lambda d, x=x: d.rv >= x)
+    ek("hacim_dusuk", "Hacim ortalamanın yarısının altında", lambda d: d.rv < 0.5)
+    for a, b, ad in [(-1, -0.05, "-%5 ve altı"), (-0.05, -0.02, "-%5 ile -%2"), (-0.02, 0, "-%2 ile 0"), (0, 0.02, "0 ile +%2"),
+                     (0.02, 0.05, "+%2 ile +%5"), (0.05, 0.095, "+%5 ile +%9,5"), (0.095, 9, "tavan (+%9,5 üstü)")]:
+        ek(f"gun_{a}_{b}", f"Günlük değişim {ad}", lambda d, a=a, b=b: (d.ret1 >= a) & (d.ret1 < b))
+    for n in (5, 20):
+        ek(f"ret{n}_dusuk", f"Son {n} günde -%10 ve daha fazla düşmüş", lambda d, n=n: d[f"ret{n}"] <= -0.10)
+        ek(f"ret{n}_yuksek", f"Son {n} günde +%15 ve daha fazla yükselmiş", lambda d, n=n: d[f"ret{n}"] >= 0.15)
+    ek("ema_dizilim", "Fiyat > EMA20 > EMA50 > EMA200", lambda d: (d.ema20 < 0) & (d.ema20 > d.ema50) & (d.ema50 > d.ema200))
+    ek("ema20_ustu", "Fiyat EMA20 üstünde", lambda d: d.ema20 < 0)
+    ek("ema50_ustu", "Fiyat EMA50 üstünde", lambda d: d.ema50 < 0)
+    ek("ema200_ustu", "Fiyat EMA200 üstünde", lambda d: d.ema200 < 0)
+    ek("ema20_cok_alti", "Fiyat EMA20'nin %20+ altında (dip)", lambda d: d.ema20 >= 0.25)
+    ek("ema20_cok_ustu", "Fiyat EMA20'nin %15+ üstünde (ısınmış)", lambda d: d.ema20 <= 1 / 1.15 - 1)
+    ek("macd_kesti", "MACD sinyali yukarı kesti", lambda d: (d.macdh > 0) & (d.macdh.shift(1) <= 0))
+    ek("macd_pozitif", "MACD sıfırın üstünde", lambda d: d.macd > 0)
+    ek("macd_dipte_dondu", "Dipte MACD yukarı döndü", lambda d: (d.macd < 0) & (d.macdh_d > 0) & (d.macdh.shift(1) < d.macdh.shift(2)))
+    for a, b in [(0, 0.02), (0.02, 0.03), (0.03, 0.05), (0.05, 0.08), (0.08, 9)]:
+        ek(f"atr_{a}_{b}", f"Günlük ortalama oynaklık (ATR) %{a*100:.0f}-%{min(b,1)*100:.0f}", lambda d, a=a, b=b: (d.atrp >= a) & (d.atrp < b))
+    ek("bb_sikisma", "Bollinger bant genişliği son 120 mumun en darına yakın", lambda d: d.bbw_min120 > 0)
+    ek("bb_ust_disari", "Fiyat üst Bollinger bandının dışında", lambda d: d.pctb > 1)
+    ek("bb_alt_disari", "Fiyat alt Bollinger bandının dışında", lambda d: d.pctb < 0)
+    for n in (20, 55, 250): ek(f"yeni_tepe{n}", f"{n} günün en yükseğinde kapanış", lambda d, n=n: d[f"yeni_tepe{n}"] > 0)
+    for a, b, ad in [(-0.03, 1, "yıllık tepeye %3'ten yakın"), (-0.15, -0.03, "yıllık tepenin %3-%15 altı"), (-0.4, -0.15, "yıllık tepenin %15-%40 altı"), (-1, -0.4, "yıllık tepenin %40+ altı")]:
+        ek(f"tepe250_{a}", f"Fiyat {ad}", lambda d, a=a, b=b: (d.dist250 >= a) & (d.dist250 < b))
+    ek("kapanis_tepede", "Gün yükseğine yakın kapanış (üst %20)", lambda d: d.clpos >= 0.8)
+    ek("kapanis_dipte", "Gün düşüğüne yakın kapanış (alt %20)", lambda d: d.clpos <= 0.2)
+    ek("guclu_yesil", "Güçlü yeşil mum (gövde +%3 üstü)", lambda d: d.govde >= 0.03)
+    ek("cekic", "Uzun alt fitil (çekiç)", lambda d: (d.alt_fitil >= 0.6) & (d.govde.abs() < 0.015))
+    ek("ust_fitil_uzun", "Uzun üst fitil (satış baskısı)", lambda d: d.ust_fitil >= 0.6)
+    ek("bosluk_yukari", "Güne +%2 boşlukla açılış", lambda d: d.bosluk >= 0.02)
+    ek("bosluk_asagi", "Güne -%2 boşlukla açılış", lambda d: d.bosluk <= -0.02)
+    ek("seri_3_yukari", "3 gün ve üstü üst üste yükseliş", lambda d: d.seri_yukari >= 3)
+    ek("seri_3_asagi", "3 gün ve üstü üst üste düşüş", lambda d: d.seri_asagi >= 3)
+    ek("stoch_dipten", "Stokastik 20 altında ve yukarı dönüyor", lambda d: (d.stoch < 25) & (d.stoch_d > 0))
+    ek("mfi_dusuk", "MFI 20 altı (para çıkışı aşırı)", lambda d: d.mfi < 20)
+    ek("mfi_yuksek", "MFI 80 üstü", lambda d: d.mfi > 80)
+    ek("obv_artiyor", "OBV artıyor (para girişi)", lambda d: d.obv_10 > 0)
+    ek("cmf_pozitif", "CMF +0,10 üstü (alıcı baskın)", lambda d: d.cmf > 0.10)
+    ek("adx_guclu_yukari", "ADX 25 üstü ve yön yukarı", lambda d: (d.adx > 25) & (d.di_fark > 0))
+    ek("adx_zayif", "ADX 20 altı (trend yok)", lambda d: d.adx < 20)
+    ek("st_yukari", "Günlük Supertrend (10,3) yukarı", lambda d: d.st > 0)
+    ek("st_yeni_dondu", "Supertrend bugün yukarı döndü", lambda d: d.st_don > 0)
+    for a, b, ad in [(0, 5, "5 ₺ altı"), (5, 20, "5-20 ₺"), (20, 100, "20-100 ₺"), (100, 1e9, "100 ₺ üstü")]:
+        ek(f"fiyat_{a}", f"Hisse fiyatı {ad}", lambda d, a=a, b=b: (d.fiyat >= a) & (d.fiyat < b))
+    for a, b, ad in [(0, 5e6, "5 mn ₺ altı"), (5e6, 50e6, "5-50 mn ₺"), (50e6, 500e6, "50-500 mn ₺"), (500e6, 1e15, "500 mn ₺ üstü")]:
+        ek(f"likidite_{a:.0f}", f"Günlük işlem hacmi {ad}", lambda d, a=a, b=b: (d.vol_tl >= a) & (d.vol_tl < b))
+    # likidite laboratuvarı (12.11)
+    ek("likidite_20mn_alti", "20 günlük ortalama işlem hacmi 20 mn ₺ altı (sığ hisse)", lambda d: d.vol_tl < 20e6)
+    ek("likidite_100mn_ustu", "20 günlük ortalama işlem hacmi 100 mn ₺ üstü", lambda d: d.vol_tl >= 100e6)
+    ek("likidite_artiyor", "Son 5 günün işlem hacmi (₺) 60 gün ortalamasının 1,5 katı ve üstü", lambda d: d.vol5_60 >= 1.5)
+    ek("likidite_istikrarli", "Son 20 günün en az 18'inde günlük işlem 20 mn ₺ üstü", lambda d: d.vol_gun_20mn >= 18)
+    ek("likit_ve_artan", "Günlük işlem 50 mn ₺ üstü ve son 5 günde hacim 60 gün ortalamasının 1,3 katı", lambda d: (d.vol_tl >= 50e6) & (d.vol5_60 >= 1.3))
+    ek("adim_buyuk", "Fiyat adımı fiyatın %0,5'i ve üstü (alım satım maliyeti yüksek)", lambda d: d.adim_oran >= 0.005)
+    for g, ad in enumerate(["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"]): ek(f"gun_{g}", f"{ad} kapanışında seçim", lambda d, g=g: d.gun == g, kaynak="T")
+    ek("piyasa_guclu", "BIST 100 günü +%1,5 üstü kapattı", lambda d: d.xu1 >= 0.015, kaynak="P")
+    ek("piyasa_zayif", "BIST 100 günü -%1,5 altı kapattı", lambda d: d.xu1 <= -0.015, kaynak="P")
+    ek("piyasa_trend", "BIST 100 EMA20 üstünde", lambda d: d.xu_e20 > 0, kaynak="P")
+    ek("genis_alim", "Hisselerin %75+ yükseldiği gün", lambda d: d.genislik >= 0.75, kaynak="P")
+    ek("genis_satis", "Hisselerin %35'ten azının yükseldiği gün", lambda d: d.genislik < 0.35, kaynak="P")
+    ek("sektor_lider", "Sektörü son 20 günde en güçlü 3 sektörden", lambda d: d.sek_sira <= 3, kaynak="S")
+    ek("sektor_geride", "Sektörü son 20 günde en zayıf 3 sektörden", lambda d: d.sek_sira_ters <= 3, kaynak="S")
+    ek("sektorden_guclu", "Hisse 5 günde sektöründen 5 puan iyi", lambda d: d.sek_fark5 >= 0.05, kaynak="S")
+    # gün içi (1S - 4S) son ~3 ay
+    ek("rsi1_dusuk", "1 saatlik RSI 35 altı (gün sonu)", lambda d: d.rsi1 < 35, kaynak="1S")
+    ek("rsi1_yuksek", "1 saatlik RSI 70 üstü (gün sonu)", lambda d: d.rsi1 > 70, kaynak="1S")
+    ek("e1_yukari", "1 saatlik EMA20 > EMA50", lambda d: d.e1 > 0, kaynak="1S")
+    ek("m1_yukari", "1 saatlik MACD sinyal üstünde", lambda d: d.m1 > 0, kaynak="1S")
+    ek("e4_yukari", "4 saatlik EMA20 > EMA50", lambda d: d.e4 > 0, kaynak="4S")
+    ek("rsi4_50_70", "4 saatlik RSI 50-70", lambda d: (d.rsi4 >= 50) & (d.rsi4 < 70), kaynak="4S")
+    ek("uc_periyot_uyum", "1S - 4S - Günlük üçü de yukarı (EMA20 > EMA50)", lambda d: (d.e1 > 0) & (d.e4 > 0) & (d.ema20 > d.ema50), kaynak="3P")
+    # temel (yalnızca son 60 işlem günü: bugünkü bilanço verisi eski günlere uygulanmaz)
+    ek("t_kar_sektor_iyi", "Net kâr artışı sektör ortancasından iyi", lambda d: d.t_ks > 0, kaynak="F")
+    ek("t_karli4", "En az 4 çeyrektir kârlı", lambda d: d.t_kc >= 4, kaynak="F")
+    ek("t_zarardan_kara", "Son çeyrekte zarardan kâra geçti", lambda d: d.t_kd == 1, kaynak="F")
+    ek("t_zarara_gecti", "Son çeyrekte kârdan zarara geçti", lambda d: d.t_kd == -1, kaynak="F")
+    ek("t_fk_ucuz", "F/K sektör ortancasının altında", lambda d: (d.t_fko > 0) & (d.t_fko < 1), kaynak="F")
+    ek("t_temel_guclu", "Temel puanı 5 ve üstü", lambda d: d.t_tp >= 5, kaynak="F")
+    ek("t_temel_zayif", "Temel puanı 2 ve altı", lambda d: d.t_tp <= 2, kaynak="F")
+    ek("t_bilanco_yakin", "Bilanço 7 gün içinde açıklanacak", lambda d: d.t_by == 1, kaynak="F")
+    ek("t_borclu", "Borç / özkaynak 2 üstü", lambda d: d.t_bo > 2, kaynak="F")
+    return B
+
+# ------------------------------------------------------------------ ana akış
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--kayit", required=True); ap.add_argument("--cikti", required=True); ap.add_argument("--puan", required=True)
+    ap.add_argument("--temel"); ap.add_argument("--yeni", type=int, default=40); ap.add_argument("--sinir", type=int, default=0)
+    a = ap.parse_args(); t0 = time.time(); simdi = dt.datetime.now(IST)
+    K = json.load(open(a.kayit)) if os.path.exists(a.kayit) else {"tur": 0, "ozellik": {}, "denenen_kombinasyon": []}
+    K["tur"] = K.get("tur", 0) + 1; tur = K["tur"]
+    sek = evren(); kods = sorted(sek)
+    if a.sinir: kods = kods[:a.sinir]
+    G = indir(kods, "1d", "2y"); S1 = indir(list(G), "60m", "3mo")
+    xu = yahoo("XU100.IS", "1d", "2y")
+    parcalar = []
+    for k, df in G.items():
+        f = gostergeler(df); f["kod"] = k; f["sektor"] = sek.get(k, "Bilinmiyor"); f.index = f.index.normalize().tz_localize(None)
+        if k in S1:
+            try: f = f.join(gun_ici(S1[k]), how="left")
+            except Exception: pass
+        parcalar.append(f)
+    D = pd.concat(parcalar); D.index.name = "tarih"; D = D.reset_index()
+    for c in ("rsi1", "e1", "m1", "rsi4", "e4"):
+        if c not in D: D[c] = np.nan
+    # piyasa
+    if xu is not None:
+        xi = xu.copy(); xi.index = xi.index.normalize().tz_localize(None); xs = pd.DataFrame({"xu1": xi.c.pct_change(), "xu_e20": (xi.c > ema(xi.c, 20)).astype(float)})
+        D = D.merge(xs, left_on="tarih", right_index=True, how="left")
+    else: D["xu1"] = np.nan; D["xu_e20"] = np.nan
+    D["genislik"] = D.groupby("tarih").ret1.transform(lambda s: (s > 0).mean())
+    # sektör
+    sm = D.groupby(["tarih", "sektor"]).ret20.mean().rename("sek20").reset_index()
+    sm["sek_sira"] = sm.groupby("tarih").sek20.rank(ascending=False); sm["sek_sira_ters"] = sm.groupby("tarih").sek20.rank(ascending=True)
+    D = D.merge(sm, on=["tarih", "sektor"], how="left")
+    D["sek_fark5"] = D.ret5 - D.groupby(["tarih", "sektor"]).ret5.transform("mean")
+    # temel (son 60 işlem günü)
+    gunler = np.sort(D.tarih.unique()); test_bas = gunler[-(TEST_GUN + 2)] if len(gunler) > TEST_GUN + 2 else gunler[0]
+    for c in ("t_ks", "t_kc", "t_kd", "t_fko", "t_tp", "t_by", "t_bo"): D[c] = np.nan
+    if a.temel and os.path.exists(a.temel):
+        T = json.load(open(a.temel))["hisseler"]
+        tm = pd.DataFrame([{"kod": k, "t_ks": v.get("kar_sektor_fark"), "t_kc": v.get("karli_ceyrek"),
+                            "t_kd": 1 if v.get("kar_donusu") == "zarardan kâra" else -1 if v.get("kar_donusu") == "kârdan zarara" else 0,
+                            "t_fko": v.get("fk_sektor_oran"), "t_tp": v.get("temel_puan"), "t_by": v.get("bilanco_yakin"), "t_bo": v.get("borc_ozk")} for k, v in T.items()])
+        D = D.drop(columns=[c for c in tm.columns if c != "kod"]).merge(tm, on="kod", how="left")
+        son = D.tarih >= test_bas
+        for c in tm.columns:
+            if c != "kod": D.loc[~son, c] = np.nan
+    D = D.replace([np.inf, -np.inf], np.nan)
+    alinamaz = int(((D.alinamaz > 0) & D.etiket.notna()).sum())
+    E = D[D.etiket.notna() & (D.alinamaz < 1)]; y = E.etiket.values; test = (E.tarih >= test_bas).values
+    taban = float((y == 1).mean()); taban_stop = float((y == -1).mean()); taban_getiri = 5 * taban - 3 * taban_stop; taban_test = float((y[test] == 1).mean()) if test.any() else None
+    LIB = kutuphane(); ad = {b["id"]: b for b in LIB}
+
+    def olc(mask):
+        m = np.asarray(mask.fillna(False) if hasattr(mask, "fillna") else mask, dtype=bool); n = int(m.sum())
+        if n == 0: return None
+        yy = y[m]; mt = m & test; nt = int(mt.sum())
+        r = {"ornek": n, "oran": round(float((yy == 1).mean()), 4), "stop": round(float((yy == -1).mean()), 4)}
+        r["fark"] = round(r["oran"] - taban, 4)
+        # beklenen getiri (yüzde): tutarsa +5, stop olursa -3, ikisi de olmazsa 0 sayılır
+        r["getiri"] = round(5 * r["oran"] - 3 * r["stop"], 3); r["getiri_fark"] = round(r["getiri"] - taban_getiri, 3)
+        if nt >= 20: r["ornek_test"] = nt; r["fark_test"] = round(float((y[mt] == 1).mean()) - taban_test, 4)
+        return r
+
+    maskeler = {}
+    for b in LIB:
+        try: maskeler[b["id"]] = b["fn"](E).fillna(False).values.astype(bool)
+        except Exception: continue
+    sonuc = {i: olc(m) for i, m in maskeler.items()}
+    # yeni kombinasyonlar: en güçlü tek özelliklerden henüz denenmemiş ikililer
+    denenen = set(K.get("denenen_kombinasyon", []))
+    adaylar = sorted([i for i, r in sonuc.items() if r and r["ornek"] >= 500], key=lambda i: -sonuc[i]["fark"])[:24]
+    ciftler = [f"{x}+{z}" for x, z in itertools.combinations(adaylar, 2) if f"{x}+{z}" not in denenen and ad[x]["id"].split("_")[0] != ad[z]["id"].split("_")[0]]
+    random.seed(tur); random.shuffle(ciftler)
+    # önce en güçlü ikilileri, sonra rastgele keşif
+    ciftler = sorted(ciftler[:a.yeni * 3], key=lambda c: -(sonuc[c.split("+")[0]]["fark"] + sonuc[c.split("+")[1]]["fark"]))[:a.yeni // 2] + ciftler[a.yeni * 3: a.yeni * 3 + a.yeni // 2]
+    # bir önceki turun kullanılan ikililerine üçüncü özellik ekle
+    ucluler = []
+    for cid, o in K["ozellik"].items():
+        if o.get("tip") == "kombinasyon" and o.get("durum") == "kullaniliyor" and cid.count("+") == 1:
+            for x in adaylar[:8]:
+                u = cid + "+" + x
+                if x not in cid and u not in denenen: ucluler.append(u)
+    random.shuffle(ucluler); yeni_kombi = ciftler + ucluler[:10]
+    for c in yeni_kombi:
+        parts = c.split("+")
+        if not all(p in maskeler for p in parts): continue
+        m = np.logical_and.reduce([maskeler[p] for p in parts]); r = olc(m)
+        denenen.add(c)
+        if r: sonuc[c] = r; maskeler[c] = m
+    # eski kullanılan kombinasyonları yeniden ölç (doğrulama)
+    for cid, o in K["ozellik"].items():
+        if o.get("tip") == "kombinasyon" and cid not in sonuc and o.get("durum") != "elendi":
+            parts = cid.split("+")
+            if all(p in maskeler for p in parts):
+                m = np.logical_and.reduce([maskeler[p] for p in parts]); r = olc(m)
+                if r: sonuc[cid] = r; maskeler[cid] = m
+    K["denenen_kombinasyon"] = sorted(denenen)[-5000:]
+    # kayıt ve durum
+    zaman = simdi.strftime("%d.%m %H:%M"); yeni_ids = []
+    for i, r in sonuc.items():
+        if not r: continue
+        kombi = "+" in i
+        o = K["ozellik"].get(i)
+        if o is None:
+            o = {"aciklama": " + ".join(ad[p]["aciklama"] for p in i.split("+")) if kombi else ad[i]["aciklama"],
+                 "tip": "kombinasyon" if kombi else "tek", "kaynak": "K" if kombi else ad[i]["kaynak"], "eklendi": zaman, "tur_eklendi": tur, "olcum": []}
+            K["ozellik"][i] = o; yeni_ids.append(i)
+        o["olcum"] = (o["olcum"] + [{"tur": tur, "t": zaman, **r}])[-12:]
+        min_n = 150 if kombi else 300
+        if r["ornek"] < min_n: d = "az örnek"
+        elif r["fark"] >= 0.10 and r.get("fark_test", -1) >= 0.05 and r.get("ornek_test", 0) >= 30 and r["getiri_fark"] >= 0.3: d = "kullaniliyor"
+        elif r["fark"] <= -0.03: d = "elendi"
+        else: d = "test"
+        onceki = o.get("durum"); o["durum"] = d; o["son"] = r
+        if onceki and onceki != d: o["degisim"] = f"{onceki} → {d} ({zaman})"
+    # bugünün lab puanı
+    son_gun = D.tarih.max(); B = D[D.tarih == son_gun].reset_index(drop=True)
+    kul = [i for i, o in K["ozellik"].items() if o.get("durum") == "kullaniliyor"]
+    puan = {}
+    if len(B):
+        bm = {}
+        for b in LIB:
+            try: bm[b["id"]] = b["fn"](B).fillna(False).values.astype(bool)
+            except Exception: pass
+        for i in kul:
+            parts = i.split("+")
+            if not all(p in bm for p in parts): continue
+            m = np.logical_and.reduce([bm[p] for p in parts])
+            for j in np.where(m)[0]:
+                if B.alinamaz[j] > 0: continue
+                k = B.kod[j]; p = puan.setdefault(k, {"skor": 0.0, "ozellikler": []}); p["ozellikler"].append(i)
+        for p in puan.values():
+            fs = sorted(p["ozellikler"], key=lambda i: -K["ozellik"][i]["son"]["fark"])
+            # puan = en güçlü özelliğin farkı x10 + her ek özellik için 0,5 (en fazla 5)
+            p["skor"] = round(min(5.0, K["ozellik"][fs[0]]["son"]["fark"] * 10 + 0.5 * (len(fs) - 1)), 2); p["ozellikler"] = fs[:6]
+    json.dump({"tarih": str(pd.Timestamp(son_gun).date()), "tur": tur, "hisse": puan}, open(a.puan, "w"), ensure_ascii=False)
+    # terminal çıktısı
+    sayac = {"kullaniliyor": 0, "test": 0, "elendi": 0, "az örnek": 0}
+    for o in K["ozellik"].values(): sayac[o.get("durum", "test")] = sayac.get(o.get("durum", "test"), 0) + 1
+    def satir(i):
+        o = K["ozellik"][i]; r = o["son"]; ol = o["olcum"]
+        eg = None
+        if len(ol) >= 2: eg = round(ol[-1]["fark"] - ol[0]["fark"], 4)
+        return {"ad": i, "aciklama": o["aciklama"], "durum": o["durum"], "tip": o["tip"], "kaynak": o["kaynak"], "oran": r["oran"], "stop": r["stop"],
+                "fark": r["fark"], "fark_test": r.get("fark_test"), "getiri": r["getiri"], "getiri_fark": r["getiri_fark"], "ornek": r["ornek"], "olcum": len(ol), "egilim": eg, "yeni": i in yeni_ids, "degisim": o.get("degisim")}
+    olculen = [i for i in K["ozellik"] if K["ozellik"][i].get("olcum") and K["ozellik"][i]["olcum"][-1]["tur"] == tur]
+    sirali = sorted([i for i in olculen if K["ozellik"][i]["durum"] != "az örnek"], key=lambda i: -K["ozellik"][i]["son"]["fark"])
+    vitrin = list(dict.fromkeys([i for i in sirali if K["ozellik"][i]["durum"] == "kullaniliyor"] + sirali[:30] + yeni_ids[:30] + sirali[-10:]))[:90]
+    s1n = sum(1 for k in G if k in S1)
+    bul = []
+    if yeni_ids:
+        yy = [i for i in yeni_ids if K["ozellik"][i]["durum"] != "az örnek"] or yeni_ids
+        en = max(yy, key=lambda i: sonuc[i]["fark"]); r = sonuc[en]
+        bul.append(f"Bu turda {len(yeni_ids)} yeni özellik denendi; en iyisi: {K['ozellik'][en]['aciklama']} (+%5 oranı %{r['oran']*100:.0f}, taban %{taban*100:.0f}, {r['ornek']} örnek).")
+    deg = [i for i in olculen if K["ozellik"][i].get("degisim", "").endswith(f"({zaman})")]
+    for i in deg[:5]: bul.append(f"{K['ozellik'][i]['aciklama']}: {K['ozellik'][i]['degisim'].split(' (')[0]}.")
+    if kul: bul.append(f"Şu an {len(kul)} özellik hem geçmişte hem son {TEST_GUN} günde tabanı geçiyor; bugün {len(puan)} hisse en az birini taşıyor.")
+    out = {"durum": "bitti", "tur": tur, "zaman": zaman, "at": simdi.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "sure_sn": round(time.time() - t0),
+           "grafik": {"gunluk": len(G), "s1": s1n, "s4": s1n, "toplam": len(G) + 2 * s1n, "hisse": len(kods)},
+           "mum": int(sum(len(x) for x in G.values()) + sum(len(x) for x in S1.values())), "ornek": int(len(E)), "alinamaz_disarida": alinamaz, "gun": int(len(gunler)),
+           "taban": round(taban, 4), "taban_stop": round(taban_stop, 4), "taban_getiri": round(taban_getiri, 3), "taban_test": round(taban_test, 4) if taban_test is not None else None, "test_gun": TEST_GUN,
+           "ozellik_toplam": len(K["ozellik"]), "bu_tur_olculen": len(olculen), "yeni": len(yeni_ids), "sayac": sayac,
+           "kombinasyon_denenen": len(denenen), "puanli_hisse": len(puan), "son_gun": str(pd.Timestamp(son_gun).date()),
+           "kural": "Hedef: 2 işlem günü içinde +%5, önce -%3 olmadan. Kullanılıyor: +%5 oranı tabandan 10 puan ve üstü iyi, son 60 günde ileri test +5 ve üstü, beklenen getiri (tutarsa +5, stopta -3) tabandan en az 0,3 puan iyi. Elendi: fark -3 ve altı.",
+           "bulgular": bul, "ozellikler": [satir(i) for i in vitrin]}
+    json.dump(out, open(a.cikti, "w"), ensure_ascii=False)
+    json.dump(K, open(a.kayit, "w"), ensure_ascii=False, separators=(",", ":"))
+    print(json.dumps({k: out[k] for k in ("tur", "sure_sn", "grafik", "mum", "ornek", "taban", "ozellik_toplam", "yeni", "sayac", "puanli_hisse")}, ensure_ascii=False))
+
+if __name__ == "__main__":
+    main()

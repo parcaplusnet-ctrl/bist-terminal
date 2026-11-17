@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+"""BIST Yükseliş Radarı - temel (finansal) ve sektörel veri modülü. Sürüm 1.0 · 11.11
+Tüm BIST hisseleri için TradingView tarayıcısından tek istekle geriye dönük finansal veriyi alır:
+son 32 çeyrek ciro ve net kâr, son 20 yıl ciro ve net kâr, F/K, PD/DD, özkaynak kârlılığı, borç/özkaynak,
+bilanço tarihleri ve sektör. Her hisse için özellik çıkarır ve sektör ortancasıyla kıyaslar.
+Not: 2023 sonrası Türk şirketleri enflasyon muhasebesi (TMS 29) uygular; yıllık büyüme oranları
+enflasyon içerir. Bu yüzden büyüme her zaman sektör ortancasıyla birlikte (göreli) değerlendirilir.
+Kullanım: python3 temel.py --cikti is/temel.json
+Çıktı: {tarih, n, kaynak, hisseler {KOD: {...}}, sektorler {SEKTÖR: {...}}}"""
+import argparse, json, subprocess, datetime as dt, statistics as stt
+
+IST = dt.timezone(dt.timedelta(hours=3))
+URL = "https://scanner.tradingview.com/turkey/scan"
+COLS = ["name", "sector", "industry", "market_cap_basic", "close", "price_earnings_ttm", "price_book_fq",
+        "net_margin_ttm", "return_on_equity_fq", "debt_to_equity_fq", "current_ratio_fq", "dividends_yield_current",
+        "total_revenue_fq_h", "net_income_fq_h", "total_revenue_fy_h", "net_income_fy_h",
+        "earnings_release_date", "earnings_release_next_date"]
+SEKTOR_TR = {"Finance": "Finans", "Producer Manufacturing": "Sanayi üretimi", "Process Industries": "Kimya - hammadde işleme",
+             "Non-Energy Minerals": "Metal - madencilik - çimento", "Consumer Non-Durables": "Gıda - tüketim",
+             "Electronic Technology": "Elektronik - savunma", "Utilities": "Enerji dağıtım - elektrik",
+             "Consumer Durables": "Dayanıklı tüketim - otomotiv", "Retail Trade": "Perakende", "Transportation": "Ulaştırma",
+             "Industrial Services": "Sanayi hizmetleri - inşaat", "Energy Minerals": "Petrol - enerji",
+             "Technology Services": "Yazılım - bilişim", "Commercial Services": "Ticari hizmetler",
+             "Consumer Services": "Turizm - medya - hizmet", "Communications": "İletişim", "Health Technology": "İlaç - sağlık ürünleri",
+             "Health Services": "Sağlık hizmetleri", "Distribution Services": "Toptan ticaret", "Miscellaneous": "Diğer"}
+
+def r3(x):
+    return None if x is None else round(float(x), 3)
+
+def oran(a, b):
+    """a/b-1, ikisi de pozitifse; değilse None (zarardan kâra gibi durumlar ayrı işaretlenir)."""
+    if a is None or b is None or a <= 0 or b <= 0:
+        return None
+    return a / b - 1
+
+def ham_veri():
+    q = {"filter": [{"left": "type", "operation": "equal", "right": "stock"},
+                    {"left": "exchange", "operation": "equal", "right": "BIST"}],
+         "columns": COLS, "range": [0, 1500], "sort": {"sortBy": "name", "sortOrder": "asc"}}
+    out = subprocess.run(["curl", "-s", "-m", "60", URL, "-d", json.dumps(q)], capture_output=True, text=True).stdout
+    return json.loads(out)["data"]
+
+def hisse_ozellik(o, simdi):
+    f = {}
+    rq, nq = o.get("total_revenue_fq_h") or [], o.get("net_income_fq_h") or []
+    ry, ny = o.get("total_revenue_fy_h") or [], o.get("net_income_fy_h") or []
+    g = lambda a, i: a[i] if len(a) > i and a[i] is not None else None
+    # çeyreklik (0 = son çeyrek, 4 = bir yıl önceki aynı çeyrek)
+    f["ciro_yoy"] = r3(oran(g(rq, 0), g(rq, 4)))
+    f["kar_yoy"] = r3(oran(g(nq, 0), g(nq, 4)))
+    f["kar_yoy_onceki"] = r3(oran(g(nq, 1), g(nq, 5)))
+    f["ciro_yoy_onceki"] = r3(oran(g(rq, 1), g(rq, 5)))
+    if g(nq, 0) is not None and g(nq, 4) is not None:
+        if g(nq, 0) > 0 and g(nq, 4) <= 0: f["kar_donusu"] = "zarardan kâra"
+        elif g(nq, 0) <= 0 and g(nq, 4) > 0: f["kar_donusu"] = "kârdan zarara"
+    if f["kar_yoy"] is not None and f["kar_yoy_onceki"] is not None:
+        f["kar_ivme"] = r3(f["kar_yoy"] - f["kar_yoy_onceki"])
+    if f["ciro_yoy"] is not None and f["ciro_yoy_onceki"] is not None:
+        f["ciro_ivme"] = r3(f["ciro_yoy"] - f["ciro_yoy_onceki"])
+    k = 0
+    for v in nq[:12]:
+        if v is not None and v > 0: k += 1
+        else: break
+    f["karli_ceyrek"] = k
+    f["zararli_ceyrek_8"] = sum(1 for v in nq[:8] if v is not None and v <= 0)
+    m = [n / r for n, r in zip(nq[:8], rq[:8]) if n is not None and r]
+    if len(m) >= 8:
+        f["marj_trend"] = r3(stt.mean(m[:4]) - stt.mean(m[4:8]))
+    # yıllık (0 = son yıl)
+    if g(ry, 0) and g(ry, 3) and g(ry, 0) > 0 and g(ry, 3) > 0:
+        f["ciro_3y_bilesik"] = r3((g(ry, 0) / g(ry, 3)) ** (1 / 3) - 1)
+    f["karli_yil_5"] = sum(1 for v in ny[:5] if v is not None and v > 0)
+    f["yil_sayisi"] = len([v for v in ry if v is not None])
+    # oranlar
+    f["fk"] = r3(o.get("price_earnings_ttm"))
+    f["pddd"] = r3(o.get("price_book_fq"))
+    f["net_marj"] = r3(o.get("net_margin_ttm"))
+    f["ozk_karlilik"] = r3(o.get("return_on_equity_fq"))
+    f["borc_ozk"] = r3(o.get("debt_to_equity_fq"))
+    f["cari_oran"] = r3(o.get("current_ratio_fq"))
+    f["temettu"] = r3(o.get("dividends_yield_current"))
+    f["piyasa_degeri_mn"] = round(o["market_cap_basic"] / 1e6) if o.get("market_cap_basic") else None
+    # bilanço zamanı (gün)
+    son, sonraki = o.get("earnings_release_date"), o.get("earnings_release_next_date")
+    if son: f["bilanco_gecen_gun"] = round((simdi.timestamp() - son) / 86400, 1)
+    if sonraki and sonraki > simdi.timestamp(): f["bilanco_kalan_gun"] = round((sonraki - simdi.timestamp()) / 86400, 1)
+    f["yeni_bilanco"] = int(f.get("bilanco_gecen_gun") is not None and f["bilanco_gecen_gun"] <= 7)
+    f["bilanco_yakin"] = int(f.get("bilanco_kalan_gun") is not None and f["bilanco_kalan_gun"] <= 7)
+    f["ceyrek_veri"] = len([v for v in rq if v is not None])
+    return {k: v for k, v in f.items() if v is not None}
+
+def ortanca(xs, en_az=5, buyume=False):
+    """Sektör ortancası; en az 5 değer yoksa None (az örnekle kıyas yanıltır). Büyümeler -%100..+%300 ile sınırlanır."""
+    xs = [max(-1.0, min(3.0, x)) if buyume else x for x in xs if x is not None]
+    return r3(stt.median(xs)) if len(xs) >= en_az else None
+
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument("--cikti", required=True); a = ap.parse_args()
+    simdi = dt.datetime.now(IST)
+    veri = ham_veri()
+    H, sek = {}, {}
+    for row in veri:
+        o = dict(zip(COLS, row["d"])); kod = row["s"].split(":")[1]
+        f = hisse_ozellik(o, simdi)
+        f["sektor"] = SEKTOR_TR.get(o.get("sector"), o.get("sector") or "Bilinmiyor"); f["sektor_en"] = o.get("sector"); f["alt_sektor"] = o.get("industry")
+        H[kod] = f; sek.setdefault(f["sektor"], []).append(kod)
+    # sektör ortancaları ve göreli konum
+    S = {}
+    for s, kods in sek.items():
+        rows = [H[k] for k in kods]
+        fk_pos = [r.get("fk") for r in rows if r.get("fk") and r["fk"] > 0]
+        S[s] = {"n": len(kods), "fk": ortanca(fk_pos), "pddd": ortanca([r.get("pddd") for r in rows if r.get("pddd") and r["pddd"] > 0]),
+                "ciro_yoy": ortanca([r.get("ciro_yoy") for r in rows], buyume=True), "kar_yoy": ortanca([r.get("kar_yoy") for r in rows], buyume=True),
+                "net_marj": ortanca([r.get("net_marj") for r in rows]), "ozk_karlilik": ortanca([r.get("ozk_karlilik") for r in rows]),
+                "karli_orani": r3(sum(1 for r in rows if r.get("karli_ceyrek", 0) >= 1) / len(rows)),
+                "kar_artan_orani": r3(sum(1 for r in rows if (r.get("kar_yoy") or 0) > 0) / len(rows))}
+    for k, f in H.items():
+        s = S[f["sektor"]]
+        if f.get("ciro_yoy") is not None and s["ciro_yoy"] is not None: f["ciro_sektor_fark"] = r3(min(3.0, f["ciro_yoy"]) - s["ciro_yoy"])
+        if f.get("kar_yoy") is not None and s["kar_yoy"] is not None: f["kar_sektor_fark"] = r3(min(3.0, f["kar_yoy"]) - s["kar_yoy"])
+        if f.get("fk") and f["fk"] > 0 and s["fk"]: f["fk_sektor_oran"] = r3(f["fk"] / s["fk"])
+        if f.get("pddd") and f["pddd"] > 0 and s["pddd"]: f["pddd_sektor_oran"] = r3(f["pddd"] / s["pddd"])
+        # basit temel puan (0-10). Yalnızca laboratuvar içindir; ağırlığı sonuçlardan öğrenilir.
+        p = 0
+        p += 2 * ((f.get("kar_sektor_fark") or -1) > 0)
+        p += 1.5 * ((f.get("ciro_sektor_fark") or -1) > 0)
+        p += 1.5 * (f.get("karli_ceyrek", 0) >= 4)
+        p += 1 * (f.get("kar_donusu") == "zarardan kâra")
+        p += 1 * ((f.get("kar_ivme") or 0) > 0)
+        p += 1 * (0 < (f.get("fk_sektor_oran") or 99) < 1)
+        p += 1 * ((f.get("marj_trend") or 0) > 0)
+        p += 1 * ((f.get("borc_ozk") if f.get("borc_ozk") is not None else 9) < 1)
+        p -= 1.5 * (f.get("kar_donusu") == "kârdan zarara")
+        f["temel_puan"] = round(max(0, min(10, p)), 1)
+        f["ozet"] = ozet(f, s)
+    out = {"tarih": simdi.strftime("%d.%m %H:%M"), "n": len(H), "kaynak": "TradingView tarayıcısı (son 32 çeyrek, 20 yıl)",
+           "not": "Büyüme oranları enflasyon muhasebesi (TMS 29) etkisi taşır; sektör ortancasıyla kıyaslanır.",
+           "sektorler": S, "hisseler": H}
+    json.dump(out, open(a.cikti, "w"), ensure_ascii=False, separators=(",", ":"))
+    print(json.dumps({"n": len(H), "sektor": len(S), "bilanco_yakin": sum(f["bilanco_yakin"] for f in H.values()),
+                      "yeni_bilanco": sum(f["yeni_bilanco"] for f in H.values())}, ensure_ascii=False))
+
+def yz(x):
+    return ("+" if x >= 0 else "-") + "%" + f"{abs(x) * 100:.0f}"
+
+def ozet(f, s):
+    p = []
+    if f.get("kar_donusu"): p.append(f["kar_donusu"])
+    elif f.get("kar_yoy") is not None: p.append("net kâr yıllık " + yz(f["kar_yoy"]) + ("" if f.get("kar_sektor_fark") is None else " (sektörden iyi)" if f["kar_sektor_fark"] > 0 else " (sektörden zayıf)"))
+    if f.get("ciro_yoy") is not None: p.append("ciro " + yz(f["ciro_yoy"]))
+    if f.get("karli_ceyrek", 0) >= 4: p.append(f"{f['karli_ceyrek']} çeyrektir kârlı")
+    elif f.get("zararli_ceyrek_8", 0) >= 4: p.append(f"son 8 çeyreğin {f['zararli_ceyrek_8']}'ü zararlı")
+    if f.get("fk") and f["fk"] > 0 and s.get("fk"): p.append(f"F/K {f['fk']:.1f} (sektör {s['fk']:.1f})".replace(".", ","))
+    if f.get("bilanco_yakin"): p.append(f"bilanço {f['bilanco_kalan_gun']:.0f} gün sonra")
+    elif f.get("yeni_bilanco"): p.append(f"bilanço {f['bilanco_gecen_gun']:.0f} gün önce açıklandı")
+    return ", ".join(p) if p else "finansal veri yok"
+
+if __name__ == "__main__":
+    main()
