@@ -234,6 +234,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 
 <main class="wrap">
  <section class="ogrb" id="ogrB" hidden aria-live="polite"></section>
+ <section class="ogrb" id="sagB" hidden aria-live="polite" style="border-color:#b3261e"></section>
  <section class="scan" id="scanP" hidden aria-live="polite">
   <div>
    <h3 id="scT">Tarama sürüyor</h3>
@@ -557,7 +558,11 @@ addEventListener("resize",()=>{clearTimeout(kesL.t);kesL.t=setTimeout(kesL,150)}
 function ogrAsama(){const e=$("ogrB");if(!e)return;const o=(D||{}).ogrenme_asamasi;if(!o){e.hidden=true;return}e.hidden=false;e.className="ogrb"+(o.aktif?"":" acik");
  e.textContent="";const b=document.createElement("b");b.textContent=o.aktif?"ÖĞRENME AŞAMASI":"ÖNERİ AÇIK";const t=document.createElement("span");
  t.textContent=o.aktif?"Bu seçimler öneri değildir; sistem öğreniyor, seçimler kasada sanal olarak izleniyor. "+(o.sebep||"")+".":(o.sebep||"")+".";e.append(b,t)}
-function render(){tvApply();ogrAsama();const H=D.history||[],st=D.son_tarama||{};
+function sagAsama(){const e=$("sagB");if(!e||!D)return;const L=[...((D.saglik||{}).uyarilar||[])];
+ try{const n=new Date(Date.now()+3*36e5),g=n.getUTCDay(),dk=n.getUTCHours()*60+n.getUTCMinutes(),vT=etTs(D.guncelleme);
+  if(g>=1&&g<=5&&dk>=640&&dk<=1140&&vT&&Date.now()-vT>100*6e4)L.push("Veri bayat: son güncelleme "+D.guncelleme+"; saatlik tarama görevi çalışmamış olabilir")}catch(x){}
+ if(!L.length){e.hidden=true;return}e.hidden=false;e.textContent="";const b=document.createElement("b");b.textContent="SİSTEM UYARISI";const t=document.createElement("span");t.textContent=L.join(" · ");e.append(b,t)}
+function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son_tarama||{};
  const tutK=new Set(((D.kasa||{}).acik||[]).map(p=>p.kod)),open=H.filter(r=>r.sonuc==="Bekliyor"&&!tutK.has(r.kod)),done=H.filter(r=>["Başarılı","Stop","Başarısız","Kâr korundu"].includes(r.sonuc)||EK(r)),hit=done.filter(r=>r.sonuc==="Başarılı").length,kkn=done.filter(r=>r.sonuc==="Kâr korundu").length,ekk=done.filter(EKK).length,bas=hit+kkn+ekk;
  txt($("kAll"),H.length);txt($("kOpen"),open.length);txt($("kHit"),hit);txt($("kStop"),H.filter(r=>r.sonuc==="Stop").length);txt($("kExp"),H.filter(r=>r.sonuc==="Başarısız").length);
  {const say=s=>H.filter(r=>r.sonuc===s).length,kk=say("Kâr korundu"),ek=say("Erken kapandı");const L=[`${open.length} takipte`,`${hit} tuttu`,`${say("Stop")} stop`,`${say("Başarısız")} süre`];if(kk)L.push(`${kk} kâr korundu`);if(ek)L.push(`${ek} erken kapandı`);txt($("kAllL"),L.join(" · "));$("kAllL").parentNode.title="Yalnızca BIST seçimleri: "+L.join(", ")}

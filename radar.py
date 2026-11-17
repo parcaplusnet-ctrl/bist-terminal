@@ -648,9 +648,9 @@ def cmd_adaylar(a):
         # Seçim kuralı (öğrenilmiş): evren içi sıralamada ilk %kademe_yuzde içinde olan ve radar filtrelerinden (KAP, derinlik, puan) geçen hisseler; günlük sayı ve kademe model tarafından öğrenilir (egit.py)
         dg = MJ.get("dogrulama") or {}; gn = int(dg.get("gunluk_n") or 3); q = int(dg.get("kademe_yuzde") or 3)
         LABP, LABT = _lab_puan(); LW = _lab_agirlik()
-        KKL = {k: v + LW * float((LABP.get(k) or {}).get("skor", 0)) for k, v in KK.items()}   # kural 17.11: laboratuvarda öğrenilmiş özelliklerle eşleşen hisse, özelliğin kanıtıyla orantılı ilave puan alır
+        KKL = {k: v + LW * float((LABP.get(k) or {}).get("skor", 0)) for k, v in KK.items()}   # kural 17.11: lab bonusu kapıyı (kademe ve eşik) GEVŞETMEZ; yalnız kapıyı model skoruyla geçenlerin sıralamasını belirler
         print(f"LAB ETKİSİ: {len(LABP)} hisse lab puanı taşıyor (veri {LABT}, ağırlık {LW}/puan)" + (": " + ", ".join(f"{k} +{LW*v['skor']:.2f}" for k, v in list(LABP.items())[:8]) if LABP else ""))
-        sirali = sorted(KKL.items(), key=lambda kv: -kv[1]); sira = {k: i + 1 for i, (k, v) in enumerate(sirali)}; kesim = max(1, round(len(sirali) * q / 100))
+        sirali = sorted(KK.items(), key=lambda kv: -kv[1]); sira = {k: i + 1 for i, (k, v) in enumerate(sirali)}; kesim = max(1, round(len(sirali) * q / 100))
         bugun = simdi().strftime("%d.%m"); bugun_n = sum(1 for h in V.get("history", []) if str(h.get("tarama", "")).startswith(bugun))
         kalan = max(0, gn - bugun_n)
         gor = {h["kod"] for h in V.get("history", [])}; dk = simdi().hour * 60 + simdi().minute; ret = {"kademe dışı": 0, "ilk kez 10-12": 0, "sığ": 0, "puan yok": 0}
@@ -659,7 +659,7 @@ def cmd_adaylar(a):
             s["model"] = KK.get(s["kod"]); s["sira"] = sira.get(s["kod"]); lb = LABP.get(s["kod"])
             if s["model"] is None: ret["puan yok"] += 1; continue
             s["lab"] = ({"skor": lb["skor"], "bonus": round(LW * lb["skor"], 3), "ozellikler": lb.get("detay") or lb.get("ozellikler"), "veri": LABT} if lb else None); s["model_lab"] = KKL[s["kod"]]
-            if kk_e is not None and s["model_lab"] < kk_e: ret["model eşiği"] = ret.get("model eşiği", 0) + 1; continue
+            if kk_e is not None and s["model"] < kk_e: ret["model eşiği"] = ret.get("model eşiği", 0) + 1; continue
             if s["sira"] > kesim: ret["kademe dışı"] += 1; continue
             if s["kod"] not in gor and dk < 720: ret["ilk kez 10-12"] += 1; continue   # kasa kuralı: ilk kez seçilen hisse 10:00-11:59 arası alınmaz (canlı isabet %40, stop %52); seçimle portföy aynı kalsın diye burada uygulanır
             if s.get("derinlik") == "Sığ": ret["sığ"] += 1; continue
@@ -707,6 +707,10 @@ def cmd_adaylar(a):
         Y["piyasa"] = B["ozet"]["piyasa"]; Y.setdefault("scans", []).append(sc)
     if a.piyasa == "bist":
         V["ogrenme_asamasi"] = _ogrenme_asamasi(V, tarih)
+        _lp, _lt = _lab_puan(); _uy = []
+        if _lt is None: _uy.append("Laboratuvar puan dosyası yok ya da 3 günden eski: lab bonusu uygulanmadı")
+        V["saglik"] = {"zaman": simdi().strftime("%d.%m %H:%M"), "lab_puan_tarih": _lt, "lab_hisse": len(_lp), "lab_agirlik": _lab_agirlik(), "uyarilar": _uy}
+        if _uy: print("SAĞLIK UYARISI: " + "; ".join(_uy))
         for p_ in V.get("picks", []): p_["asama"] = "öğrenme" if V["ogrenme_asamasi"]["aktif"] else "öneri"
         if ban_elenen: V["son_tarama"]["ban_elenen"] = ban_elenen; print(f"YASAKLI LİSTE: aday olamayan hisseler {ban_elenen}")
         print(f"AŞAMA: {'ÖĞRENME (öneri değildir, sanal izleme)' if V['ogrenme_asamasi']['aktif'] else 'ÖNERİ AÇIK'} · {V['ogrenme_asamasi']['sebep']}")

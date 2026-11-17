@@ -356,6 +356,13 @@ def main():
                 v, g, kap = deger(i); r = K["ozellik"][i]["son"]
                 det.append({"id": i, "aciklama": K["ozellik"][i]["aciklama"], "oran": r["oran"], "fark": r["fark"], "fark_test": r.get("fark_test"), "ornek": r["ornek"], "ornek_test": r.get("ornek_test"), "guven": g, "kapsam": kap, "deger": v})
             det.sort(key=lambda x: -x["deger"])
+            # aynı ailedeki (iç içe) özellikler aynı kanıtı iki kez saymasın: bir özelliğin parçaları öncekilerden birinin parçalarının alt ya da üst kümesiyse atlanır
+            tut = []
+            for x in det:
+                px = set(x["id"].split("+"))
+                if any(px <= set(y["id"].split("+")) or set(y["id"].split("+")) <= px for y in tut): continue
+                tut.append(x)
+            det = tut
             # puan = en değerli özellik + diğerlerinin değerinin dörtte biri (en fazla 5)
             p["skor"] = round(min(5.0, det[0]["deger"] + 0.25 * sum(x["deger"] for x in det[1:])), 2)
             p["ozellikler"] = [x["id"] for x in det[:6]]; p["detay"] = det[:6]

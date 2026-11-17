@@ -131,3 +131,9 @@ Genel isabet = (hedefe ulaşan "Başarılı" + "Kâr korundu") / sonuçlanan (Ba
 - lab.py (özellik laboratuvarı) her hisse için `lab/puan.json` üretir: eşleşen "kullaniliyor" özellikler + kanıta dayalı puan (en çok 5). Özellik değeri = (0,5 x geçmiş fark + 0,5 x son 60 gün ileri test farkı) x 10 x güven; güven = min(1, örnek/3000) x min(1, ileri test örneği/300). Puan = en değerli özellik + diğerlerinin dörtte biri.
 - radar.py `adaylar`: seçim puanı = model skoru + `lab_agirlik` (rules.json, 0,05) x lab puanı. Hem kalite kapısı eşiği hem sıralama bu puanla yapılır; öneri nedeninde ve `lab` alanında görünür. lab/puan.json 3 günden eskiyse bonus uygulanmaz.
 - Bonus en çok 0,25 puandır; öğrenme aşaması ve yasak listesi kuralları aynen geçerlidir.
+
+## 17.11 Sağlık denetimi ve kapı kuralı
+- Lab bonusu kalite kapısını (kademe ve model eşiği) gevşetmez: kapı yalnız saf model skoruyla uygulanır, bonus kapıyı geçenlerin sıralamasını belirler.
+- Lab puanında iç içe özellikler (parçaları birbirinin alt kümesi) aynı kanıtı iki kez saymaz; yalnız en değerlisi puana girer.
+- `adaylar` her çalışmada veri.json içine `saglik` yazar (lab puan tarihi, eşleşen hisse sayısı, uyarılar). Sayfa kırmızı "SİSTEM UYARISI" bandını uyarı varsa ya da hafta içi 10:40-19:00 arasında veri 100 dakikadan eskiyse gösterir.
+- Eski `dogrulama` alanı kaldırıldı (silinmiş görevden kalan bayat rapor).
