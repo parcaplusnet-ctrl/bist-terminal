@@ -2,13 +2,13 @@
  "acik_takipte_tekrar_secme": false,
  "aday_sayisi_sabit": false,
  "always_include": [],
- "ban": [
-  "ISVEA",
-  "KONTR",
-  "PASEU",
-  "PEKGY",
-  "TMPOL"
- ],
+ "ban": {
+  "ISVEA": "SPK tedbir kararı (07.11)",
+  "KONTR": "kayyım süreci",
+  "PASEU": "SPK suç duyurusu: 2026/77 sayılı bülten, pay işlemleri (KAP 28.10)",
+  "PEKGY": "kayyım atandı (04.11); 17.11 kira sertifikası ödemesi yapılamadı",
+  "TMPOL": "SPK tedbir kararı (07.11, Hedef Portföy işlemleri)"
+ },
  "esik": 0.05,
  "gecis_2gun": true,
  "gecis_stop3": true,

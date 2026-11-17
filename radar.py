@@ -570,12 +570,16 @@ def _kk_esik_gozden(V, zaman):
     print(f"KK EŞİK (otomatik gözden geçirme, n={n}): {eski} → {yeni} · {gerekce}")
     return yeni
 
-def _ban_listesi():
-    """rules.json -> ban (liste ya da {kod: neden}); dosya yoksa boş."""
+def _ban_listesi(V=None):
+    """Yasaklı liste = rules.json ban + veri.json ban_ek, veri.json ban_kaldirilan çıkarılmış hâli. {kod: neden}"""
     try:
         r = json.load(open("rules.json", encoding="utf-8")).get("ban", [])
-        return {k: "" for k in r} if isinstance(r, list) else dict(r)
-    except Exception: return {}
+        B = {k: "" for k in r} if isinstance(r, list) else dict(r)
+    except Exception: B = {}
+    if V:
+        for k, v in (V.get("ban_ek") or {}).items(): B[k] = v.get("neden", "") if isinstance(v, dict) else str(v)
+        for k in (V.get("ban_kaldirilan") or {}): B.pop(k, None)
+    return B
 
 OGR_MIN_SONUC = 30; OGR_MIN_ISABET = 0.45; OGR_MAX_STOP = 0.45
 def _ogrenme_asamasi(V, tarih):
@@ -601,8 +605,17 @@ def cmd_adaylar(a):
     B = json.load(open(a.girdi)); K = {k["kod"]: k for k in json.load(open(a.karar))}; V = json.load(open(a.veri))
     tarih = simdi().strftime("%d.%m %H:%M"); bitis = vade(a.piyasa)
     havuz = []; karar_eksik = []
-    BAN = _ban_listesi() if a.piyasa == "bist" else {}   # kural 17.11: yasaklı hisse (SPK tedbiri, kayyım, suç duyurusu vb.) hiçbir koşulda aday olamaz
+    BAN = _ban_listesi(V) if a.piyasa == "bist" else {}   # kural 17.11: yasaklı hisse (SPK tedbiri, kayyım, suç duyurusu vb.) hiçbir koşulda aday olamaz
     ban_elenen = []
+    # Yasaklı liste çıkışı (kural 17.11): yasağın nedeni giderildiyse ya da olumlu gelişme/haber varsa karar.json "ban_kaldir": {kod: neden} ile liste dışına alınır; yeni yasak "ban_ekle": {kod: neden}
+    for kk, kv in K.items():
+        if kv.get("ban_kaldir") and kk in BAN:
+            V.setdefault("ban_kaldirilan", {})[kk] = {"neden": kv["ban_kaldir"], "tarih": tarih, "eski_neden": BAN.pop(kk)}; V.get("ban_ek", {}).pop(kk, None)
+            print(f"YASAK KALDIRILDI: {kk} · {kv['ban_kaldir']}")
+        if kv.get("ban_ekle") and a.piyasa == "bist":
+            V.setdefault("ban_ek", {})[kk] = {"neden": kv["ban_ekle"], "tarih": tarih}; V.get("ban_kaldirilan", {}).pop(kk, None); BAN[kk] = kv["ban_ekle"]
+            print(f"YASAK EKLENDİ: {kk} · {kv['ban_ekle']}")
+    if BAN: print("YASAKLI İNCELEME: haber/KAP bu hisseler için de okunmalı (olumlu gelişme varsa karar.json ban_kaldir): " + ", ".join(f"{k} ({v})" if v else k for k, v in BAN.items()))
     ACIK0 = {h["kod"] for h in (V.get("history", []) if a.piyasa == "bist" else V.get("yurtdisi", {}).get("history", [])) if h.get("sonuc") == "Bekliyor"}
     for s in B["adaylar"]:
         if s["kod"] in BAN: ban_elenen.append(s["kod"]); continue
