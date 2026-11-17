@@ -1,50 +1,237 @@
 {
-  "adim": "Tamamlandı",
-  "at": "2026-11-17T12:30:00Z",
-  "durum": "bitti",
-  "en_iyi": [
-    {
-      "kod": "MRGYO",
-      "puan": 7.75
-    },
-    {
-      "kod": "PAHOL",
-      "puan": 7.5
-    },
-    {
-      "kod": "ISKPL",
-      "puan": 7.25
-    },
-    {
-      "kod": "CITAS",
-      "puan": 7.25
-    },
-    {
-      "kod": "IHLAS",
-      "puan": 7
-    },
-    {
-      "kod": "BAHKM",
-      "puan": 7
-    }
-  ],
-  "hedefe_ulasan": [],
-  "islenen": 625,
-  "oturum": "Öğleden sonra",
-  "sayac": {
-    "elenen": 609,
-    "kap": 16,
-    "puanlanan": 625,
-    "uygun": 16
+ "durum": "bitti",
+ "tarama": "17.11 BIST",
+ "oturum": "Bulut tarama",
+ "toplam": 625,
+ "islenen": 625,
+ "adim": "Tamamlandı",
+ "sayac": {
+  "puanlanan": 625,
+  "uygun": 32,
+  "elenen": 593,
+  "kap": 0
+ },
+ "en_iyi": [
+  {
+   "kod": "LIDER",
+   "puan": 9.75
   },
-  "son": [],
-  "stop_olan": [],
-  "suresi_dolan": [],
-  "tarama": "17.11 15:23",
-  "toplam": 625,
-  "ulak": {
-    "1S": 0,
-    "4S": 0,
-    "G": 0
+  {
+   "kod": "PASEU",
+   "puan": 9.25
+  },
+  {
+   "kod": "ISVEA",
+   "puan": 8.75
+  },
+  {
+   "kod": "MARMR",
+   "puan": 8.75
+  },
+  {
+   "kod": "MRGYO",
+   "puan": 8.75
+  },
+  {
+   "kod": "TKNKA",
+   "puan": 8.75
+  },
+  {
+   "kod": "CELHA",
+   "puan": 8.5
+  },
+  {
+   "kod": "GRTHO",
+   "puan": 8.5
+  },
+  {
+   "kod": "BINHO",
+   "puan": 8.25
+  },
+  {
+   "kod": "CGCAM",
+   "puan": 8.25
   }
+ ],
+ "son": [
+  {
+   "kod": "VAKFN",
+   "periyot": "3P",
+   "puan": 6.0,
+   "rv": 1.33,
+   "fiyat": 0.88,
+   "pk": {
+    "RSI-MACD": 1,
+    "Trend": 0.5,
+    "Hacim": 1,
+    "Uyum": 2.5,
+    "Dip": 1,
+    "KAP": 0,
+    "Risk": 0
+   },
+   "tk": {
+    "1S": [
+     0.09,
+     0.8,
+     0.45
+    ],
+    "4S": [
+     0,
+     0.4,
+     0.2
+    ],
+    "G": [
+     0.27,
+     0,
+     0.14
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (6,0), günlük trend aşağı"
+  },
+  {
+   "kod": "VESTL",
+   "periyot": "3P",
+   "puan": 6.0,
+   "rv": 2.64,
+   "fiyat": 15.2,
+   "pk": {
+    "RSI-MACD": 0,
+    "Trend": 1,
+    "Hacim": 1.5,
+    "Uyum": 2.5,
+    "Dip": 1,
+    "KAP": 0,
+    "Risk": 0
+   },
+   "tk": {
+    "1S": [
+     -0.09,
+     0.8,
+     0.35
+    ],
+    "4S": [
+     0.18,
+     0.4,
+     0.29
+    ],
+    "G": [
+     -0.09,
+     0.13,
+     0.02
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (6,0), günlük trend aşağı"
+  },
+  {
+   "kod": "YESIL",
+   "periyot": "3P",
+   "puan": 5.25,
+   "rv": 1.3,
+   "fiyat": 0.81,
+   "pk": {
+    "RSI-MACD": 1,
+    "Trend": 1.5,
+    "Hacim": 0,
+    "Uyum": 2.75,
+    "Dip": 1,
+    "KAP": 0,
+    "Risk": -1
+   },
+   "tk": {
+    "1S": [
+     0.09,
+     0.93,
+     0.51
+    ],
+    "4S": [
+     0.27,
+     0.53,
+     0.4
+    ],
+    "G": [
+     -0.09,
+     0.13,
+     0.02
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (5,25), sığ hisse: günlük ort. ciro 9 mn ₺ (eşik 20 mn ₺), günlük trend aşağı"
+  },
+  {
+   "kod": "ZOREN",
+   "periyot": "3P",
+   "puan": 5.0,
+   "rv": 1.84,
+   "fiyat": 1.59,
+   "pk": {
+    "RSI-MACD": 0,
+    "Trend": 1.5,
+    "Hacim": 1,
+    "Uyum": 2.5,
+    "Dip": 0,
+    "KAP": 0,
+    "Risk": 0
+   },
+   "tk": {
+    "1S": [
+     0.09,
+     0.4,
+     0.25
+    ],
+    "4S": [
+     0.18,
+     0.53,
+     0.36
+    ],
+    "G": [
+     -0.09,
+     0.13,
+     0.02
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (5,0), günlük trend aşağı"
+  },
+  {
+   "kod": "VAKKO",
+   "periyot": "3P",
+   "puan": 4.75,
+   "rv": 1.04,
+   "fiyat": 49.06,
+   "pk": {
+    "RSI-MACD": 1,
+    "Trend": 0.5,
+    "Hacim": 0,
+    "Uyum": 2.25,
+    "Dip": 1,
+    "KAP": 0,
+    "Risk": 0
+   },
+   "tk": {
+    "1S": [
+     0.27,
+     0.67,
+     0.47
+    ],
+    "4S": [
+     0.09,
+     0.27,
+     0.18
+    ],
+    "G": [
+     0.18,
+     -0.13,
+     0.02
+    ]
+   },
+   "uygun": false,
+   "sebep": "puan düşük (4,75), sığ hisse: günlük ort. ciro 8 mn ₺ (eşik 20 mn ₺), günlük trend aşağı"
+  }
+ ],
+ "hedefe_ulasan": [],
+ "stop_olan": [],
+ "suresi_dolan": [],
+ "at": "2026-11-17T18:05:22Z"
 }
