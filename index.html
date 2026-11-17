@@ -602,7 +602,7 @@ async function tvCek(){const k=tvKodlar();if(!k.length)return;try{const r=await 
   const n=new Date(),o={timeZone:"Europe/Istanbul"},hm=n.toLocaleTimeString("tr-TR",Object.assign({hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"},o)),gm=n.toLocaleDateString("tr-TR",Object.assign({day:"2-digit",month:"2-digit"},o));
   const imza=JSON.stringify(f);TV={f,hm,et:gm+" "+hm.slice(0,5)};TVERR=0;tvApply();tvAlarm();TVIL=false;if(imza!==TVSON&&D){TVSON=imza;render()}else txt($("fyT"),TVET+" · 15 dk gecikmeli · sürekli")}
  catch(e){TVERR++;if(TVERR>=3&&!TV)txt($("fyT"),"TradingView bağlantısı yok · "+(FY_ET||"15 dk gecikmeli"))}}
-function tvDongu(){tvCek().finally(()=>{const t=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"})),g=t.getDay(),dk=t.getHours()*60+t.getMinutes(),acik=g>=1&&g<=5&&dk>=595&&dk<=1090;setTimeout(tvDongu,document.hidden?30000:acik?10000:300000)})}
+function tvDongu(){tvCek().finally(()=>{const t=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"})),g=t.getDay(),dk=t.getHours()*60+t.getMinutes(),acik=g>=1&&g<=5&&dk>=595&&dk<=1090;setTimeout(tvDongu,document.hidden?30000:acik?5000:300000)})}
 /* GitHub Pages: TradingView canlı fiyat döngüsü açık (BIST 15 dk gecikmeli) */
 tvDongu();
 
@@ -1075,6 +1075,30 @@ document.addEventListener("keydown",e=>{if($("tour").hidden)return;if(e.key==="E
 $("tourB").addEventListener("click",()=>{if(!$("mod").hidden)modKapat();turBasla()});
 </script>
 
+<script>
+/* canlı fiyat hareketi: ŞİMDİ sütununda değişen fiyat yanıp söner (yeşil yukarı, kırmızı aşağı); veri 15 dk gecikmeli ama kesintisiz akar */
+(function(){
+ const st=document.createElement("style");
+ st.textContent="@keyframes flU{0%{background:rgba(34,197,94,.55)}100%{background:transparent}}@keyframes flD{0%{background:rgba(239,68,68,.55)}100%{background:transparent}}.fl-up{animation:flU 2s ease-out;color:#22c55e!important}.fl-dn{animation:flD 2s ease-out;color:#ef4444!important}.fl-up::after{content:' \\25B2';font-size:.7em}.fl-dn::after{content:' \\25BC';font-size:.7em}#canliNokta{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:6px;animation:cnp 1s infinite}@keyframes cnp{50%{opacity:.25}}";
+ document.head.appendChild(st);
+ const prev={};
+ function flash(){
+  if(typeof TV==="undefined"||!TV||!TV.f)return;
+  const ch={};
+  Object.keys(TV.f).forEach(k=>{const p=prev[k],n=TV.f[k];if(p!==undefined&&n!==p)ch[k]=n>p?"fl-up":"fl-dn";prev[k]=n});
+  document.querySelectorAll("#ksA tr, #gT tr").forEach(tr=>{
+   const c=tr.cells&&tr.cells[3],t=tr.cells&&tr.cells[0];if(!c||!t)return;
+   const m=t.textContent.trim().match(/^[A-Z0-9]+/);if(!m)return;
+   const k=m[0];
+   if(ch[k]){c.classList.remove("fl-up","fl-dn");void c.offsetWidth;c.classList.add(ch[k])}
+  });
+  const f=document.getElementById("fyT");
+  if(f&&!document.getElementById("canliNokta")){const d=document.createElement("span");d.id="canliNokta";f.parentNode.insertBefore(d,f)}
+ }
+ const orig=tvCek;
+ tvCek=async function(){await orig();flash()};
+})();
+</script>
 </body></html><!-- genel tarama 16.11 13:49 -->
 
 <!-- audit 16.11 -->
