@@ -228,6 +228,7 @@ def cmd_bist(a):
         ix = [i.get("proname", "") for i in (o.get("indexes") or [])]
         s["katman"] = "XU030" if "BIST:XU030" in ix else "XU050" if "BIST:XU050" in ix else "XU100" if "BIST:XU100" in ix else None
         s["acik"] = s["kod"] in ac
+        s["sek"] = next((x for x in BIST_SEK if "BIST:" + x in ix), None)  # BIST sektör endeksi kodu (sektör laboratuvarı bonusu için)
         S.append(s)
     xu = scan("turkey", {"symbols": {"tickers": ["BIST:XU100"]}, "columns": ["close", "change", "Perf.W"]})["data"][0]["d"]
     out = {"tarih": simdi().strftime("%d.%m %H:%M"), "seans_ici": si, "esik": esik,
@@ -648,7 +649,8 @@ def cmd_adaylar(a):
         # Seçim kuralı (öğrenilmiş): evren içi sıralamada ilk %kademe_yuzde içinde olan ve radar filtrelerinden (KAP, derinlik, puan) geçen hisseler; günlük sayı ve kademe model tarafından öğrenilir (egit.py)
         dg = MJ.get("dogrulama") or {}; gn = int(dg.get("gunluk_n") or 3); q = int(dg.get("kademe_yuzde") or 3)
         LABP, LABT = _lab_puan(); LW = _lab_agirlik()
-        HK = _hareket_kurallari()
+        HK = _hareket_kurallari(); SB, SW = _sektor_bonus(V)
+        print(f"SEKTÖR ETKİSİ: {len(SB)} sektör kadranı, ağırlık {SW} (en çok ±{SW:g}, yalnız sıralama)")
         print(f"HAREKET KURALLARI: {len(HK)} onaylı kural uygulanıyor" + (": " + ", ".join(f"{k.get('yon')} {k.get('aciklama', k.get('id'))}" for k in HK) if HK else " (onaylı kural yok, seçime etkisi yok)"))
         KKL = {k: v + LW * float((LABP.get(k) or {}).get("skor", 0)) for k, v in KK.items()}   # kural 17.11: lab bonusu kapıyı (kademe ve eşik) GEVŞETMEZ; yalnız kapıyı model skoruyla geçenlerin sıralamasını belirler
         print(f"LAB ETKİSİ: {len(LABP)} hisse lab puanı taşıyor (veri {LABT}, ağırlık {LW}/puan)" + (": " + ", ".join(f"{k} +{LW*v['skor']:.2f}" for k, v in list(LABP.items())[:8]) if LABP else ""))
@@ -665,7 +667,8 @@ def cmd_adaylar(a):
             if s["sira"] > kesim: ret["kademe dışı"] += 1; continue
             if s["kod"] not in gor and dk < 720: ret["ilk kez 10-12"] += 1; continue   # kasa kuralı: ilk kez seçilen hisse 10:00-11:59 arası alınmaz (canlı isabet %40, stop %52); seçimle portföy aynı kalsın diye burada uygulanır
             if s.get("derinlik") == "Sığ": ret["sığ"] += 1; continue
-            hb, he, hm = _hareket_etki(s, HK); s["hareket"] = hm; s["model_lab"] = s["model_lab"] + hb
+            hb, he, hm = _hareket_etki(s, HK); s["hareket"] = hm; sb_ = SB.get(s.get("sek")); s["sektor_lab"] = ({"kod": s["sek"], "kadran": sb_[1], "bonus": sb_[0]} if sb_ else None)
+            s["model_lab"] = s["model_lab"] + hb + (sb_[0] if sb_ else 0)
             if he: ret["hareket elemesi"] = ret.get("hareket elemesi", 0) + 1; s["kk_neden"] = "hareket laboratuvarı elemesi: " + he[0]; continue
             gecen.append(s)
         gecen.sort(key=lambda s: -s["model_lab"]); sec = gecen[:kalan]
@@ -687,10 +690,11 @@ def cmd_adaylar(a):
         if s["kod"] in son_basari:
             b0 = son_basari[s["kod"]]; p["trend_devam"] = {"onceki_tarama": b0["tarama"], "onceki_max": b0.get("max_degisim"), "onceki_giris": b0.get("giris")}
             yz2 = f"{(b0.get('max_degisim') or 0) * 100:.1f}".replace(".", ","); p["neden"] = f"Trend devam ediyor: {b0['tarama']} seçimi hedefe ulaştı (+%{yz2}). " + p["neden"]
+        if s.get("sektor_lab"): p["sektor_lab"] = s["sektor_lab"]
         if s.get("hareket"): p["hareket"] = s["hareket"]; p["neden"] = "Hareket laboratuvarı kuralı eşleşti (" + ", ".join(s["hareket"]) + "). " + p["neden"]
         p["kap" if a.piyasa == "bist" else "haber"] = s["haber"]; picks.append(p)
         hist.append({"trend_devam": bool(p.get("trend_devam")), "model": hist_model, "tarama": tarih, "kod": s["kod"], "giris": s["fiyat"], "stop": s["stop"], "bitis": bitis, "kontrol": None, "kontrol_fiyat": None, "degisim": None,
-                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None, "lab_skor": (s.get("lab") or {}).get("skor", 0), "hareket": s.get("hareket") or [],
+                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None, "lab_skor": (s.get("lab") or {}).get("skor", 0), "hareket": s.get("hareket") or [], "sektor_lab": s.get("sektor_lab"),
                      "likit_mn": s.get("likit_mn"), "kapasite_tl": s.get("kapasite_tl"), "derinlik": s.get("derinlik")})
     izl = [{"kod": s["kod"], "fiyat": s["fiyat"], "skor": s["puan"], "model": s.get("model"), "neden": (s.get("kk_neden") or "eşik üstü, ilk 10 dışında") + ": " + (", ".join(s["why"][:2]) or s["sebep"]) + (f"; {s['haber']}" if s["haber"] else "")} for s in izle]
     # İzleme listesi en az 10 hisse: eşik üstü ama ilk 10 dışında kalanlar + eşiğe yakın (eşik-1,5) ya da filtreye takılan güçlü hisseler
@@ -817,6 +821,18 @@ def _hareket_kurallari():
     """Kullanıcının onayladığı hareket laboratuvarı kuralları (rules.json hareket_kurallari). Yoksa boş: seçime etkisi yoktur."""
     try: return [k for k in (json.load(open("rules.json", encoding="utf-8")).get("hareket_kurallari") or []) if k.get("ozellik") and k.get("yon") in ("bonus", "eleme")]
     except Exception: return []
+
+SEK_PUAN = {"Lider": 1.0, "Toparlanan": 0.5, "Zayıflayan": -0.5, "Geride": -1.0}
+
+def _sektor_bonus(V):
+    """Sektör laboratuvarı etkisi (18.11 kullanıcı kararı): hissenin BIST sektör endeksinin kadranına göre küçük bonus/ceza. Yalnız SIRALAMAYI etkiler, kapıyı (kademe, eşik) gevşetmez ya da sıkılaştırmaz.
+    Ağırlık rules.json sektor_agirlik (varsayılan 0,05; kadran puanı Lider +1, Toparlanan +0,5, Zayıflayan -0,5, Geride -1). Döner: ({sektör kodu: (bonus, kadran)}, ağırlık)."""
+    try: w = float(json.load(open("rules.json", encoding="utf-8")).get("sektor_agirlik", 0.05))
+    except Exception: w = 0.05
+    out = {}
+    for x in ((V.get("sektor_lab") or {}).get("bist") or {}).get("sektorler", []):
+        if x.get("kadran") in SEK_PUAN: out[x["kod"]] = (round(w * SEK_PUAN[x["kadran"]], 4), x["kadran"])
+    return out, w
 
 def _hareket_etki(s, kurallar):
     """(bonus, eleme_kuralları, eşleşen_id'ler). Bonus yalnız sıralamayı etkiler; eleme adayı dışarıda bırakır (kapıyı gevşetmez, yalnız sıkılaştırır)."""
