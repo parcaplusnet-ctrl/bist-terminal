@@ -1035,6 +1035,7 @@ def cmd_kasa(a):
             fy = r_.get("kontrol_fiyat") or r_["giris"]
             hd_ = r_.get("hedef") or round(r_["giris"] * 1.05, 2)
             if fy >= hd_ or fy <= r_["stop"]: continue
+            if r_.get("bitis") and r_["bitis"] == hm_.strftime("%d.%m"): continue  # vadesi bugün biten takip adayı alınmaz (18:00'de süre dolar, alıp aynı gün kapatmak anlamsız)
             if ILK.get((r_["kod"], r_["tarama"])) and sa_ < 720: continue
             sebep = None
             if len(K["acik"]) >= PORTFOY_MAX:
