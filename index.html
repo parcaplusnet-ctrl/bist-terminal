@@ -614,7 +614,7 @@ function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son
  if(!liveOn)txt($("sess"),`${st.tarama||D.guncelleme||"—"} · ${st.oturum||""} · ${st.taranan||"?"} hisse`);txt($("nxt"),nextScan());
  {const Y=D.yurtdisi||{},LB=window.LABS=window.LABS||{};LB.bist=open.length;LB.abd=(Y.history||[]).filter(r=>r.sonuc==="Bekliyor").length;LB.kri=((D.kripto||{}).hisseler||[]).length;LB.isabet=done.length?bas/done.length:null;LB.next=nextScan();if(pz&&pz.xu100!=null)LB.xu=pz.xu100;if(!liveOn)LB.top=(D.picks||[])[0]||null;LB.live=liveOn}
  txt($("fyT"),(TVET||FY_ET||st.tarama||D.guncelleme||"—")+" · 15 dk gecikmeli"+(TVET?" · sürekli":""));
- takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill()}
+ takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
 
 /* eski kural (06.11): son günü olmayan 'Başarısız' kayıtlar bugünkü kurala göre gösterilir */
 function eskiDuzelt(D){(D.history||[]).forEach(r=>{if(r.sonuc!=="Başarısız"||r.bitis)return;r.eski_kural=1;if(r.max_degisim!=null&&r.max_degisim>=0.05){r.sonuc="Başarılı";r.hedef_tarih=r.hedef_tarih||r.kontrol}else if(r.degisim!=null&&r.degisim<=-0.03){r.sonuc="Stop";r.stop_tarih=r.stop_tarih||r.kontrol}else r.sonuc="Erken kapandı"})}
@@ -1157,8 +1157,10 @@ const st2=document.createElement("style");
  function blink(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));const gun=n.getDay(),dk=n.getHours()*60+n.getMinutes();const acik=gun>=1&&gun<=5&&dk>=10*60&&dk<18*60+10;const bug=String(n.getDate()).padStart(2,"0")+"."+String(n.getMonth()+1).padStart(2,"0");
   document.querySelectorAll("#ksHr tr").forEach(tr=>{const h=tr.cells&&tr.cells[1];["bl-al","bl-he","bl-st","bl-sd"].forEach(x=>tr.classList.remove(x));if(!h||!acik)return;const t=h.textContent.toLocaleUpperCase("tr-TR");if(t.indexOf(bug)<0)return;
    const c=/AL[İI]M/.test(t)?"bl-al":/HEDEF/.test(t)?"bl-he":/STOP/.test(t)?"bl-st":/S[ÜU]RE|D[İI]ĞER|SAT/.test(t)?"bl-sd":"";if(c)tr.classList.add(c)})}
- async function xuCanli(){try{const r=await fetch("https://scanner.tradingview.com/turkey/scan",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({symbols:{tickers:["BIST:XU100"]},columns:["close","change"]})});if(!r.ok)return;const j=await r.json(),d=j.data&&j.data[0]&&j.data[0].d;if(!d||!(d[1]===d[1])||d[1]==null)return;const v=Number(d[1]),b=document.getElementById("kMkt"),l=document.getElementById("kMktL");if(!b)return;
-  b.textContent=(v>=0?"+":"")+v.toFixed(2).replace(".",",")+"%";b.className=v>=0?"up":"dn";const hm=new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});if(l)l.textContent="endeks "+Number(d[0]).toLocaleString("tr-TR",{maximumFractionDigits:0})+" · canlı "+hm;b.classList.remove("fl-up","fl-dn")}catch(e){}}
+ async function xuCanli(){try{const r=await fetch("https://scanner.tradingview.com/turkey/scan",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({symbols:{tickers:["BIST:XU100"]},columns:["close","change"]})});if(!r.ok)return;const j=await r.json(),d=j.data&&j.data[0]&&j.data[0].d;if(!d||!(d[1]===d[1])||d[1]==null)return;const v=Number(d[1]);const hm=new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});window.XUL={v:v,c:Number(d[0]),hm:hm,t:Date.now()};xuYaz()}catch(e){}}
+ function xuYaz(){const X=window.XUL;if(!X||Date.now()-X.t>600000)return;const b=document.getElementById("kMkt"),l=document.getElementById("kMktL");if(!b)return;
+  b.textContent=(X.v>=0?"+":"")+X.v.toFixed(2).replace(".",",")+"%";b.className=X.v>=0?"up":"dn";if(l)l.textContent="endeks "+X.c.toLocaleString("tr-TR",{maximumFractionDigits:0})+" · canlı "+X.hm;b.classList.remove("fl-up","fl-dn");if(window.LABS)window.LABS.xu=X.v}
+ window.xuYaz=xuYaz;
  const orig=tvCek; tvCek=async function(){await orig();flash();blink();xuCanli()}; setInterval(blink,5000); setTimeout(blink,2000);
 })();
 </script>
