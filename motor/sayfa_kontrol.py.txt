@@ -110,7 +110,7 @@ def main():
         sorun.append("Ölçümü geciken projeksiyon: " + ", ".join(gec[:8]))
 
     # 5) veri bütünlüğü: zorunlu anahtarlar
-    zorunlu = ["kasa", "history", "learning", "lab_ozellik", "sektor_lab", "kripto", "ogrenme_asamasi", "son_tarama", "saglik"]
+    zorunlu = ["kasa", "history", "learning", "lab_ozellik", "sektor_lab", "kripto", "ogrenme_asamasi", "son_tarama", "saglik", "hareket_lab"]
     eksik = [k for k in zorunlu if k not in v]
     if eksik:
         sorun.append("veri.json'da eksik anahtar: %s" % ", ".join(eksik))
@@ -125,9 +125,13 @@ def main():
         if vt and tt and abs((vt - tt).total_seconds()) > 36 * 3600:
             sorun.append("%s: 'veri' açıklaması (%s) ile 'tarama' (%s) tutmuyor" % (ad, d.get("veri"), d.get("tarama")))
 
+    # 6b) hareket laboratuvarı tazeliği
+    hl = v.get("hareket_lab") or {}
+    if hl:
+        bolum("Hareket laboratuvarı", hl.get("guncelleme"), 30)
     # 7) sayfa dosyası
     if html:
-        for isaret in ("sagB", "veri.json", "pjGec"):
+        for isaret in ("sagB", "veri.json", "pjGec", "hrkLab"):
             if isaret not in html:
                 sorun.append("index.html'de beklenen öğe yok: %s" % isaret)
         if "<html" not in html.lower():
