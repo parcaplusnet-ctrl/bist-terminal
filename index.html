@@ -97,6 +97,7 @@ tbody tr:hover{background:var(--panel2)}
 tr:last-child td{border-bottom:0}
 .kod{font:600 14px var(--mono);letter-spacing:.02em}
 .sub{display:block;font-size:11.5px;color:var(--mut);font-family:var(--sans)}
+.kn{margin-left:6px;font:600 11.5px var(--mono);color:var(--mut)}
 .wrapt{white-space:normal;min-width:220px;max-width:420px;text-align:left;font-size:12.5px;color:#c6d0db}
 
 /* durum çipi */
@@ -497,7 +498,7 @@ table($("ksHr"),["Hisse",["Hareket","l"],"İşlem Fiyatı","Sonuç"],H1.map(h=>r
   if(al)cell(r,h.hedef!=null?`hedef ${tl(h.hedef)}`:TL(h.maliyet),"num mut");else cell(r,`${sTL(h.kar_tl)}`,"num "+cls(h.kar_tl));if(al&&h.stop!=null)r.cells[3].appendChild(el("span","sub","stop "+tl(h.stop)));else if(!al)r.cells[3].appendChild(el("span","sub",pct(h.kar_yuzde)))}),"Henüz hareket yok.");
  const A=(K.acik||[]).slice().sort((a,b)=>(b.kar_yuzde||0)-(a.kar_yuzde||0));
  txt($("ksAT"),(K.acik||[]).length+" pozisyon");table($("ksA"),["Açık pozisyon","Lot","Alış","Şimdi",["Stop · alış · hedef",""],"Hedef","Stop","Değer","Kâr / zarar"],A.map(p=>r=>{const v=p.giris&&p.fiyat?p.fiyat/p.giris-1:(p.kar_yuzde||0),sy=p.stop&&p.giris?p.stop/p.giris-1:-0.03;
-  {const k=kodCell(r,p.kod,`alındı ${p.alindi||p.tarama}`);{const pt=tsDM(p.tarama),sn=(D.history||[]).filter(h=>h.kod===p.kod&&tsDM(h.tarama)<=pt).length||1;k.querySelector(".kod").append(" ",el("span","sub","#"+sn));k.title=`${p.kod}: ${sn}. kez seçildi`}if(ALIM.has(p.kod+"|"+p.tarama)){k.querySelector(".sub").append(" ",el("span","ch new","YENİ"));r.className="risk"}}cell(r,Number(p.adet||0).toLocaleString("tr-TR"),"num");cell(r,tl(p.giris),"num");cell(r,tl(p.fiyat),"num");cell(r,rng(sy,v));cell(r,tl(p.hedef),"num up");cell(r,tl(p.stop),"num dn");cell(r,TL(p.deger),"num");
+  {const k=kodCell(r,p.kod,`alındı ${p.alindi||p.tarama}`);{const pt=tsDM(p.tarama),sn=(D.history||[]).filter(h=>h.kod===p.kod&&tsDM(h.tarama)<=pt).length||1;k.querySelector(".kod").after(el("span","kn","#"+sn));k.title=`${p.kod}: ${sn}. kez seçildi`}if(ALIM.has(p.kod+"|"+p.tarama)){k.querySelector(".sub").append(" ",el("span","ch new","YENİ"));r.className="risk"}}cell(r,Number(p.adet||0).toLocaleString("tr-TR"),"num");cell(r,tl(p.giris),"num");cell(r,tl(p.fiyat),"num");cell(r,rng(sy,v));cell(r,tl(p.hedef),"num up");cell(r,tl(p.stop),"num dn");cell(r,TL(p.deger),"num");
   const td=cell(r,`${sTL(p.kar_tl)} · ${pct(p.kar_yuzde)}`,"num "+cls(p.kar_tl))}),"Açık pozisyon yok.");
  const KP=(K.kapanan||[]).slice().reverse();txt($("ksHT"),KP.length+" işlem");
  table($("ksH"),["Hisse","Alış","Satış",["Çıkış","l"],"Lot","Kâr / zarar","%","Alındı","Satıldı"],KP.slice(0,60).map(p=>r=>{kodCell(r,p.kod);cell(r,tl(p.giris),"num");cell(r,tl(p.cikis),"num");cell(r,p.tur,"l");cell(r,p.adet,"num");cell(r,sTL(p.kar_tl),"num "+cls(p.kar_tl));cell(r,pct(p.kar_yuzde),"num "+cls(p.kar_tl));cell(r,p.tarama,"num mut");cell(r,p.kapanis,"num mut")}),"Henüz kapanan işlem yok.")}
