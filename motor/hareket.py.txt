@@ -1,0 +1,399 @@
+#!/usr/bin/env python3
+"""Günlük Hareket Laboratuvarı (18.11, kullanıcı kararı). SÜREKLİ ÖĞRENME: bitmez, her taramada/gece yeniden ölçer.
+Ne yapar:
+  1) Arşivdeki (arsiv/gozlem_bist_*.json) tamamlanmış her gün için, sabah taramasındaki her hisseyi gün sonuna kadar ENDEKSE GÖRE ölçer
+     (hisse getirisi - BIST 100 getirisi, aynı saat aralığında). Yükselen: endeksten >= +3 puan fazla, düşen: <= -3 puan.
+  2) Yükselenlerin/düşenlerin sabahki özelliklerini (radar.py _ozellikler: hacim, puan, gün içi değişim, RSI, sektör ...) karşılaştırır;
+     tek özellik ve çift özellik örüntüleri için kanıt üretir.
+  3) Kanıt kapıları (laboratuvar disipliniyle aynı): keşif günlerinde örnek, istatistik anlamlılık (z>=3), gün tutarlılığı, ARDINDAN
+     ileri test (son günler keşifte kullanılmaz). Asgari 6 gün. Kanıtı yetmeyen örüntü "aday" bile olmaz.
+  4) İleri testi geçen örüntü yalnızca ÖNERİLİR ("Onay bekliyor"). Seçime girmesi için kullanıcı onayı gerekir; onaylananlar rules.json
+     hareket_kurallari listesindedir ve radar.py adaylar adımında uygulanır (bonus: yalnız sıralama; eleme: aday dışı).
+  5) Çalışan sistemleri (radar puanı, hacim, uygun işareti, onaylı kurallar) her gün aynı yöntemle puanlar; başarı oranları sürekli ölçülür.
+Çıktılar: veri.json -> hareket_lab (sayfa okur), lab/hareket.json (kalıcı kayıt, durum geçmişi).
+Kullanım: python3 -I hareket.py --motor radar.py --arsiv arsiv --veri veri.json --kayit lab/hareket.json --rules rules.json [--neden hareket_neden.json]"""
+import json, os, sys, math, glob, argparse, importlib.util, datetime, itertools, collections
+import statistics as st
+
+VERSIYON = "1.0"
+ESIK_YUK, ESIK_DUS = 3.0, -3.0          # endekse göre puan farkı (yükselen / düşen)
+MIN_GUN = 6                              # kanıt için asgari tamamlanmış gün
+KESIF_N1, KESIF_N2 = 60, 40              # keşifte asgari örnek (tek / çift özellik)
+ILERI_N = 30                             # ileri testte asgari örnek
+Z_MIN = 3.0                              # tek taraflı oran farkı z eşiği (çok sayıda örüntü denendiği için sıkı)
+ORT_FARK_MIN = 0.6                       # ortalama endeksa göre getiri farkı (puan)
+TUTARLI_MIN = 0.70                       # günlerin en az bu oranında aynı yön
+ILERI_ORAN = 0.4                         # ileri testte etki keşif etkisinin en az bu kadarı
+SABAH_EN_GEC = "11:30"                   # "sabah taraması" = günün ilk taraması bu saatten önce
+GUN_SONU_EN_ERKEN = "17:45"
+KILIT = 9.5                              # sabah |gün değişimi| bu değerden büyükse hisse alınamaz sayılır, dışlanır
+
+SISTEMLER = [
+    {"id": "puan6", "ad": "Radar puanı 6 ve üstü", "any": ["puan=6-7", "puan=7-8", "puan=≥8"]},
+    {"id": "hacim15", "ad": "Göreli hacim 1,5x ve üstü", "any": ["hacim=1,5-3x", "hacim=≥3x"]},
+    {"id": "uygun", "ad": "Radar uygun işaretli", "any": ["radar uygun=evet"]},
+    {"id": "puan3alti", "ad": "Radar puanı 3'ün altı (zayıf grup)", "any": ["puan=<3"]},
+]
+
+
+def hhmm(s):
+    return s or "00:00"
+
+
+def simdi_ist():
+    return datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None) + datetime.timedelta(hours=3)
+
+
+def yukle_radar(yol):
+    spec = importlib.util.spec_from_file_location("radar_mod", yol)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def gunleri_oku(arsiv, bugun):
+    G = {}
+    for f in sorted(glob.glob(os.path.join(arsiv, "gozlem_bist_*.json"))):
+        try:
+            g = json.load(open(f, encoding="utf-8"))
+            G[g["tarih"]] = g
+        except Exception:
+            continue
+    return G
+
+
+def xu(t):
+    try:
+        return float(((t.get("piyasa") or {}).get("xu100") or {}).get("v"))
+    except Exception:
+        return None
+
+
+def gozlemler(R, G, bugun, simdi):
+    """Tamamlanmış her gün için hisse gözlemleri (sabah özellikleri, endekse göre gün içi sonuç)."""
+    obs, gunler = [], []
+    tarihler = sorted(G)
+    for i, gun in enumerate(tarihler):
+        g = G[gun]
+        T = [t for t in g.get("taramalar", []) if t.get("rows")]
+        if len(T) < 2:
+            continue
+        t0, t1 = T[0], T[-1]
+        if hhmm(t0["saat"]) > SABAH_EN_GEC or hhmm(t1["saat"]) < GUN_SONU_EN_ERKEN:
+            continue                      # sabah taraması ya da gün sonu taraması yok: ölçülmez (ufuklar karışmasın)
+        if gun == bugun and not (simdi.hour * 60 + simdi.minute >= 18 * 60 + 15):
+            continue
+        C = g["cols"]
+        x0, x1 = xu(t0), xu(t1)
+        A = {r[0]: r for r in t0["rows"]}
+        Z = {r[0]: r for r in t1["rows"]}
+        ix = {c: k for k, c in enumerate(C)}
+        ham = []
+        for kod, r in A.items():
+            z = Z.get(kod)
+            if not z or not r[1] or not z[1]:
+                continue
+            ch0 = r[ix["ch"]]
+            if ch0 is None or abs(ch0) >= KILIT:
+                continue
+            ham.append((kod, r, z, (z[1] / r[1] - 1) * 100))
+        if len(ham) < 100:
+            continue
+        ex = ((x1 / x0 - 1) * 100) if (x0 and x1) else st.median(h[3] for h in ham)
+        for kod, r, z, ret in ham:
+            F = set(R._ozellikler(r, C, "bist"))
+            obs.append({"gun": gun, "kod": kod, "f": F, "ret": ret, "rel": ret - ex, "ex": ex,
+                        "kap": z[ix["ch"]], "sab": r[ix["ch"]], "rv": r[ix["rv"]], "puan": r[ix["puan"]], "rsi": r[ix["rsi"]],
+                        "sektor": r[ix["sektor"]], "fiyat0": r[1], "fiyat1": z[1], "likit": r[ix["likit_mn"]] if "likit_mn" in ix else None})
+        gunler.append({"gun": gun, "ilk": t0["saat"], "son": t1["saat"], "n": len(ham), "endeks": round(ex, 2),
+                       "medyan_hisse": round(st.median(h[3] for h in ham), 2)})
+    return obs, gunler
+
+
+def olc(idx, O):
+    """İndeks kümesi için ölçüler."""
+    n = len(idx)
+    if n == 0:
+        return None
+    rel = [O[i]["rel"] for i in idx]
+    yuk = sum(1 for v in rel if v >= ESIK_YUK) / n
+    dus = sum(1 for v in rel if v <= ESIK_DUS) / n
+    return {"n": n, "yuk": yuk, "dus": dus, "ort": sum(rel) / n, "med": st.median(rel)}
+
+
+def z_oran(p, p0, n):
+    if n == 0 or p0 <= 0 or p0 >= 1:
+        return 0.0
+    return (p - p0) / math.sqrt(p0 * (1 - p0) / n)
+
+
+def tutarlilik(idx, O, yon, taban_gun):
+    """Her günde (>=4 gözlem) örüntü ortalaması o günün tabanından yön doğrultusunda mı."""
+    by = collections.defaultdict(list)
+    for i in idx:
+        by[O[i]["gun"]].append(O[i]["rel"])
+    ok = say = 0
+    for g, v in by.items():
+        if len(v) < 4:
+            continue
+        say += 1
+        fark = sum(v) / len(v) - taban_gun.get(g, 0)
+        if (fark > 0 and yon > 0) or (fark < 0 and yon < 0):
+            ok += 1
+    return (ok / say if say else 0.0), say
+
+
+def degerlendir(idx_all, O, kesif_gunleri, test_gunleri, taban_k, taban_i, taban_gun, ad_n_min):
+    kes = [i for i in idx_all if O[i]["gun"] in kesif_gunleri]
+    tst = [i for i in idx_all if O[i]["gun"] in test_gunleri]
+    mk = olc(kes, O)
+    if not mk or mk["n"] < ad_n_min:
+        return None
+    fark_yuk = mk["yuk"] - taban_k["yuk"]
+    fark_dus = mk["dus"] - taban_k["dus"]
+    fark_ort = mk["ort"] - taban_k["ort"]
+    z_yuk = z_oran(mk["yuk"], taban_k["yuk"], mk["n"])
+    z_dus = z_oran(mk["dus"], taban_k["dus"], mk["n"])
+    if fark_ort >= ORT_FARK_MIN and z_yuk >= Z_MIN and fark_yuk > 0:
+        yon, z, fark = 1, z_yuk, fark_yuk
+    elif fark_ort <= -ORT_FARK_MIN and z_dus >= Z_MIN and fark_dus > 0:
+        yon, z, fark = -1, z_dus, fark_dus
+    else:
+        return {"yon": 0, "n": mk["n"], "fark_ort": fark_ort, "fark_yuk": fark_yuk, "fark_dus": fark_dus, "z": max(z_yuk, z_dus),
+                "yuk": mk["yuk"], "dus": mk["dus"], "ort": mk["ort"], "gecti_kesif": False}
+    tut, tgun = tutarlilik(kes, O, yon, taban_gun)
+    gecti = tut >= TUTARLI_MIN and tgun >= 3
+    r = {"yon": yon, "n": mk["n"], "yuk": mk["yuk"], "dus": mk["dus"], "ort": mk["ort"], "fark_ort": fark_ort, "fark_yuk": fark_yuk,
+         "fark_dus": fark_dus, "z": z, "tutarlilik": tut, "gun_sayisi": tgun, "gecti_kesif": gecti}
+    mt = olc(tst, O)
+    if mt:
+        r["n_ileri"] = mt["n"]
+        r["ileri_fark_ort"] = mt["ort"] - taban_i["ort"]
+        r["ileri_fark_yuk"] = mt["yuk"] - taban_i["yuk"]
+        r["ileri_fark_dus"] = mt["dus"] - taban_i["dus"]
+    else:
+        r["n_ileri"] = 0
+    return r
+
+
+def durum_belirle(r, gun_sayisi, test_var):
+    if r is None:
+        return None
+    if gun_sayisi < MIN_GUN:
+        return "Veri biriktiriliyor"
+    if not r.get("gecti_kesif"):
+        return "Kanıt yok"
+    if not test_var or r.get("n_ileri", 0) < ILERI_N:
+        return "İleri test bekliyor"
+    yon = r["yon"]
+    ileri_ort = r["ileri_fark_ort"] * yon
+    ileri_oran = (r["ileri_fark_yuk"] if yon > 0 else r["ileri_fark_dus"])
+    if ileri_ort >= ILERI_ORAN * abs(r["fark_ort"]) and ileri_oran > 0:
+        return "Onay bekliyor"
+    return "Elendi (ileri test)"
+
+
+def aciklama(feats):
+    return " ve ".join(feats)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--motor", default="radar.py")
+    ap.add_argument("--arsiv", default="arsiv")
+    ap.add_argument("--veri", default="veri.json")
+    ap.add_argument("--kayit", default="lab/hareket.json")
+    ap.add_argument("--rules", default="rules.json")
+    ap.add_argument("--neden", default="hareket_neden.json")
+    ap.add_argument("--bugun", default=None)
+    a = ap.parse_args()
+    simdi = simdi_ist()
+    bugun = a.bugun or simdi.strftime("%Y-%m-%d")
+    R = yukle_radar(a.motor)
+    G = gunleri_oku(a.arsiv, bugun)
+    O, gunler = gozlemler(R, G, bugun, simdi)
+    V = json.load(open(a.veri, encoding="utf-8"))
+    try:
+        rules = json.load(open(a.rules, encoding="utf-8"))
+    except Exception:
+        rules = {}
+    onayli = {k["id"]: k for k in rules.get("hareket_kurallari", [])}
+    kayit = {}
+    if os.path.exists(a.kayit):
+        try:
+            kayit = json.load(open(a.kayit, encoding="utf-8"))
+        except Exception:
+            kayit = {}
+    zaman = simdi.strftime("%d.%m %H:%M")
+    gun_adlari = [g["gun"] for g in gunler]
+    ng = len(gun_adlari)
+    HL = {"surum": VERSIYON, "guncelleme": zaman, "gun_sayisi": ng, "gunler": gunler[-10:], "gozlem": len(O),
+          "kurallar": {"yukselen": f"endeksten >= +{ESIK_YUK:g} puan fazla", "dusen": f"endeksten <= {ESIK_DUS:g} puan az", "min_gun": MIN_GUN,
+                       "kesif_ornek": f"tek {KESIF_N1}, çift {KESIF_N2}", "z": Z_MIN, "ort_fark": ORT_FARK_MIN, "tutarlilik": TUTARLI_MIN,
+                       "ileri_ornek": ILERI_N, "ileri_etki": ILERI_ORAN,
+                       "not": "Sabah taraması (<= 11:30) -> gün sonu taraması (>= 17:45), endekse göre. Kilitli (|sabah gün| >= %9,5) hisseler dışlanır. Önerilen örüntü ancak kullanıcı onayıyla seçime girer."},
+          "oruntular": [], "sistemler": [], "dun": None, "onayli": []}
+    if ng == 0:
+        HL["not"] = "Ölçülebilir tamamlanmış gün yok (sabah ve gün sonu taraması gerekir)."
+        V["hareket_lab"] = HL
+        json.dump(V, open(a.veri, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+        print("HAREKET: ölçülebilir gün yok")
+        return
+    # keşif / ileri test günleri
+    K = max(2, round(ng * 0.25)) if ng >= MIN_GUN else 0
+    test_g = set(gun_adlari[-K:]) if K else set()
+    kesif_g = set(gun_adlari) - test_g
+    idx_all = list(range(len(O)))
+    kes_idx = [i for i in idx_all if O[i]["gun"] in kesif_g]
+    tst_idx = [i for i in idx_all if O[i]["gun"] in test_g]
+    taban_k = olc(kes_idx, O)
+    taban_i = olc(tst_idx, O) or taban_k
+    taban_gun = {}
+    for g in gun_adlari:
+        v = [O[i]["rel"] for i in idx_all if O[i]["gun"] == g]
+        taban_gun[g] = sum(v) / len(v) if v else 0.0
+    HL["taban"] = {"n": taban_k["n"], "yukselen": round(taban_k["yuk"], 3), "dusen": round(taban_k["dus"], 3), "ort_rel": round(taban_k["ort"], 2),
+                   "kesif_gunleri": sorted(kesif_g), "ileri_gunleri": sorted(test_g)}
+    # özellik -> gözlem indeksleri
+    harita = collections.defaultdict(list)
+    for i in idx_all:
+        for f in O[i]["f"]:
+            harita[f].append(i)
+    aile = lambda f: f.split("=")[0]
+    tekler = {f: v for f, v in harita.items() if len(v) >= 30}
+    sonuc = []
+    for f, v in tekler.items():
+        r = degerlendir(v, O, kesif_g, test_g, taban_k, taban_i, taban_gun, KESIF_N1)
+        if r:
+            sonuc.append(([f], r))
+    # çiftler: yalnızca kendi başına kanıt/eğilim taşıyan ya da yeterince kalabalık özelliklerden, farklı ailelerden
+    adaylar = [f for f, v in tekler.items() if len(v) >= 120 and not f.startswith("sektör=") and not f.startswith("sinyal=")]
+    kume = {f: set(tekler[f]) for f in adaylar}
+    for f1, f2 in itertools.combinations(sorted(adaylar), 2):
+        if aile(f1) == aile(f2):
+            continue
+        ortak = sorted(kume[f1] & kume[f2])
+        if len(ortak) < KESIF_N2:
+            continue
+        r = degerlendir(ortak, O, kesif_g, test_g, taban_k, taban_i, taban_gun, KESIF_N2)
+        if r and r["yon"]:
+            sonuc.append(([f1, f2], r))
+    # iç içe örüntüleri ele: tek özellik zaten aynı yönde aynı etkiyi taşıyorsa çift gereksiz
+    tek_yon = {t[0]: r for t, r in sonuc if len(t) == 1 and r["yon"] and r.get("gecti_kesif")}
+    liste = []
+    for feats, r in sonuc:
+        if not r["yon"]:
+            continue
+        if len(feats) == 2 and any(f in tek_yon and tek_yon[f]["yon"] == r["yon"] and abs(tek_yon[f]["fark_ort"]) >= abs(r["fark_ort"]) * 0.9 for f in feats):
+            continue
+        d = durum_belirle(r, ng, bool(test_g))
+        pid = "|".join(sorted(feats))
+        liste.append((pid, feats, r, d))
+    # sıralama: kanıt gücü (z), yön
+    liste.sort(key=lambda x: -x[2]["z"])
+    # kalıcı kayıt: durum geçmişi
+    Kk = kayit.setdefault("oruntular", {})
+    for pid, feats, r, d in liste:
+        e = Kk.setdefault(pid, {"aciklama": aciklama(feats), "ilk_gorulme": zaman, "durum_gecmisi": []})
+        if not e["durum_gecmisi"] or e["durum_gecmisi"][-1]["durum"] != d:
+            e["durum_gecmisi"].append({"zaman": zaman, "durum": d, "gun_sayisi": ng})
+            e["durum_gecmisi"] = e["durum_gecmisi"][-12:]
+    for pid, feats, r, d in liste[:60]:
+        o = {"id": pid, "aciklama": aciklama(feats), "yon": "bonus" if r["yon"] > 0 else "eleme", "durum": d, "n": r["n"],
+             "yuk_oran": round(r["yuk"], 3), "dus_oran": round(r["dus"], 3), "ort_rel": round(r["ort"], 2),
+             "fark_yuk": round(r["fark_yuk"], 3), "fark_dus": round(r["fark_dus"], 3), "fark_ort": round(r["fark_ort"], 2), "z": round(r["z"], 1),
+             "tutarlilik": round(r.get("tutarlilik", 0), 2), "n_ileri": r.get("n_ileri", 0),
+             "ileri_fark_ort": round(r["ileri_fark_ort"], 2) if r.get("ileri_fark_ort") is not None else None,
+             "ilk_gorulme": Kk[pid]["ilk_gorulme"], "onayli": pid in onayli}
+        HL["oruntular"].append(o)
+    HL["ozet"] = {"toplam": len(liste), "onay_bekleyen": sum(1 for x in liste if x[3] == "Onay bekliyor"),
+                  "ileri_test_bekleyen": sum(1 for x in liste if x[3] == "İleri test bekliyor"),
+                  "veri_biriktiriliyor": sum(1 for x in liste if x[3] == "Veri biriktiriliyor"),
+                  "elenen": sum(1 for x in liste if x[3] and x[3].startswith("Elendi")),
+                  "durum": ("Veri biriktiriliyor: %d/%d gün; kanıt kapıları %d günden sonra işler" % (ng, MIN_GUN, MIN_GUN)) if ng < MIN_GUN else "Kanıt kapıları açık"}
+    # çalışan sistemlerin puanlanması (her gün aynı yöntem)
+    sis = list(SISTEMLER)
+    for kid, k in onayli.items():
+        sis.append({"id": "kural:" + kid, "ad": "Onaylı kural: " + k.get("aciklama", kid), "all": k.get("ozellik") or kid.split("|"), "yon": k.get("yon")})
+    for s in sis:
+        def eslesir(F, s=s):
+            if "all" in s:
+                return all(x in F for x in s["all"])
+            return any(x in F for x in s["any"])
+        gunluk = []
+        tum = []
+        for g in gun_adlari:
+            ids = [i for i in idx_all if O[i]["gun"] == g and eslesir(O[i]["f"])]
+            m = olc(ids, O)
+            if m:
+                gunluk.append({"gun": g, "n": m["n"], "ort_rel": round(m["ort"], 2), "yuk": round(m["yuk"], 3), "dus": round(m["dus"], 3),
+                               "taban": round(taban_gun[g], 2)})
+            tum += ids
+        mm = olc(tum, O)
+        if mm:
+            top = olc(idx_all, O)
+            HL["sistemler"].append({"id": s["id"], "ad": s["ad"], "n": mm["n"], "gun": len(gunluk), "ort_rel": round(mm["ort"], 2),
+                                    "yuk": round(mm["yuk"], 3), "dus": round(mm["dus"], 3), "taban_ort": round(top["ort"], 2),
+                                    "taban_yuk": round(top["yuk"], 3), "taban_dus": round(top["dus"], 3), "fark_ort": round(mm["ort"] - top["ort"], 2),
+                                    "gunluk": gunluk[-10:], "yon": s.get("yon")})
+    # kasa seçimlerinin gerçek sonuçları (kalite kapısı)
+    H = [h for h in V.get("history", []) if h.get("sonuc") in ("Başarılı", "Stop", "Takip Süresi Doldu")]
+    if H:
+        b = sum(1 for h in H if h["sonuc"] == "Başarılı")
+        sp = sum(1 for h in H if h["sonuc"] == "Stop")
+        HL["sistemler"].append({"id": "secim", "ad": "Radar seçimleri (sonuçlanan kayıt)", "n": len(H), "gun": None, "ort_rel": None,
+                                "yuk": round(b / len(H), 3), "dus": round(sp / len(H), 3), "taban_ort": None, "taban_yuk": None, "taban_dus": None,
+                                "fark_ort": None, "gunluk": [], "yon": None})
+    # dünün (en son tamamlanmış günün) hareketleri
+    son = gun_adlari[-1]
+    O_son = [o for o in O if o["gun"] == son]
+    neden = {}
+    try:
+        neden = json.load(open(a.neden, encoding="utf-8"))
+    except Exception:
+        pass
+    O_son.sort(key=lambda o: o["rel"])
+
+    def ozet(o):
+        sec = [f for f in sorted(o["f"]) if f.split("=")[0] in ("hacim", "gün", "puan", "RSI G", "1 ay zirve", "hafta") ]
+        return {"kod": o["kod"], "sektor": o["sektor"], "rel": round(o["rel"], 1), "gun_ici": round(o["ret"], 1), "sabah_degisim": o["sab"],
+                "kapanis_degisim": o["kap"], "rv": o["rv"], "puan": o["puan"], "rsi": o["rsi"], "ozellik": sec,
+                "neden": (neden.get(o["kod"]) or {}).get("neden") if (neden.get(o["kod"]) or {}).get("tarih") == son else None}
+    yuk_l, dus_l = [o for o in O_son if o["rel"] >= ESIK_YUK], [o for o in O_son if o["rel"] <= ESIK_DUS]
+
+    def ortak(grup):
+        if len(grup) < 8:
+            return []
+        out = []
+        sayac = collections.Counter(f for o in grup for f in o["f"])
+        gen = collections.Counter(f for o in O_son for f in o["f"])
+        for f, c in sayac.items():
+            if c < 5 or f.startswith("sektör="):
+                continue
+            pay_g, pay_t = c / len(grup), gen[f] / len(O_son)
+            if pay_t > 0 and pay_g / pay_t >= 1.5:
+                out.append({"ozellik": f, "grupta": round(pay_g, 2), "tabanda": round(pay_t, 2), "kat": round(pay_g / pay_t, 1), "n": c})
+        out.sort(key=lambda x: -x["kat"] * math.sqrt(x["n"]))
+        return out[:8]
+    HL["dun"] = {"gun": son, "endeks": [g for g in gunler if g["gun"] == son][0]["endeks"], "yukselen_sayi": len(yuk_l), "dusen_sayi": len(dus_l),
+                 "gozlem": len(O_son), "yukselenler": [ozet(o) for o in O_son[::-1][:12]], "dusenler": [ozet(o) for o in O_son[:12]],
+                 "yukselen_ortak": ortak(yuk_l), "dusen_ortak": ortak(dus_l),
+                 "uyari": "Tek günlük gözlem kanıt değildir; örüntü tablosundaki kapılardan geçmeden seçime etkisi yoktur."}
+    HL["onayli"] = [{"id": k, "aciklama": v.get("aciklama"), "yon": v.get("yon"), "onay": v.get("onay_tarihi")} for k, v in onayli.items()]
+    V["hareket_lab"] = HL
+    json.dump(V, open(a.veri, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    kayit["guncelleme"] = zaman
+    kayit["gun_sayisi"] = ng
+    os.makedirs(os.path.dirname(a.kayit) or ".", exist_ok=True)
+    json.dump(kayit, open(a.kayit, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    o = HL["ozet"]
+    print(f"HAREKET: {ng} gün, {len(O)} gözlem · örüntü {o['toplam']} (onay bekleyen {o['onay_bekleyen']}, ileri test bekleyen {o['ileri_test_bekleyen']}, "
+          f"elenen {o['elenen']}) · {o['durum']}")
+    print(f"HAREKET DÜN ({son}): endeks {HL['dun']['endeks']:+.2f}% · endekse göre yükselen {len(yuk_l)}, düşen {len(dus_l)}")
+    for s in HL["sistemler"]:
+        if s.get("ort_rel") is not None:
+            print(f"  SİSTEM {s['ad']}: n={s['n']} ort {s['ort_rel']:+.2f} (taban {s['taban_ort']:+.2f}) +3↑ %{s['yuk']*100:.0f} (taban %{s['taban_yuk']*100:.0f}) -3↓ %{s['dus']*100:.0f} (taban %{s['taban_dus']*100:.0f})")
+
+
+if __name__ == "__main__":
+    main()

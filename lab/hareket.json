@@ -1,0 +1,28 @@
+{
+ "oruntular": {
+  "hafta=≥+%10": {
+   "aciklama": "hafta=≥+%10",
+   "ilk_gorulme": "18.11 13:10",
+   "durum_gecmisi": [
+    {
+     "zaman": "18.11 13:10",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 1
+    }
+   ]
+  },
+  "modül Hacim=+|teknik G=Al": {
+   "aciklama": "modül Hacim=+ ve teknik G=Al",
+   "ilk_gorulme": "18.11 13:10",
+   "durum_gecmisi": [
+    {
+     "zaman": "18.11 13:10",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 1
+    }
+   ]
+  }
+ },
+ "guncelleme": "18.11 13:13",
+ "gun_sayisi": 1
+}

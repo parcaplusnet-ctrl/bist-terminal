@@ -345,6 +345,24 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    <div class="tw kay" tabindex="0" aria-label="Özellik tablosu, kaydırılabilir"><table id="ozT"></table></div>
    <div class="note">Her özelliği taşıyan hisselerin 2 işlem günü içinde +%5 yapma oranı tüm hisselerin ortalamasıyla (taban) karşılaştırılır. Fark +10 puan ve üstü: kullanılıyor · -3 ve altı: elendi · arası: test.</div>
   </section>
+  <section class="sec" id="hrkSek"><div class="sh"><h2>Hareket laboratuvarı · dünkü hareketler ve sürekli öğrenme</h2><p id="hrkTag">—</p></div>
+   <div class="kasa">
+    <div class="k"><small>Ölçülen gün</small><b id="hrkG">—</b><em id="hrkGd">—</em></div>
+    <div class="k"><small>Gözlem</small><b id="hrkO">—</b><em id="hrkOd">—</em></div>
+    <div class="k"><small>Örüntü</small><b id="hrkP">—</b><em id="hrkPd">—</em></div>
+    <div class="k"><small>Onay bekleyen</small><b id="hrkB" class="up">—</b><em id="hrkBd">—</em></div>
+    <div class="k"><small>Onaylı kural</small><b id="hrkK">—</b><em id="hrkKd">—</em></div>
+    <div class="k"><small>Dün endeks</small><b id="hrkE">—</b><em id="hrkEd">—</em></div>
+   </div>
+   <p class="note" style="border-top:0" id="hrkNot">—</p>
+   <div class="split" style="padding:12px 16px"><div class="tw"><table id="hrkU"></table></div><div class="tw"><table id="hrkD"></table></div></div>
+   <p class="note" id="hrkOrt">—</p>
+   <h3 style="padding:10px 16px 0;margin:0;font-size:13px">Çalışan sistemler · her gün aynı yöntemle puanlanır</h3>
+   <div class="tw kay" tabindex="0" aria-label="Çalışan sistemler tablosu"><table id="hrkS"></table></div>
+   <h3 style="padding:10px 16px 0;margin:0;font-size:13px">Örüntüler · kanıt kapılarından geçenler önerilir, onayla seçime girer</h3>
+   <div class="tw kay" tabindex="0" aria-label="Örüntü tablosu, kaydırılabilir"><table id="hrkT"></table></div>
+   <div class="note" id="hrkKural">—</div>
+  </section>
   <section class="sec"><div class="sh"><h2>Sektör rotasyonu · para nereye gidiyor</h2><p id="sTag">—</p></div>
    <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="sHip">—</p>
    <div class="rrg2"><div class="rrgw"><div class="rrgh"><b>BIST</b><span>kıyas: BIST Tüm · balon = hacim payı · renk = net akış</span></div><svg id="rrgB" viewBox="0 0 440 300" role="img" aria-label="BIST sektör rotasyon haritası"></svg></div><div class="rrgw"><div class="rrgh"><b>ABD</b><span>kıyas: S&amp;P 500 · balon = hacim payı · renk = net akış</span></div><svg id="rrgU" viewBox="0 0 440 300" role="img" aria-label="ABD sektör rotasyon haritası"></svg></div></div>
@@ -517,6 +535,29 @@ function kripto(K){if(!K)return;const b=K.btc||{},g=K.grup||{},T=K.tahminler||[]
 
 /* laboratuvar */
 const P0=v=>v==null?"—":"%"+Math.round(v*100),F0=v=>v==null?"—":(v>0?"+":"")+Math.round(v*100);
+function hrkLab(H){const sek=$("hrkSek");if(!sek)return;if(!H){sek.hidden=true;return}sek.hidden=false;
+ const f1=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(1).replace(".",","),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",","),pc=v=>v==null?"—":"%"+Math.round(v*100);
+ const mk=(t,tag,v,c)=>{const e=document.createElement(tag);e.textContent=v==null?"—":v;if(c)e.className=c;t.append(e);return e};
+ const tbl=(id,bas,satirlar)=>{const T=$(id);T.textContent="";const th=document.createElement("thead"),tr=document.createElement("tr");bas.forEach(b=>mk(tr,"th",b));th.append(tr);const tb=document.createElement("tbody");
+  if(!satirlar.length){const r=document.createElement("tr"),td=mk(r,"td","Veri yok");td.colSpan=bas.length;tb.append(r)}
+  satirlar.forEach(s=>{const r=document.createElement("tr");s.forEach(c=>{if(c&&typeof c==="object")mk(r,"td",c.t,c.c);else mk(r,"td",c)});tb.append(r)});T.append(th,tb)};
+ const o=H.ozet||{},d=H.dun,tb=H.taban||{};
+ txt($("hrkTag"),`güncelleme ${H.guncelleme||"—"} · sürekli öğrenir`);
+ txt($("hrkG"),`${H.gun_sayisi||0}/${(H.kurallar||{}).min_gun||6}`);txt($("hrkGd"),(H.gun_sayisi||0)<((H.kurallar||{}).min_gun||6)?"kanıt kapıları için gün birikiyor":"kanıt kapıları açık");
+ txt($("hrkO"),(H.gozlem||0).toLocaleString("tr-TR"));txt($("hrkOd"),"hisse-gün (sabah -> gün sonu)");
+ txt($("hrkP"),o.toplam!=null?o.toplam:"—");txt($("hrkPd"),`${o.ileri_test_bekleyen||0} ileri test bekliyor · ${o.elenen||0} elendi`);
+ txt($("hrkB"),o.onay_bekleyen!=null?o.onay_bekleyen:"—");txt($("hrkBd"),"ileri testi geçti, onayınızı bekliyor");
+ txt($("hrkK"),(H.onayli||[]).length);txt($("hrkKd"),(H.onayli||[]).length?"seçimde uygulanıyor":"seçime etkisi yok");
+ if(d){txt($("hrkE"),f2(d.endeks)+"%");$("hrkE").className=cls(d.endeks);txt($("hrkEd"),`${d.gun} · yükselen ${d.yukselen_sayi} · düşen ${d.dusen_sayi}`)}
+ txt($("hrkNot"),(o.durum||"")+". "+((H.kurallar||{}).not||""));
+ const satir=a=>a.map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),{t:f1(x.rel),c:cls(x.rel)},f1(x.sabah_degisim),x.rv!=null?x.rv+"x":"—",x.puan!=null?x.puan:"—",x.neden||"—"]);
+ const bas=["Hisse","Sektör","Endekse göre","Sabah %","Hacim","Puan","Neden (haber)"];
+ tbl("hrkU",["En çok yükselenler (endekse göre)"].concat(bas.slice(1)),d?satir(d.yukselenler):[]);tbl("hrkD",["En çok düşenler (endekse göre)"].concat(bas.slice(1)),d?satir(d.dusenler):[]);
+ const og=a=>(a||[]).map(x=>`${x.ozellik} (${x.kat}x)`).join(" · ")||"yeterli grup yok";
+ txt($("hrkOrt"),d?`Yükselenlerin sabah ortak özellikleri: ${og(d.yukselen_ortak)}. Düşenlerin: ${og(d.dusen_ortak)}. ${d.uyari||""}`:"—");
+ tbl("hrkS",["Sistem","Gözlem","Endekse göre ort.","Taban","+3 puan oranı","Taban","-3 puan oranı","Taban","Fark"],(H.sistemler||[]).map(s=>s.id==="secim"?[s.ad,s.n,"—","—",pc(s.yuk)+" tuttu","—",pc(s.dus)+" stop","—","—"]:[s.ad,s.n,{t:f2(s.ort_rel),c:cls(s.ort_rel)},f2(s.taban_ort),pc(s.yuk),pc(s.taban_yuk),pc(s.dus),pc(s.taban_dus),{t:f2(s.fark_ort),c:cls(s.fark_ort)}]));
+ tbl("hrkT",["Örüntü","Yön","Durum","Örnek","Endekse göre","Fark","Z","Tutarlılık","İleri örnek","İleri fark"],(H.oruntular||[]).slice(0,30).map(x=>[x.aciklama,x.yon==="bonus"?"bonus":"eleme",{t:x.durum+(x.onayli?" · KULLANILIYOR":""),c:x.durum==="Onay bekliyor"?"up":""},x.n,{t:f2(x.ort_rel),c:cls(x.ort_rel)},{t:f2(x.fark_ort),c:cls(x.fark_ort)},x.z,pc(x.tutarlilik),x.n_ileri,x.ileri_fark_ort==null?"—":f2(x.ileri_fark_ort)]));
+ const k=H.kurallar||{};txt($("hrkKural"),`Kapılar: yükselen ${k.yukselen}; düşen ${k.dusen}. Keşif örneği ${k.kesif_ornek}, z en az ${k.z}, endekse göre fark en az ${k.ort_fark} puan, günlerin en az %${Math.round((k.tutarlilik||0)*100)}'inde aynı yön; ardından ileri test (en az ${k.ileri_ornek} örnek, etki keşfin en az %${Math.round((k.ileri_etki||0)*100)}'i). En az ${k.min_gun} gün. İleri testi geçse bile seçime ancak sizin onayınızla girer. Bu laboratuvar bitmez: her tarama ve gece yeniden ölçer.`)}
 function ozLab(O){if(!O)return;const m=(O.model||{}).ileri_test||{};txt($("ozTag"),`eğitim ${(O.model||{}).egitim||"—"}`);txt($("ozM10"),P0(m.model_ilk10_tuttu));{const ck=(O.model||{}).canli_kiyas;txt($("ozTab"),`ilk 5 ${P0(m.model_ilk5_tuttu)} · taban ${P0(m.tum_hisseler_tuttu)}`+(ck?` · CANLI isabet ${P0(ck.isabet)} (stoplu, n=${ck.n})`:""));if(ck&&$("ozTab"))$("ozTab").title=ck.not;}
  if(LC&&(LC.ozellikler||[]).length)return;const S={kullaniliyor:["Kullanılıyor","ok"],test:["Test","new"],elendi:["Elendi","bad"]};
  table($("ozT"),[["Özellik","l"],["Durum","l"],"+%5 oranı","Stop oranı","Fark (puan)","Örnek"],(O.ozellikler||[]).slice().sort((a,b)=>(b.fark??-9)-(a.fark??-9)).map(o=>r=>{cell(r,o.aciklama||o.ad,"l wrapt");const s=S[o.durum]||[o.durum,""];cell(r,el("span","ch "+s[1],s[0]),"l");cell(r,P0(o.oran),"num");cell(r,P0(o.stop),"num");cell(r,F0(o.fark),"num "+cls(o.fark));cell(r,o.ornek==null?"—":o.ornek.toLocaleString("tr-TR"),"num")}))}
@@ -572,7 +613,7 @@ function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son
  if(!liveOn)txt($("sess"),`${st.tarama||D.guncelleme||"—"} · ${st.oturum||""} · ${st.taranan||"?"} hisse`);txt($("nxt"),nextScan());
  {const Y=D.yurtdisi||{},LB=window.LABS=window.LABS||{};LB.bist=open.length;LB.abd=(Y.history||[]).filter(r=>r.sonuc==="Bekliyor").length;LB.kri=((D.kripto||{}).hisseler||[]).length;LB.isabet=done.length?bas/done.length:null;LB.next=nextScan();if(pz&&pz.xu100!=null)LB.xu=pz.xu100;if(!liveOn)LB.top=(D.picks||[])[0]||null;LB.live=liveOn}
  txt($("fyT"),(TVET||FY_ET||st.tarama||D.guncelleme||"—")+" · 15 dk gecikmeli"+(TVET?" · sürekli":""));
- takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill()}
+ takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill()}
 
 /* eski kural (06.11): son günü olmayan 'Başarısız' kayıtlar bugünkü kurala göre gösterilir */
 function eskiDuzelt(D){(D.history||[]).forEach(r=>{if(r.sonuc!=="Başarısız"||r.bitis)return;r.eski_kural=1;if(r.max_degisim!=null&&r.max_degisim>=0.05){r.sonuc="Başarılı";r.hedef_tarih=r.hedef_tarih||r.kontrol}else if(r.degisim!=null&&r.degisim<=-0.03){r.sonuc="Stop";r.stop_tarih=r.stop_tarih||r.kontrol}else r.sonuc="Erken kapandı"})}

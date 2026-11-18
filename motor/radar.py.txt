@@ -648,6 +648,8 @@ def cmd_adaylar(a):
         # Seçim kuralı (öğrenilmiş): evren içi sıralamada ilk %kademe_yuzde içinde olan ve radar filtrelerinden (KAP, derinlik, puan) geçen hisseler; günlük sayı ve kademe model tarafından öğrenilir (egit.py)
         dg = MJ.get("dogrulama") or {}; gn = int(dg.get("gunluk_n") or 3); q = int(dg.get("kademe_yuzde") or 3)
         LABP, LABT = _lab_puan(); LW = _lab_agirlik()
+        HK = _hareket_kurallari()
+        print(f"HAREKET KURALLARI: {len(HK)} onaylı kural uygulanıyor" + (": " + ", ".join(f"{k.get('yon')} {k.get('aciklama', k.get('id'))}" for k in HK) if HK else " (onaylı kural yok, seçime etkisi yok)"))
         KKL = {k: v + LW * float((LABP.get(k) or {}).get("skor", 0)) for k, v in KK.items()}   # kural 17.11: lab bonusu kapıyı (kademe ve eşik) GEVŞETMEZ; yalnız kapıyı model skoruyla geçenlerin sıralamasını belirler
         print(f"LAB ETKİSİ: {len(LABP)} hisse lab puanı taşıyor (veri {LABT}, ağırlık {LW}/puan)" + (": " + ", ".join(f"{k} +{LW*v['skor']:.2f}" for k, v in list(LABP.items())[:8]) if LABP else ""))
         sirali = sorted(KK.items(), key=lambda kv: -kv[1]); sira = {k: i + 1 for i, (k, v) in enumerate(sirali)}; kesim = max(1, round(len(sirali) * q / 100))
@@ -663,6 +665,8 @@ def cmd_adaylar(a):
             if s["sira"] > kesim: ret["kademe dışı"] += 1; continue
             if s["kod"] not in gor and dk < 720: ret["ilk kez 10-12"] += 1; continue   # kasa kuralı: ilk kez seçilen hisse 10:00-11:59 arası alınmaz (canlı isabet %40, stop %52); seçimle portföy aynı kalsın diye burada uygulanır
             if s.get("derinlik") == "Sığ": ret["sığ"] += 1; continue
+            hb, he, hm = _hareket_etki(s, HK); s["hareket"] = hm; s["model_lab"] = s["model_lab"] + hb
+            if he: ret["hareket elemesi"] = ret.get("hareket elemesi", 0) + 1; s["kk_neden"] = "hareket laboratuvarı elemesi: " + he[0]; continue
             gecen.append(s)
         gecen.sort(key=lambda s: -s["model_lab"]); sec = gecen[:kalan]
         print(f"KALİTE KAPISI: evren {len(sirali)} hisse, ilk %{q} = {kesim} hisse · radar havuzu {len(havuz)} → kuralı geçen {len(gecen)} → seçilen {len(sec)} (bugün {bugun_n}/{gn}) · elenenler {ret} · evrenin en iyisi: {', '.join(f'{k} {v}' for k, v in sirali[:5])}")
@@ -683,9 +687,10 @@ def cmd_adaylar(a):
         if s["kod"] in son_basari:
             b0 = son_basari[s["kod"]]; p["trend_devam"] = {"onceki_tarama": b0["tarama"], "onceki_max": b0.get("max_degisim"), "onceki_giris": b0.get("giris")}
             yz2 = f"{(b0.get('max_degisim') or 0) * 100:.1f}".replace(".", ","); p["neden"] = f"Trend devam ediyor: {b0['tarama']} seçimi hedefe ulaştı (+%{yz2}). " + p["neden"]
+        if s.get("hareket"): p["hareket"] = s["hareket"]; p["neden"] = "Hareket laboratuvarı kuralı eşleşti (" + ", ".join(s["hareket"]) + "). " + p["neden"]
         p["kap" if a.piyasa == "bist" else "haber"] = s["haber"]; picks.append(p)
         hist.append({"trend_devam": bool(p.get("trend_devam")), "model": hist_model, "tarama": tarih, "kod": s["kod"], "giris": s["fiyat"], "stop": s["stop"], "bitis": bitis, "kontrol": None, "kontrol_fiyat": None, "degisim": None,
-                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None, "lab_skor": (s.get("lab") or {}).get("skor", 0),
+                     "max_degisim": None, "min_degisim": None, "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None, "lab_skor": (s.get("lab") or {}).get("skor", 0), "hareket": s.get("hareket") or [],
                      "likit_mn": s.get("likit_mn"), "kapasite_tl": s.get("kapasite_tl"), "derinlik": s.get("derinlik")})
     izl = [{"kod": s["kod"], "fiyat": s["fiyat"], "skor": s["puan"], "model": s.get("model"), "neden": (s.get("kk_neden") or "eşik üstü, ilk 10 dışında") + ": " + (", ".join(s["why"][:2]) or s["sebep"]) + (f"; {s['haber']}" if s["haber"] else "")} for s in izle]
     # İzleme listesi en az 10 hisse: eşik üstü ama ilk 10 dışında kalanlar + eşiğe yakın (eşik-1,5) ya da filtreye takılan güçlü hisseler
@@ -788,16 +793,7 @@ def cmd_gozlem(a):
         eks = len(GZ_COLS) - len(G["cols"]); G["cols"] = list(GZ_COLS)
         for t in G["taramalar"]:
             for r in t["rows"]: r.extend([None] * eks)
-    rows = []
-    for s in B["tum"]:
-        oz = s.get("oz") or {}; pk = s.get("pk") or {}; tk = s.get("tk") or {}
-        rows.append([s["kod"], s["fiyat"], s["ch"], s["rv"], s["puan"], s.get("rsi"), oz.get("rsi1s"), oz.get("rsi4s"), s.get("mt"),
-                     int(bool(s.get("uygun"))), oz.get("asiri", int("aşırı" in (s.get("sebep") or ""))),
-                     oz.get("g_trend", int("günlük trend aşağı" not in (s.get("sebep") or ""))),
-                     pk.get("RSI-MACD"), pk.get("Trend"), pk.get("Hacim"), pk.get("Uyum"), pk.get("Dip"), pk.get("Risk"),
-                     (tk.get("1S") or [None] * 3)[2], (tk.get("4S") or [None] * 3)[2], (tk.get("G") or [None] * 3)[2],
-                     oz.get("pw"), oz.get("p1m"), oz.get("cfo"), oz.get("h1m"), oz.get("l1m"),
-                     s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")])
+    rows = [_gz_satir(s) for s in B["tum"]]
     oz = B.get("ozet", {})
     pz = {k: oz.get(k) for k in ("yukselen", "hacim_ort", "uygun")}
     pz.update({"xu100": oz.get("xu100"), "piyasa": oz.get("piyasa")})
@@ -805,6 +801,33 @@ def cmd_gozlem(a):
     G["taramalar"] = [t for t in G["taramalar"] if t["saat"] != an] + [{"saat": an, "ts": int(n.timestamp()), "seans_ici": B.get("seans_ici"), "piyasa": pz, "rows": rows}]
     json.dump(G, open(yol, "w"), ensure_ascii=False, separators=(",", ":"))
     print(f"GÖZLEM: {len(rows)} hisse → {yol} ({len(G['taramalar'])} tarama, {os.path.getsize(yol) // 1024} KB)")
+
+def _gz_satir(s):
+    """Bir hissenin arşiv satırı (GZ_COLS sırası). Arşiv, öğren ve hareket laboratuvarı ile canlı seçim aynı satırı kullanır."""
+    oz = s.get("oz") or {}; pk = s.get("pk") or {}; tk = s.get("tk") or {}
+    return [s["kod"], s["fiyat"], s["ch"], s["rv"], s["puan"], s.get("rsi"), oz.get("rsi1s"), oz.get("rsi4s"), s.get("mt"),
+            int(bool(s.get("uygun"))), oz.get("asiri", int("aşırı" in (s.get("sebep") or ""))),
+            oz.get("g_trend", int("günlük trend aşağı" not in (s.get("sebep") or ""))),
+            pk.get("RSI-MACD"), pk.get("Trend"), pk.get("Hacim"), pk.get("Uyum"), pk.get("Dip"), pk.get("Risk"),
+            (tk.get("1S") or [None] * 3)[2], (tk.get("4S") or [None] * 3)[2], (tk.get("G") or [None] * 3)[2],
+            oz.get("pw"), oz.get("p1m"), oz.get("cfo"), oz.get("h1m"), oz.get("l1m"),
+            s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")]
+
+def _hareket_kurallari():
+    """Kullanıcının onayladığı hareket laboratuvarı kuralları (rules.json hareket_kurallari). Yoksa boş: seçime etkisi yoktur."""
+    try: return [k for k in (json.load(open("rules.json", encoding="utf-8")).get("hareket_kurallari") or []) if k.get("ozellik") and k.get("yon") in ("bonus", "eleme")]
+    except Exception: return []
+
+def _hareket_etki(s, kurallar):
+    """(bonus, eleme_kuralları, eşleşen_id'ler). Bonus yalnız sıralamayı etkiler; eleme adayı dışarıda bırakır (kapıyı gevşetmez, yalnız sıkılaştırır)."""
+    if not kurallar: return 0.0, [], []
+    F = set(_ozellikler(_gz_satir(s), GZ_COLS, "bist")); bonus = 0.0; ele = []; esl = []
+    for k in kurallar:
+        if all(f in F for f in k["ozellik"]):
+            esl.append(k.get("id") or "|".join(k["ozellik"]))
+            if k["yon"] == "bonus": bonus += float(k.get("agirlik", 0.05))
+            else: ele.append(k.get("aciklama") or "|".join(k["ozellik"]))
+    return bonus, ele, esl
 
 def _kova(ad, v):
     if v is None or (isinstance(v, float) and math.isnan(v)): return None
