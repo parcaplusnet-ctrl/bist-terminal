@@ -347,11 +347,12 @@ def main():
     # dünün (en son tamamlanmış günün) hareketleri
     son = gun_adlari[-1]
     O_son = [o for o in O if o["gun"] == son]
-    neden = {}
+    neden = dict(kayit.get("nedenler") or {})          # nedenler kalıcı kayıtta taşınır (saatlik görev de görür): {kod: {tarih, neden}}
     try:
-        neden = json.load(open(a.neden, encoding="utf-8"))
+        neden.update(json.load(open(a.neden, encoding="utf-8")))
     except Exception:
         pass
+    kayit["nedenler"] = {k: v for k, v in neden.items() if isinstance(v, dict) and v.get("tarih") in gun_adlari[-3:]}
     O_son.sort(key=lambda o: o["rel"])
 
     def ozet(o):
