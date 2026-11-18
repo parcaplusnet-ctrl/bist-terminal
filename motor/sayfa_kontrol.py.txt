@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Yayın sonrası sayfa denetimi (18.11). Kullanım: python3 -I sayfa_kontrol.py [--yerel veri.json]
+GitHub Pages üzerindeki veri.json ve index.html'i buluttan okur, eksik/bayat/hatalı veriyi listeler.
+Çıkış kodu: 0 sorun yok, 1 sorun var. Her satır 'SORUN: ...' ya da 'TAMAM: ...' olarak basılır."""
+import json, sys, time, datetime, urllib.request, re
+
+SAYFA = "https://parcaplusnet-ctrl.github.io/bist-terminal/"
+UA = {"User-Agent": "Mozilla/5.0"}
+
+
+def al(url, tekrar=3):
+    son = None
+    for i in range(tekrar):
+        try:
+            r = urllib.request.Request(url + ("&" if "?" in url else "?") + "v=%d" % int(time.time()), headers=UA)
+            return urllib.request.urlopen(r, timeout=30).read().decode("utf-8")
+        except Exception as e:
+            son = e
+            time.sleep(5)
+    raise RuntimeError("%s okunamadı: %s" % (url, son))
+
+
+def ist_simdi():
+    return datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None) + datetime.timedelta(hours=3)
+
+
+def etiket(s):
+    """'18.11 12:38' -> datetime (yıl bu yıl)."""
+    m = re.search(r"(\d{2})\.(\d{2})(?:\s+(\d{2}):(\d{2}))?", s or "")
+    if not m:
+        return None
+    g, a = int(m.group(1)), int(m.group(2))
+    sa, dk = int(m.group(3) or 0), int(m.group(4) or 0)
+    y = ist_simdi().year
+    try:
+        return datetime.datetime(y, a, g, sa, dk)
+    except ValueError:
+        return None
+
+
+def main():
+    sorun = []
+    ok = []
+    yerel = None
+    if "--yerel" in sys.argv:
+        yerel = json.load(open(sys.argv[sys.argv.index("--yerel") + 1]))
+    try:
+        v = json.loads(al(SAYFA + "veri.json"))
+    except Exception as e:
+        print("SORUN: Sayfadaki veri.json okunamadı: %s" % e)
+        return 1
+    html = ""
+    try:
+        html = al(SAYFA + "index.html")
+    except Exception as e:
+        sorun.append("index.html okunamadı: %s" % e)
+    now = ist_simdi()
+    hafta_ici = now.weekday() < 5
+    seans = hafta_ici and (10 * 60 + 40) <= now.hour * 60 + now.minute <= 19 * 60
+
+    # 0) Pages yerel (az önce itilen) veriyle aynı mı (dağıtım gecikmesi)
+    if yerel is not None and v.get("guncelleme") != yerel.get("guncelleme"):
+        sorun.append("Pages henüz yeni veriyi yayınlamadı: sayfada %s, depoda %s (1-3 dk bekleyip yeniden dene)" % (v.get("guncelleme"), yerel.get("guncelleme")))
+
+    # 1) ana tarama tazeliği
+    g = etiket(v.get("guncelleme"))
+    if g is None:
+        sorun.append("guncelleme alanı okunamadı")
+    else:
+        yas = (now - g).total_seconds() / 60
+        if seans and yas > 100:
+            sorun.append("Ana veri bayat: guncelleme %s (%d dk önce)" % (v.get("guncelleme"), yas))
+        else:
+            ok.append("ana tarama %s" % v.get("guncelleme"))
+
+    # 2) sağlık uyarıları
+    sag = v.get("saglik") or {}
+    if sag.get("uyarilar"):
+        sorun.append("SAĞLIK UYARISI: %s" % "; ".join(map(str, sag["uyarilar"])))
+
+    # 3) bölüm etiketleri (kripto, sektör, lab) en çok 26 saat eski olsun (hafta sonu hariç tutulur)
+    def bolum(ad, s, saat=26):
+        t = etiket(s)
+        if t is None:
+            sorun.append("%s etiketi okunamadı (%r)" % (ad, s))
+            return
+        yas = (now - t).total_seconds() / 3600
+        if hafta_ici and yas > saat:
+            sorun.append("%s bayat: %s (%d saat önce)" % (ad, s, yas))
+        else:
+            ok.append("%s %s" % (ad, s))
+    bolum("Kripto", (v.get("kripto") or {}).get("tarama"))
+    bolum("Sektör", (v.get("sektor_lab") or {}).get("tarama"), 26 + 24 * 6)  # haftalık görev; asıl denetim projeksiyonda
+    lz = ((v.get("lab_ozellik") or {}).get("tur") or {}).get("zaman")
+    if lz:
+        bolum("Özellik laboratuvarı", lz, 30)
+    kz = ((v.get("kasa") or {}).get("ozet") or {}).get("tarih")
+    if kz:
+        bolum("Kasa", kz, 4 if seans else 70)
+
+    # 4) geciken projeksiyon / açıklamalar
+    sl = v.get("sektor_lab") or {}
+    gec = []
+    for p in sl.get("projeksiyon", []):
+        if p.get("sonuc") == "Bekliyor":
+            t = etiket(p.get("kontrol"))
+            if t and t + datetime.timedelta(hours=24) < now:
+                gec.append("%s %s (%s)" % (p.get("piyasa"), p.get("kod"), p.get("kontrol")))
+    if gec:
+        sorun.append("Ölçümü geciken projeksiyon: " + ", ".join(gec[:8]))
+
+    # 5) veri bütünlüğü: zorunlu anahtarlar
+    zorunlu = ["kasa", "history", "learning", "lab_ozellik", "sektor_lab", "kripto", "ogrenme_asamasi", "son_tarama", "saglik"]
+    eksik = [k for k in zorunlu if k not in v]
+    if eksik:
+        sorun.append("veri.json'da eksik anahtar: %s" % ", ".join(eksik))
+    st = v.get("son_tarama") or {}
+    if not st:
+        sorun.append("son_tarama boş")
+
+    # 6) metin içi çelişki: sayfa metinlerinde artık geçerli olmayan sabit tarih
+    for ad in ("kripto", "lab_bist", "sektor_lab"):
+        d = v.get(ad) or {}
+        vt, tt = etiket(d.get("veri")), etiket(d.get("tarama"))
+        if vt and tt and abs((vt - tt).total_seconds()) > 36 * 3600:
+            sorun.append("%s: 'veri' açıklaması (%s) ile 'tarama' (%s) tutmuyor" % (ad, d.get("veri"), d.get("tarama")))
+
+    # 7) sayfa dosyası
+    if html:
+        for isaret in ("sagB", "veri.json", "pjGec"):
+            if isaret not in html:
+                sorun.append("index.html'de beklenen öğe yok: %s" % isaret)
+        if "<html" not in html.lower():
+            sorun.append("index.html geçerli görünmüyor")
+    # canli/durum.json
+    try:
+        d = json.loads(al(SAYFA + "canli/durum.json"))
+        if d.get("durum") != "bitti":
+            sorun.append("canli/durum.json durumu 'bitti' değil: %s" % d.get("durum"))
+        elif d.get("tarama") != v.get("guncelleme") and seans:
+            sorun.append("canli/durum.json (%s) ile veri.json (%s) tarama zamanı farklı" % (d.get("tarama"), v.get("guncelleme")))
+    except Exception as e:
+        sorun.append("canli/durum.json okunamadı: %s" % e)
+
+    for s in ok:
+        print("TAMAM: " + s)
+    for s in sorun:
+        print("SORUN: " + s)
+    return 1 if sorun else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
