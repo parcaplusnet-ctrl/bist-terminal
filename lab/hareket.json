@@ -584,7 +584,88 @@
    ]
   }
  },
- "guncelleme": "18.11 18:22",
+ "guncelleme": "18.11 21:45",
  "gun_sayisi": 2,
- "nedenler": {}
+ "nedenler": {
+  "TRHOL": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: eski haber, fon soruşturması gözaltıları (03.11); dünkü hareketi açıklayan yeni haber yok"
+  },
+  "BAKAB": {
+   "tarih": "2026-11-18",
+   "neden": "olumlu: 10.11 bilanço 9 aylık net kâr 151 mn TL (önceki dönem zarar); dünkü günlük haber yok"
+  },
+  "BRMEN": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ATSYH": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "SEGYO": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "DURDO": {
+   "tarih": "2026-11-18",
+   "neden": "olumlu: 09.11 bilançoda zarar küçüldü (1,6 mn TL, önceki 291 mn TL); dünkü günlük haber yok"
+  },
+  "OZRDN": {
+   "tarih": "2026-11-18",
+   "neden": "olumlu: 09.11 bilançoda zarar azaldı (30,9 mn TL, önceki 57,3 mn TL); dünkü günlük haber yok"
+  },
+  "FLAP": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "METRO": {
+   "tarih": "2026-11-18",
+   "neden": "olumlu: 22.10 bilanço net kâr 3,4 milyar TL; 16.11 imtiyazlı pay alımından vazgeçti; dünkü günlük haber yok"
+  },
+  "KNFRT": {
+   "tarih": "2026-11-18",
+   "neden": "olumlu: 09.11 zarar azaldı; yatırım teşvik belgesi (28.10); dünkü günlük haber yok"
+  },
+  "LYDHO": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 09.11 bilanço 2,85 milyar TL net zarar (önceki kâr)"
+  },
+  "ANELE": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 09.11 bilanço 2,64 milyar TL net zarar; 17.11 birleşme duyurusu"
+  },
+  "BULGS": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 30.10 bilanço 5,46 milyar TL net zarar"
+  },
+  "KARCL": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ODINE": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 09.11 bilançoda zarar büyüdü (159,7 mn TL)"
+  },
+  "TMPOL": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: SPK Trive Yatırım faaliyetlerini geçici durdurdu (09.11)"
+  },
+  "PASEU": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ISVEA": {
+   "tarih": "2026-11-18",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "CEMZY": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 30.10 bilanço net zarar 486 mn TL; dünkü günlük haber yok"
+  },
+  "EDATA": {
+   "tarih": "2026-11-18",
+   "neden": "olumsuz: 27.10 bilanço net zarar 86,8 mn TL (önceki kâr); 16.11 SPK yasak listeleri"
+  }
+ }
 }
