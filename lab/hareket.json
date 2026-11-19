@@ -1167,88 +1167,88 @@
    ]
   }
  },
- "guncelleme": "19.11 18:23",
+ "guncelleme": "19.11 21:47",
  "gun_sayisi": 3,
  "nedenler": {
+  "ISVEA": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "RALYH": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
   "TRHOL": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: eski haber, fon soruşturması gözaltıları (03.11); dünkü hareketi açıklayan yeni haber yok"
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "SVGYO": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "IHEVA": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "IHYAY": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "RODRG": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "TKNKA": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "UFUK": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "BAKAB": {
-   "tarih": "2026-11-18",
-   "neden": "olumlu: 10.11 bilanço 9 aylık net kâr 151 mn TL (önceki dönem zarar); dünkü günlük haber yok"
-  },
-  "BRMEN": {
-   "tarih": "2026-11-18",
+   "tarih": "2026-11-19",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
-  "ATSYH": {
-   "tarih": "2026-11-18",
+  "AYES": {
+   "tarih": "2026-11-19",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
-  "SEGYO": {
-   "tarih": "2026-11-18",
+  "BURCE": {
+   "tarih": "2026-11-19",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
-  "DURDO": {
-   "tarih": "2026-11-18",
-   "neden": "olumlu: 09.11 bilançoda zarar küçüldü (1,6 mn TL, önceki 291 mn TL); dünkü günlük haber yok"
-  },
-  "OZRDN": {
-   "tarih": "2026-11-18",
-   "neden": "olumlu: 09.11 bilançoda zarar azaldı (30,9 mn TL, önceki 57,3 mn TL); dünkü günlük haber yok"
-  },
-  "FLAP": {
-   "tarih": "2026-11-18",
+  "ATAKP": {
+   "tarih": "2026-11-19",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
-  "METRO": {
-   "tarih": "2026-11-18",
-   "neden": "olumlu: 22.10 bilanço net kâr 3,4 milyar TL; 16.11 imtiyazlı pay alımından vazgeçti; dünkü günlük haber yok"
+  "MAGEN": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "GENIL": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "KNFRT": {
-   "tarih": "2026-11-18",
-   "neden": "olumlu: 09.11 zarar azaldı; yatırım teşvik belgesi (28.10); dünkü günlük haber yok"
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
-  "LYDHO": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 09.11 bilanço 2,85 milyar TL net zarar (önceki kâr)"
-  },
-  "ANELE": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 09.11 bilanço 2,64 milyar TL net zarar; 17.11 birleşme duyurusu"
-  },
-  "BULGS": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 30.10 bilanço 5,46 milyar TL net zarar"
+  "ENPRA": {
+   "tarih": "2026-11-19",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "KARCL": {
-   "tarih": "2026-11-18",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
+   "tarih": "2026-11-19",
+   "neden": "olumlu: şirket SPK suç duyurusu kararında yönetim, ortak ve çalışanların yer almadığını açıkladı (19.11)"
   },
-  "ODINE": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 09.11 bilançoda zarar büyüdü (159,7 mn TL)"
+  "ANELE": {
+   "tarih": "2026-11-19",
+   "neden": "olumsuz: VBTS kapsamında açığa satış ve kredili işlem tedbiri duyuruldu (19.11); 17.11 birleşme bildirimi de var"
   },
-  "TMPOL": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: SPK Trive Yatırım faaliyetlerini geçici durdurdu (09.11)"
-  },
-  "PASEU": {
-   "tarih": "2026-11-18",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "ISVEA": {
-   "tarih": "2026-11-18",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "CEMZY": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 30.10 bilanço net zarar 486 mn TL; dünkü günlük haber yok"
-  },
-  "EDATA": {
-   "tarih": "2026-11-18",
-   "neden": "olumsuz: 27.10 bilanço net zarar 86,8 mn TL (önceki kâr); 16.11 SPK yasak listeleri"
+  "KLSYN": {
+   "tarih": "2026-11-19",
+   "neden": "olumlu: büyüme stratejisi kapsamında otel, restoran ve kafe projelerine yönelik yeni faaliyet alanı bildirimi (18.11)"
   }
  },
  "surpriz_haber": {
