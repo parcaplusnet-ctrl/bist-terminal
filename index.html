@@ -141,6 +141,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 /* kasa */
 .kasa{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun:empty{display:none}.ksGun .k{border-bottom:0}.ksGun .k:last-child{border-right:1px solid var(--line)}.ksGun .k b{font-size:20px}
 @media (min-width:1101px){.glg6{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.kasa .k.kbist{position:relative}.vxc{position:absolute;top:8px;right:8px;width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--mut,#8896a6);cursor:pointer}.vxc:hover{color:#fff;border-color:#5b6b7c}.vxc.ok{color:var(--up);border-color:var(--up)}.vxc.er{color:var(--dn);border-color:var(--dn)}
 #kMktL:empty{display:none}.kasa .k em.kvx{display:block;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-style:normal}.kasa .k em.kvx .up{color:var(--up)}.kasa .k em.kvx .dn{color:var(--dn)}.kasa .k{border-right:1px solid var(--line)}.kasa .k:last-child{border-right:0}
 .seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg button{cursor:pointer;background:transparent;border:1px solid var(--line2);border-radius:6px;padding:5px 12px;font-size:12.5px;color:var(--mut)}
@@ -262,7 +263,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
    <div class="k"><small>Açık pozisyon</small><b id="ksAcik">—</b><em id="ksAcikL">—</em></div>
    <div class="k"><small>Nakit</small><b id="ksNak">—</b><em>yatırılmamış</em></div>
    <div class="k"><small>Kapanan işlem</small><b id="ksIs">—</b><em id="ksIsL">—</em></div>
-   <div class="k"><small>BIST 100</small><b id="kMkt">—</b><em id="kMktL">—</em><em id="kVix" class="kvx">—</em></div>
+   <div class="k kbist"><button type="button" id="vxC" class="vxc" title="VIX durumunu görsel olarak kopyala" aria-label="Görseli kopyala"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button><small>BIST 100</small><b id="kMkt">—</b><em id="kMktL">—</em><em id="kVix" class="kvx">—</em></div>
   </div>
   <div class="ksG">
    <div class="ksL"><div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Açık pozisyonlar</h2><p id="ksAT">—</p></div>
@@ -1341,6 +1342,43 @@ const st2=document.createElement("style");
  async function xuCanli(){try{const r=await fetch("https://scanner.tradingview.com/turkey/scan",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({symbols:{tickers:["BIST:XU100"]},columns:["close","change"]})});vixCanli();if(!r.ok)return;const j=await r.json(),d=j.data&&j.data[0]&&j.data[0].d;if(!d||!(d[1]===d[1])||d[1]==null)return;const v=Number(d[1]);const hm=new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour12:false,hour:"2-digit",minute:"2-digit",second:"2-digit"});window.XUL={v:v,c:Number(d[0]),hm:hm,t:Date.now()};xuYaz()}catch(e){}}
  function xuYaz(){const X=window.XUL;if(!X||Date.now()-X.t>600000)return;const b=document.getElementById("kMkt"),l=document.getElementById("kMktL");if(!b)return;
   b.textContent=(X.v>=0?"+":"")+X.v.toFixed(2).replace(".",",")+"%";b.className=X.v>=0?"up":"dn";if(l)l.textContent="";b.classList.remove("fl-up","fl-dn");if(window.LABS)window.LABS.xu=X.v}
+
+ function vixGorsel(xu,vx,ch){const W=1080,H=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");const F="Inter,Segoe UI,Arial,sans-serif";const kor=ch>=0;
+  const C=kor?{a:"#2a0509",b:"#8f1320",ac:"#ff4d5e",soft:"#ffb3ba"}:{a:"#04201a",b:"#0f7a52",ac:"#3ddc97",soft:"#b6f2d6"};
+  let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,C.a);gr.addColorStop(1,C.b);g.fillStyle=gr;g.fillRect(0,0,W,H);
+  if(kor){g.strokeStyle="rgba(255,255,255,.07)";g.lineWidth=3;for(let i=0;i<9;i++){const x=70+i*125;g.beginPath();g.moveTo(x,0);g.lineTo(x-60,300);g.lineTo(x+20,300);g.lineTo(x-70,640);g.stroke()}}
+  else{const rg=g.createRadialGradient(W/2,1080,60,W/2,1080,900);rg.addColorStop(0,"rgba(255,235,150,.55)");rg.addColorStop(1,"rgba(255,235,150,0)");g.fillStyle=rg;g.fillRect(0,0,W,H);g.strokeStyle="rgba(255,255,255,.07)";g.lineWidth=14;for(let i=0;i<13;i++){const a=Math.PI+i*Math.PI/12;g.beginPath();g.moveTo(W/2+Math.cos(a)*220,1080+Math.sin(a)*220);g.lineTo(W/2+Math.cos(a)*1300,1080+Math.sin(a)*1300);g.stroke()}}
+  g.textAlign="center";g.fillStyle=C.soft;g.font="700 34px "+F;g.fillText("BIST YÜKSELİŞ RADARI",W/2,86);
+  g.fillStyle="#fff";g.font="900 128px "+F;g.fillText(kor?"KORKU":"GÜVEN",W/2,232);
+  g.fillStyle=C.soft;g.font="600 38px "+F;g.fillText(kor?"Piyasada korku artıyor":"Piyasada korku azalıyor",W/2,292);
+  const cx=W/2,cy=520,R=165;g.beginPath();g.arc(cx,cy,R,0,7);g.fillStyle=kor?"#ffcf7a":"#ffe27a";g.fill();g.lineWidth=10;g.strokeStyle="rgba(0,0,0,.35)";g.stroke();
+  g.fillStyle="#2b1a12";g.strokeStyle="#2b1a12";g.lineCap="round";
+  if(kor){g.fillStyle="#fff";for(const x of[-58,58]){g.beginPath();g.arc(cx+x,cy-35,40,0,7);g.fill();g.lineWidth=6;g.strokeStyle="#2b1a12";g.stroke()}g.fillStyle="#2b1a12";for(const x of[-58,58]){g.beginPath();g.arc(cx+x,cy-30,13,0,7);g.fill()}
+   g.lineWidth=11;g.beginPath();g.moveTo(cx-100,cy-108);g.lineTo(cx-30,cy-92);g.moveTo(cx+100,cy-108);g.lineTo(cx+30,cy-92);g.stroke();
+   g.beginPath();g.ellipse(cx,cy+78,30,40,0,0,7);g.fill();
+   g.fillStyle="#6cc8ff";g.beginPath();g.moveTo(cx+138,cy-110);g.quadraticCurveTo(cx+168,cy-62,cx+138,cy-50);g.quadraticCurveTo(cx+108,cy-62,cx+138,cy-110);g.fill()}
+  else{g.lineWidth=11;for(const x of[-58,58]){g.beginPath();g.arc(cx+x,cy-28,22,Math.PI*1.1,Math.PI*1.9);g.stroke()}
+   g.lineWidth=13;g.beginPath();g.arc(cx,cy+18,88,Math.PI*0.14,Math.PI*0.86);g.stroke();
+   g.fillStyle="rgba(255,120,120,.35)";for(const x of[-100,100]){g.beginPath();g.arc(cx+x,cy+40,24,0,7);g.fill()}}
+  g.lineWidth=11;g.lineJoin="round";g.strokeStyle=C.ac;g.beginPath();const y0=kor?818:732,n=48;for(let i=0;i<=n;i++){const x=90+i*(W-180)/n,t=i/n;let y;if(kor){y=y0-t*t*150-(i%2?38:-18)*(.3+t)}else{y=y0+t*95+Math.sin(t*10)*20*(1-t)}i?g.lineTo(x,y):g.moveTo(x,y)}g.stroke();
+  g.lineWidth=0;g.fillStyle=C.ac;g.font="900 44px "+F;
+  const by=900,bw=420,bh=122;function box(x,lbl,val,col){g.fillStyle="rgba(0,0,0,.32)";g.beginPath();g.roundRect(x,by,bw,bh,22);g.fill();g.textAlign="center";g.fillStyle=C.soft;g.font="700 26px "+F;g.fillText(lbl,x+bw/2,by+36);g.fillStyle=col;g.font="900 54px "+F;g.fillText(val,x+bw/2,by+97)}
+  const f=(v,d)=>Number(v).toFixed(d).replace(".",",");const sg=v=>(v>=0?"+":"-")+f(Math.abs(v),2)+"%";
+  box(80,"BIST 100",xu==null?"-":sg(xu),xu==null?"#fff":(xu>=0?"#3ddc97":"#ff6b78"));
+  box(W-80-bw,"VIX "+f(vx,2),(ch>=0?"▲ ":"▼ ")+f(Math.abs(ch),2)+"%",kor?"#ff8a95":"#7dffc0");
+  g.textAlign="center";g.fillStyle="rgba(255,255,255,.55)";g.font="600 24px "+F;g.fillText(new Date().toLocaleString("tr-TR",{timeZone:"Europe/Istanbul",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})+" · korku endeksi VIX",W/2,1054);
+  return cv}
+ async function vixKopyala(){const b=document.getElementById("vxC");const bil=(c)=>{b.classList.remove("ok","er");b.classList.add(c);clearTimeout(bil.t);bil.t=setTimeout(()=>b.classList.remove("ok","er"),2000)};
+  const VL=window.VXL&&Date.now()-window.VXL.t<600000?window.VXL:null,st=((((window.D||D||{}).yurtdisi||{}).piyasa||{}).vix)||null;const vx=VL?VL.v:st&&st.v,ch=VL?VL.c:st&&st.ch;
+  if(vx==null||ch==null){bil("er");b.title="VIX verisi henüz yok";return}
+  const xt=(document.getElementById("kMkt").textContent||"").replace("%","").replace(",",".").replace("−","-"),xu=isFinite(parseFloat(xt))?parseFloat(xt):null;
+  let cv;try{cv=vixGorsel(xu,Number(vx),Number(ch))}catch(e){console.error(e);bil("er");return}
+  try{await document.fonts.ready}catch(e){}
+  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));if(!blob){kartOnizle(cv);return}
+  try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);bil("ok");b.title="Kopyalandı";return}catch(e){}
+  try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"vix_"+(Number(ch)>=0?"korku":"guven")+".png",data:blob});bil("ok");return}}catch(e){if(e&&e.code==="declined")return}
+  kartOnizle(cv)}
+ document.getElementById("vxC").addEventListener("click",vixKopyala);
  window.xuYaz=xuYaz;
  const orig=tvCek; tvCek=async function(){await orig();flash();blink();xuCanli()}; setInterval(blink,5000); setTimeout(blink,2000); setTimeout(xuCanli,500); setTimeout(vixCanli,300); setInterval(xuCanli,30000); setTimeout(()=>{if(!window.VXL&&window.render)try{render()}catch(e){}},6500);
 })();
