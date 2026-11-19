@@ -1,5 +1,5 @@
 {
- "guncelleme": "19.11 20:55",
+ "guncelleme": "19.11 21:48",
  "versiyon": "1.0",
  "tanim": "Olay: bir günün kapanışından sonraki 10 işlem günü içinde kapanış en az +%20. Evren: günlük ort. ciro ≥ 5 mn TL, o gün tavan (≥ %9) değil. Gözlem: her hisse-gün (olay içi günler hariç). Kaldıraç = özellik varken olay başlama oranı / tüm gözlemlerde oran. Kapı: ≥ 25 olay, kaldıraç ≥ 1.6, z ≥ 4, iki dönemde de ≥ 1,2, ve yön ayrımı: aynı özellikte -%16 düşüş olayı oranından en az 1,25 kat daha fazla yükseliş (salt oynaklık elenir).",
  "donem": "08.09.2025 - 05.11.2026",
