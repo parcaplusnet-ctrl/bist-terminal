@@ -168,7 +168,8 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .bub{transform-box:fill-box;transform-origin:center;animation:bgir .9s cubic-bezier(.2,.9,.3,1.3) both,bdans 4.5s ease-in-out infinite alternate}
 @keyframes bgir{from{transform:scale(0)}}@keyframes bdans{0%{transform:translate(0,0)}50%{transform:translate(1.5px,-2px)}100%{transform:translate(-1.5px,1.5px)}}
 @media (max-width:760px){.scene{height:180px}.scene .cx{display:none}.rrg2{grid-template-columns:1fr}}
-.hrkBH{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 0}.hrkBH h3{margin:0;font-size:13px}.hrkBH .btn{flex:none;min-width:116px;text-align:center}
+.hrkBH{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;min-height:52px;box-sizing:border-box}.hrkBH h3{margin:0;font-size:13px;line-height:1.35;min-width:0}.hrkBH .btn{flex:none;width:132px;height:30px;padding:0;text-align:center;display:inline-flex;align-items:center;justify-content:center}
+@media (max-width:640px){.hrkBH{flex-direction:column;align-items:stretch;justify-content:center;gap:10px;text-align:center}.hrkBH .btn{width:100%;max-width:240px;align-self:center}}
 .tw.kay{max-height:320px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .tw.kay th{position:sticky;top:0;z-index:1}
 #lcBul{max-height:130px;overflow:auto}#learn{border-bottom:1px solid var(--line)}
