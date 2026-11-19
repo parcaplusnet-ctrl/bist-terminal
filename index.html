@@ -168,6 +168,8 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .bub{transform-box:fill-box;transform-origin:center;animation:bgir .9s cubic-bezier(.2,.9,.3,1.3) both,bdans 4.5s ease-in-out infinite alternate}
 @keyframes bgir{from{transform:scale(0)}}@keyframes bdans{0%{transform:translate(0,0)}50%{transform:translate(1.5px,-2px)}100%{transform:translate(-1.5px,1.5px)}}
 @media (max-width:760px){.scene{height:180px}.scene .cx{display:none}.rrg2{grid-template-columns:1fr}}
+.ogrSh{align-items:center}.ogrSh .btn{flex:none;width:132px;height:30px;padding:0;text-align:center;display:inline-flex;align-items:center;justify-content:center}
+@media (max-width:640px){.ogrSh{flex-direction:column;align-items:stretch;text-align:center;gap:10px}.ogrSh .btn{width:100%;max-width:240px;align-self:center}}
 .hrkBH{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;min-height:52px;box-sizing:border-box}.hrkBH h3{margin:0;font-size:13px;line-height:1.35;min-width:0}.hrkBH .btn{flex:none;width:132px;height:30px;padding:0;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 @media (max-width:640px){.hrkBH{flex-direction:column;align-items:stretch;justify-content:center;gap:10px;text-align:center}.hrkBH .btn{width:100%;max-width:240px;align-self:center}}
 .tw.kay{max-height:320px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -381,7 +383,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
     <button class="ltab" role="tab" type="button" data-l="en" aria-selected="false">Endeks katmanları</button>
     <button class="ltab" role="tab" type="button" data-l="dis" aria-selected="false">Dış etkenler</button>
    </div>
-   <div id="l-og" role="tabpanel"><div class="sh"><h2>Öğrenme · bulgular ve kural değişiklikleri</h2><p id="lTag">—</p></div><div id="learn" tabindex="0" aria-label="Öğrenme günlüğü, kaydırılabilir"></div></div>
+   <div id="l-og" role="tabpanel"><div class="sh ogrSh"><h2>Öğrenme · bulgular ve kural değişiklikleri</h2><p id="lTag">—</p><button class="btn" type="button" data-hg="ogr" title="Son 10 önemli değişiklik ve kararı görsel olarak kopyala">Görsel kopyala</button></div><div id="learn" tabindex="0" aria-label="Öğrenme günlüğü, kaydırılabilir"></div></div>
    <div id="l-pj" role="tabpanel" hidden><div class="sh"><h2>Önümüzdeki hafta projeksiyonu</h2><p id="sPjT">—</p></div><div class="tw"><table id="sPj"></table></div></div>
    <div id="l-en" role="tabpanel" hidden><div class="sh"><h2>Endeks katmanları · BIST 30 / 50 / 100</h2><p id="bTag">—</p></div>
     <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="bHip">—</p>
@@ -1094,6 +1096,32 @@ async function gunKopyala(){if(!D)return;let cv;try{cv=gunGorsel()}catch(e){cons
  try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"gunun_ozeti_"+String(((D.kasa||{}).ozet||{}).tarih||"").slice(0,5)+".png",data:blob});gunMsg("Kaydedildi ✓");return}}catch(e){if(e&&e.code==="declined"){return}}
  kartOnizle(cv)}
 $("gunC").addEventListener("click",gunKopyala);
+/* öğrenme günlüğü: son 10 ÖNEMLİ değişiklik/karar (rutin "kural değişikliği yok" taramaları hariç) */
+function ogrOnemli(L){const BP=[/kural değişikliği yok/gi,/model\.json (güncellendi|değişmedi)/gi,/model kabul edildi/gi,/model dosyası yenisiyle değiştirildi/gi,/scans kaydına yazıldı/gi,/sinyal(?= )/gi,/\(\s*EV[^)]*\)/gi,/\(radar\/rules okunamadı[^)]*\)/gi,/\(doğrula[^)]*\)/gi];
+ const on=l=>{let s=String(l.degisiklik||"");BP.forEach(r=>s=s.replace(r,""));s=s.replace(/[\s;.,()\-:]+/g," ").trim();return s.length>=12||/reddedildi/i.test(String(l.bulgu||"")+String(l.degisiklik||""))};
+ return L.filter(on).slice(-10).reverse()}
+function ogrGorsel(){
+ const L=(D&&D.learning)||[],K=ogrOnemli(L);if(!K.length)throw new Error("kayıt yok");
+ const SANS='"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif',MONO='"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace';
+ const W=1600,S=2,PAD=40,IW=W-PAD*2,C={bg:"#080d16",fg:"#e7edf4",mut:"#8e9bab",dim:"#5f6c7c",line:"#1c2636",up:"#33c48a",au:"#d9a441"};
+ const mc=document.createElement("canvas").getContext("2d");
+ const wrap=(t,mw,font)=>{mc.font=font;const w=String(t).split(/\s+/),R=[];let c="";for(const q of w){const n=c?c+" "+q:q;if(mc.measureText(n).width>mw&&c){R.push(c);c=q}else c=n}if(c)R.push(c);return R.length?R:[""]};
+ const fB="400 15px "+SANS,fL="600 13px "+SANS,TW=IW-40;
+ const cards=K.map(l=>({no:l.no,tarih:l.tarih||"",b:wrap(l.bulgu||"—",TW,fB),d:wrap(l.degisiklik||"—",TW,"500 15px "+SANS)}));
+ const ch=c=>16+22+c.b.length*21+10+18+c.d.length*21+18;
+ const H=PAD+34+26+30+cards.reduce((a,c)=>a+ch(c)+12,0)+20+70;
+ const cv=document.createElement("canvas");cv.width=W*S;cv.height=H*S;const x=cv.getContext("2d");x.scale(S,S);x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+ const Tx=(t,px,py,f,c,al)=>{x.font=f;x.fillStyle=c;x.textAlign=al||"left";x.textBaseline="alphabetic";x.fillText(t,px,py)};
+ let y=PAD+20;Tx("Öğrenme · son 10 önemli değişiklik ve karar",PAD,y,"700 24px "+SANS,C.fg);
+ y+=26;Tx(`güncelleme ${(D.guncelleme||"—")} · günlükte toplam ${L.length} madde · rutin "kural değişikliği yok" taramaları hariç`,PAD,y,"400 14px "+SANS,C.mut);y+=30;
+ cards.forEach(c=>{const h=ch(c);x.fillStyle="#0e1623";x.fillRect(PAD,y,IW,h);x.fillStyle=C.au;x.fillRect(PAD,y,3,h);
+  let cy=y+16+14;Tx("#"+c.no,PAD+20,cy,"700 16px "+MONO,C.au);Tx(c.tarih,PAD+20+66,cy,"500 14px "+SANS,C.mut);cy+=10;
+  c.b.forEach(z=>{cy+=21;Tx(z,PAD+20,cy,fB,C.fg)});cy+=10+8;Tx("DEĞİŞİKLİK / KARAR",PAD+20,cy,fL,C.mut);
+  c.d.forEach(z=>{cy+=21;Tx(z,PAD+20,cy,"500 15px "+SANS,C.up)});y+=h+12});
+ x.fillStyle="rgba(255,255,255,.08)";x.fillRect(PAD,H-PAD-6,IW,1);
+ Tx("Geçmiş sonuçlar gelecekteki getiriyi garanti etmez · Veriler 15 dk gecikmelidir · Yatırım tavsiyesi değildir.",PAD,H-PAD+14,"400 13px "+SANS,C.dim);
+ Tx("Borsa Tarama Terminali",W-PAD,H-PAD+14,"700 14px "+SANS,C.au,"right");
+ return cv}
 /* hareket laboratuvarı tabloları: tüm satırlar ve ayrıntılar tek görsel olarak panoya kopyalanır */
 function hrkGorsel(id){
  const T=$(id);if(!T||!T.rows.length)throw new Error("tablo boş");
@@ -1134,10 +1162,10 @@ function hrkGorsel(id){
  Tx("Borsa Tarama Terminali",W-PAD,H-PAD+14,"700 14px "+SANS,C.au,"right");
  return cv}
 async function hrkKopyala(b){const id=b.dataset.hg,ad=b.textContent;const m=s=>{b.textContent=s;clearTimeout(b._t);b._t=setTimeout(()=>b.textContent="Görsel kopyala",2200)};
- let cv;try{try{await document.fonts.ready}catch(e){}cv=hrkGorsel(id)}catch(e){console.error(e);m("Üretilemedi");return}
+ let cv;try{try{await document.fonts.ready}catch(e){}cv=id==="ogr"?ogrGorsel():hrkGorsel(id)}catch(e){console.error(e);m("Üretilemedi");return}
  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));if(!blob){kartOnizle(cv);return}
  try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);m("Kopyalandı ✓");return}catch(e){}
- try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"hareket_lab_"+(id==="hrkS"?"sistemler":"oruntuler")+".png",data:blob});m("Kaydedildi ✓");return}}catch(e){if(e&&e.code==="declined"){return}}
+ try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:(id==="ogr"?"ogrenme_son10":"hareket_lab_"+(id==="hrkS"?"sistemler":"oruntuler"))+".png",data:blob});m("Kaydedildi ✓");return}}catch(e){if(e&&e.code==="declined"){return}}
  kartOnizle(cv)}
 document.querySelectorAll("[data-hg]").forEach(b=>b.addEventListener("click",()=>hrkKopyala(b)));
 
