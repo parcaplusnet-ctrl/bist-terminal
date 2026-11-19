@@ -582,10 +582,593 @@
      "gun_sayisi": 2
     }
    ]
+  },
+  "hafta=≥+%10|modül Dip=+": {
+   "aciklama": "hafta=≥+%10 ve modül Dip=+",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=11-12": {
+   "aciklama": "3P kriter=11-12",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|hafta=≥+%10": {
+   "aciklama": "hacim=1,5-3x ve hafta=≥+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=≥+%10|teknik G=Sat": {
+   "aciklama": "hafta=≥+%10 ve teknik G=Sat",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|modül Hacim=+": {
+   "aciklama": "hacim=1,5-3x ve modül Hacim=+",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|teknik 4S=Al": {
+   "aciklama": "hacim=1,5-3x ve teknik 4S=Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|teknik 1S=Al": {
+   "aciklama": "hacim=1,5-3x ve teknik 1S=Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=≥+%10|teknik 1S=Güçlü Al": {
+   "aciklama": "hafta=≥+%10 ve teknik 1S=Güçlü Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=0,8-1,5x|puan=3-5": {
+   "aciklama": "hacim=0,8-1,5x ve puan=3-5",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=11-12|likidite (günlük ciro)=20-50 mn": {
+   "aciklama": "3P kriter=11-12 ve likidite (günlük ciro)=20-50 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI G=55-65|modül Dip=0": {
+   "aciklama": "RSI G=55-65 ve modül Dip=0",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay=-%10/0|hafta=≥+%10": {
+   "aciklama": "1 ay=-%10/0 ve hafta=≥+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "modül Hacim=+|modül RSI-MACD=+": {
+   "aciklama": "modül Hacim=+ ve modül RSI-MACD=+",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=≥+%10|puan=5-6": {
+   "aciklama": "hafta=≥+%10 ve puan=5-6",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "gün=+%4,7/+%9,5": {
+   "aciklama": "gün=+%4,7/+%9,5",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI G=55-65|piyasa değeri=1,5-10 mlr": {
+   "aciklama": "RSI G=55-65 ve piyasa değeri=1,5-10 mlr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "modül Dip=+|modül Hacim=+": {
+   "aciklama": "modül Dip=+ ve modül Hacim=+",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=≥+%10|likidite (günlük ciro)=20-50 mn": {
+   "aciklama": "hafta=≥+%10 ve likidite (günlük ciro)=20-50 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI 1S=50-70|hacim=1,5-3x": {
+   "aciklama": "RSI 1S=50-70 ve hacim=1,5-3x",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=<0,5x|hafta=≥+%10": {
+   "aciklama": "hacim=<0,5x ve hafta=≥+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=4-7|hafta=≥+%10": {
+   "aciklama": "3P kriter=4-7 ve hafta=≥+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "modül Hacim=+|teknik 1S=Güçlü Al": {
+   "aciklama": "modül Hacim=+ ve teknik 1S=Güçlü Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay=0/+%10|hafta=≥+%10": {
+   "aciklama": "1 ay=0/+%10 ve hafta=≥+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|piyasa değeri=<1,5 mlr": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve piyasa değeri=<1,5 mlr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|modül Dip=+": {
+   "aciklama": "hacim=1,5-3x ve modül Dip=+",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=<-%5|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "hafta=<-%5 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|piyasa değeri=<1,5 mlr": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve piyasa değeri=<1,5 mlr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "teknik 1S=Güçlü Al|teknik G=Al": {
+   "aciklama": "teknik 1S=Güçlü Al ve teknik G=Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|modül Hacim=0": {
+   "aciklama": "hacim=1,5-3x ve modül Hacim=0",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=≥+%10|teknik 1S=Nötr": {
+   "aciklama": "hafta=≥+%10 ve teknik 1S=Nötr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|teknik 4S=Al": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve teknik 4S=Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=11-12|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "3P kriter=11-12 ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|RSI G=55-65": {
+   "aciklama": "1 ay=+%10/+%25 ve RSI G=55-65",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=0-3|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "3P kriter=0-3 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye %5-15|hacim=0,8-1,5x": {
+   "aciklama": "1 ay zirve=zirveye %5-15 ve hacim=0,8-1,5x",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI G=30-45|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "RSI G=30-45 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|puan=<3": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve puan=<3",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn": {
+   "aciklama": "likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|teknik G=Sat": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve teknik G=Sat",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI G=55-65|teknik 1S=Güçlü Al": {
+   "aciklama": "RSI G=55-65 ve teknik 1S=Güçlü Al",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI G=55-65|hafta=+%5/+%10": {
+   "aciklama": "RSI G=55-65 ve hafta=+%5/+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=0,5-0,8x|piyasa değeri=<1,5 mlr": {
+   "aciklama": "hacim=0,5-0,8x ve piyasa değeri=<1,5 mlr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hafta=<-%5|piyasa değeri=<1,5 mlr": {
+   "aciklama": "hafta=<-%5 ve piyasa değeri=<1,5 mlr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI 1S=50-70|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "RSI 1S=50-70 ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "RSI 1S=30-50|hacim=1,5-3x": {
+   "aciklama": "RSI 1S=30-50 ve hacim=1,5-3x",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=8-10|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "3P kriter=8-10 ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "piyasa değeri=10-50 mlr|teknik 1S=Nötr": {
+   "aciklama": "piyasa değeri=10-50 mlr ve teknik 1S=Nötr",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|RSI 1S=50-70": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve RSI 1S=50-70",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|modül RSI-MACD=0": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve modül RSI-MACD=0",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "3P kriter=8-10|hacim=0,5-0,8x": {
+   "aciklama": "3P kriter=8-10 ve hacim=0,5-0,8x",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "1 ay zirve=zirveye <%5|hafta=+%5/+%10": {
+   "aciklama": "1 ay zirve=zirveye <%5 ve hafta=+%5/+%10",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
+  },
+  "hacim=1,5-3x|puan=<3": {
+   "aciklama": "hacim=1,5-3x ve puan=<3",
+   "ilk_gorulme": "19.11 18:23",
+   "durum_gecmisi": [
+    {
+     "zaman": "19.11 18:23",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 3
+    }
+   ]
   }
  },
- "guncelleme": "19.11 17:23",
- "gun_sayisi": 2,
+ "guncelleme": "19.11 18:23",
+ "gun_sayisi": 3,
  "nedenler": {
   "TRHOL": {
    "tarih": "2026-11-18",
