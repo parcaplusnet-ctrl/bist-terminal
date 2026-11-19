@@ -1,0 +1,1221 @@
+{
+ "guncelleme": "19.11 20:32",
+ "versiyon": "1.0",
+ "tanim": "Olay: bir günün kapanışından sonraki 10 işlem günü içinde kapanış en az +%20. Evren: günlük ort. ciro ≥ 5 mn TL, o gün tavan (≥ %9) değil. Gözlem: her hisse-gün (olay içi günler hariç). Kaldıraç = özellik varken olay başlama oranı / tüm gözlemlerde oran. Kapı: ≥ 25 olay, kaldıraç ≥ 1.6, z ≥ 4, iki dönemde de ≥ 1,2, ve yön ayrımı: aynı özellikte -%16 düşüş olayı oranından en az 1,25 kat daha fazla yükseliş (salt oynaklık elenir).",
+ "donem": "08.09.2025 - 05.11.2026",
+ "hisse": 600,
+ "gozlem": 128917,
+ "olay": 1671,
+ "taban": 0.013,
+ "gun": 293,
+ "durum": "Sınırlı kanıt",
+ "kume": {
+  "gun": "05.11",
+  "pay": 0.86,
+  "n": 79
+ },
+ "kume_not": "Canlı olayların %85'i aynı gün (05.11) başladı: bu bireysel hisse hikayesi değil, piyasa geneli dip sonrası toparlanma / spekülatif dalga. Neden analizinde bu ayrım önemli.",
+ "yogunluk": {
+  "olay_gunu": 280,
+  "ilk10_pay": 0.18,
+  "en_yogun": [
+   {
+    "gun": "30.10.2026",
+    "olay": 58
+   },
+   {
+    "gun": "21.05.2026",
+    "olay": 47
+   },
+   {
+    "gun": "23.10.2026",
+    "olay": 31
+   },
+   {
+    "gun": "02.11.2026",
+    "olay": 30
+   },
+   {
+    "gun": "07.04.2026",
+    "olay": 25
+   }
+  ]
+ },
+ "taban_dus": 0.0861,
+ "tek": [
+  {
+   "ozellik": "gün=<-%3",
+   "n": 18272,
+   "olay": 715,
+   "oran": 0.0391,
+   "kaldirac": 3.02,
+   "z": 31.3,
+   "kaldirac_dus": 2.28,
+   "asimetri": 1.33,
+   "kaldirac_ilk": 2.73,
+   "kaldirac_son": 3.09
+  }
+ ],
+ "asimetrik": [
+  {
+   "ozellik": "kapanış konumu (gün)=günün altında",
+   "n": 61531,
+   "olay": 1104,
+   "oran": 0.0179,
+   "kaldirac": 1.38,
+   "z": 10.9,
+   "kaldirac_dus": 1.0,
+   "asimetri": 1.39,
+   "kaldirac_ilk": 1.35,
+   "kaldirac_son": 1.4
+  },
+  {
+   "ozellik": "gün=<-%3",
+   "n": 18272,
+   "olay": 715,
+   "oran": 0.0391,
+   "kaldirac": 3.02,
+   "z": 31.3,
+   "kaldirac_dus": 2.28,
+   "asimetri": 1.33,
+   "kaldirac_ilk": 2.73,
+   "kaldirac_son": 3.09
+  },
+  {
+   "ozellik": "son 5 günde yükselen gün=1",
+   "n": 30083,
+   "olay": 534,
+   "oran": 0.0178,
+   "kaldirac": 1.37,
+   "z": 7.3,
+   "kaldirac_dus": 1.03,
+   "asimetri": 1.33,
+   "kaldirac_ilk": 1.4,
+   "kaldirac_son": 1.34
+  },
+  {
+   "ozellik": "60 gün=+%30/+%70",
+   "n": 9414,
+   "olay": 190,
+   "oran": 0.0202,
+   "kaldirac": 1.56,
+   "z": 6.2,
+   "kaldirac_dus": 1.25,
+   "asimetri": 1.25,
+   "kaldirac_ilk": 1.62,
+   "kaldirac_son": 1.55
+  },
+  {
+   "ozellik": "5 gün=<-%8",
+   "n": 17348,
+   "olay": 644,
+   "oran": 0.0371,
+   "kaldirac": 2.86,
+   "z": 28.1,
+   "kaldirac_dus": 2.44,
+   "asimetri": 1.18,
+   "kaldirac_ilk": 2.83,
+   "kaldirac_son": 2.79
+  }
+ ],
+ "cift": [
+  {
+   "ozellik": "60 gün=≥+%70 + gün=<-%3",
+   "n": 502,
+   "olay": 34,
+   "oran": 0.0677,
+   "kaldirac": 5.23,
+   "z": 10.8,
+   "kaldirac_ilk": 6.06,
+   "kaldirac_son": 4.4,
+   "kaldirac_dus": 2.68,
+   "asimetri": 1.95
+  },
+  {
+   "ozellik": "gün=<-%3 + sektör=Commercial Services",
+   "n": 447,
+   "olay": 30,
+   "oran": 0.0671,
+   "kaldirac": 5.18,
+   "z": 10.1,
+   "kaldirac_ilk": 4.37,
+   "kaldirac_son": 5.47,
+   "kaldirac_dus": 4.08,
+   "asimetri": 1.27
+  },
+  {
+   "ozellik": "60g zirveye=zirveye >%25 + SMA200=≥%40 üstünde",
+   "n": 863,
+   "olay": 54,
+   "oran": 0.0626,
+   "kaldirac": 4.83,
+   "z": 12.9,
+   "kaldirac_ilk": 5.15,
+   "kaldirac_son": 4.61,
+   "kaldirac_dus": 3.11,
+   "asimetri": 1.55
+  },
+  {
+   "ozellik": "5 gün=<-%8 + gün=<-%3",
+   "n": 8119,
+   "olay": 486,
+   "oran": 0.0599,
+   "kaldirac": 4.62,
+   "z": 37.4,
+   "kaldirac_ilk": 4.52,
+   "kaldirac_son": 4.46,
+   "kaldirac_dus": 3.44,
+   "asimetri": 1.34
+  },
+  {
+   "ozellik": "SMA200=≥%40 üstünde + gün=<-%3",
+   "n": 1497,
+   "olay": 83,
+   "oran": 0.0554,
+   "kaldirac": 4.28,
+   "z": 14.5,
+   "kaldirac_ilk": 4.79,
+   "kaldirac_son": 3.81,
+   "kaldirac_dus": 2.8,
+   "asimetri": 1.53
+  },
+  {
+   "ozellik": "60 gün=≥+%70 + oynaklık (20g)=≥%5",
+   "n": 564,
+   "olay": 31,
+   "oran": 0.055,
+   "kaldirac": 4.24,
+   "z": 8.8,
+   "kaldirac_ilk": 4.57,
+   "kaldirac_son": 3.97,
+   "kaldirac_dus": 3.19,
+   "asimetri": 1.33
+  },
+  {
+   "ozellik": "5 gün=<-%8 + SMA200=≥%40 üstünde",
+   "n": 1056,
+   "olay": 58,
+   "oran": 0.0549,
+   "kaldirac": 4.24,
+   "z": 12.1,
+   "kaldirac_ilk": 5.29,
+   "kaldirac_son": 3.15,
+   "kaldirac_dus": 2.9,
+   "asimetri": 1.46
+  },
+  {
+   "ozellik": "60 gün=+%30/+%70 + gün=<-%3",
+   "n": 1518,
+   "olay": 82,
+   "oran": 0.054,
+   "kaldirac": 4.17,
+   "z": 14.1,
+   "kaldirac_ilk": 3.74,
+   "kaldirac_son": 4.83,
+   "kaldirac_dus": 1.83,
+   "asimetri": 2.28
+  },
+  {
+   "ozellik": "boşluk=<-%1,5 + kapanış konumu (gün)=günün altında",
+   "n": 2354,
+   "olay": 127,
+   "oran": 0.054,
+   "kaldirac": 4.16,
+   "z": 17.6,
+   "kaldirac_ilk": 4.14,
+   "kaldirac_son": 4.09,
+   "kaldirac_dus": 3.17,
+   "asimetri": 1.31
+  },
+  {
+   "ozellik": "60 gün=+%30/+%70 + 60g zirveye=zirveye >%25",
+   "n": 839,
+   "olay": 45,
+   "oran": 0.0536,
+   "kaldirac": 4.14,
+   "z": 10.4,
+   "kaldirac_ilk": 3.64,
+   "kaldirac_son": 5.08,
+   "kaldirac_dus": 1.95,
+   "asimetri": 2.12
+  },
+  {
+   "ozellik": "SMA200=≥%40 üstünde + SMA20=<-%4 altı",
+   "n": 1580,
+   "olay": 83,
+   "oran": 0.0525,
+   "kaldirac": 4.05,
+   "z": 13.9,
+   "kaldirac_ilk": 4.76,
+   "kaldirac_son": 3.32,
+   "kaldirac_dus": 2.47,
+   "asimetri": 1.64
+  },
+  {
+   "ozellik": "5 gün=<-%8 + 60 gün=+%30/+%70",
+   "n": 1127,
+   "olay": 57,
+   "oran": 0.0506,
+   "kaldirac": 3.9,
+   "z": 11.2,
+   "kaldirac_ilk": 4.05,
+   "kaldirac_son": 3.86,
+   "kaldirac_dus": 1.82,
+   "asimetri": 2.14
+  },
+  {
+   "ozellik": "endeks 20g=düşüşte (<-%4) + gün=<-%3",
+   "n": 8309,
+   "olay": 419,
+   "oran": 0.0504,
+   "kaldirac": 3.89,
+   "z": 30.2,
+   "kaldirac_ilk": 3.48,
+   "kaldirac_son": 3.8,
+   "kaldirac_dus": 3.04,
+   "asimetri": 1.28
+  },
+  {
+   "ozellik": "gün=<-%3 + oynaklık (20g)=%3,5-5",
+   "n": 5212,
+   "olay": 263,
+   "oran": 0.0505,
+   "kaldirac": 3.89,
+   "z": 23.9,
+   "kaldirac_ilk": 3.71,
+   "kaldirac_son": 3.85,
+   "kaldirac_dus": 2.82,
+   "asimetri": 1.38
+  },
+  {
+   "ozellik": "boşluk=<-%1,5 + son 5 günde yükselen gün=1",
+   "n": 1894,
+   "olay": 89,
+   "oran": 0.047,
+   "kaldirac": 3.63,
+   "z": 13.1,
+   "kaldirac_ilk": 4.03,
+   "kaldirac_son": 3.3,
+   "kaldirac_dus": 2.89,
+   "asimetri": 1.26
+  }
+ ],
+ "dusuk": [
+  {
+   "ozellik": "gün=+%3/+%6",
+   "n": 9171,
+   "olay": 29,
+   "oran": 0.0032,
+   "kaldirac": 0.24,
+   "z": -8.3,
+   "kaldirac_dus": 1.16,
+   "asimetri": 0.21,
+   "kaldirac_ilk": 0.27,
+   "kaldirac_son": 0.22
+  },
+  {
+   "ozellik": "gün=+%1/+%3",
+   "n": 21820,
+   "olay": 101,
+   "oran": 0.0046,
+   "kaldirac": 0.36,
+   "z": -10.9,
+   "kaldirac_dus": 0.84,
+   "asimetri": 0.43,
+   "kaldirac_ilk": 0.4,
+   "kaldirac_son": 0.32
+  },
+  {
+   "ozellik": "son 5 günde yükselen gün=4",
+   "n": 11671,
+   "olay": 56,
+   "oran": 0.0048,
+   "kaldirac": 0.37,
+   "z": -7.8,
+   "kaldirac_dus": 0.93,
+   "asimetri": 0.4,
+   "kaldirac_ilk": 0.44,
+   "kaldirac_son": 0.31
+  },
+  {
+   "ozellik": "oynaklık (20g)=<%1,5",
+   "n": 12232,
+   "olay": 62,
+   "oran": 0.0051,
+   "kaldirac": 0.39,
+   "z": -7.7,
+   "kaldirac_dus": 0.35,
+   "asimetri": 1.12,
+   "kaldirac_ilk": 0.47,
+   "kaldirac_son": 0.31
+  },
+  {
+   "ozellik": "kapanış konumu (gün)=üstünde",
+   "n": 29266,
+   "olay": 159,
+   "oran": 0.0054,
+   "kaldirac": 0.42,
+   "z": -11.4,
+   "kaldirac_dus": 0.93,
+   "asimetri": 0.45,
+   "kaldirac_ilk": 0.51,
+   "kaldirac_son": 0.34
+  },
+  {
+   "ozellik": "5 gün=+%3/+%8",
+   "n": 19812,
+   "olay": 117,
+   "oran": 0.0059,
+   "kaldirac": 0.46,
+   "z": -8.8,
+   "kaldirac_dus": 0.85,
+   "asimetri": 0.53,
+   "kaldirac_ilk": 0.51,
+   "kaldirac_son": 0.41
+  },
+  {
+   "ozellik": "RSI14=60-70",
+   "n": 11406,
+   "olay": 77,
+   "oran": 0.0068,
+   "kaldirac": 0.52,
+   "z": -5.9,
+   "kaldirac_dus": 0.87,
+   "asimetri": 0.6,
+   "kaldirac_ilk": 0.45,
+   "kaldirac_son": 0.64
+  },
+  {
+   "ozellik": "SMA20=≥%4 üstünde",
+   "n": 18982,
+   "olay": 135,
+   "oran": 0.0071,
+   "kaldirac": 0.55,
+   "z": -7.1,
+   "kaldirac_dus": 0.91,
+   "asimetri": 0.6,
+   "kaldirac_ilk": 0.51,
+   "kaldirac_son": 0.61
+  }
+ ],
+ "olaylar": [
+  {
+   "kod": "GUNDG",
+   "sektor": "Consumer Non-Durables",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 65.6,
+   "getiri": 158.7,
+   "simdi": 158.7,
+   "ciro_mn": 87.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili "
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "BIGEN",
+   "sektor": "Utilities",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 5.63,
+   "getiri": 158.3,
+   "simdi": 158.3,
+   "ciro_mn": 90.8,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "MANAS",
+   "sektor": "Producer Manufacturing",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 2.03,
+   "getiri": 156.2,
+   "simdi": 156.2,
+   "ciro_mn": 189.0,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
+    "10.11 MANAS Manas Enerji Yönetimi Sanayi ve Tic. konsolide bilanço 2026 9 aylık net zararı 624,835,451 TL (Önceki: 274,130,584"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "PEKGY",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 0.88,
+   "getiri": 150.0,
+   "simdi": 150.0,
+   "ciro_mn": 384.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "18.11 VBTS kapsamında PEKGY.E payları seans başından 17 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere konu edile",
+    "17.11 Peker Gayrimenkul, TRDTERVK2618 ISIN kodlu kira sertifikası ödemesini gerçekleştiremedi-KAP",
+    "13.11 Bulls Yatırım ve Tera Varlık Kiralama borçlanma aracı ödemelerini gerçekleştiremedi-MKK/KAP"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "IEYHO",
+   "sektor": "Process Industries",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 5.95,
+   "getiri": 139.2,
+   "simdi": 139.2,
+   "ciro_mn": 33.3,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 IEYHO Işıklar Enerji ve Yapı Holding konsolide bilanço 2026 9 aylık net zararı 644,869,434 TL (Önceki: 530,017,340 TL ne"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "UFUK",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 90.9,
+   "getiri": 135.0,
+   "simdi": 111.6,
+   "ciro_mn": 28.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "TEHOL",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 1.21,
+   "getiri": 119.8,
+   "simdi": 119.8,
+   "ciro_mn": 65.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "10.11 SPK, 17 şirkete 30.09.2026 tarihli finansal raporlarının KAP'a bildirimi ile ilgili olarak ek süre verdi",
+    "09.11 Tera Yatırım Teknoloji Holding'e CEO olarak Tolga Yenice atandı"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ANELE",
+   "sektor": "Industrial Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 6.25,
+   "getiri": 113.6,
+   "simdi": 111.5,
+   "ciro_mn": 228.6,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1-1,5x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
+    "17.11 Anel Elektrik bağlı ortaklıkları, Anel Holding, Anel Netve Anelyapı Gayrimenkul ile devralma suretiyle kolaylaştırılmış ",
+    "09.11 ANELE Anel Elektrik Proje Taahhüt ve Tic. konsolide bilanço 2026 9 aylık net zararı 2,643,219,772 TL (Önceki: 277,632,42"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ALKLC",
+   "sektor": "Consumer Non-Durables",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 19.59,
+   "getiri": 111.5,
+   "simdi": 111.5,
+   "ciro_mn": 221.4,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=0,6-1x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 ALKLC Altınkılıç Gıda ve Süt Sanayi Tic. konsolide bilanço 2026 9 aylık net zararı 446,805,868 TL (Önceki: 101,065,243 T"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "DOGUB",
+   "sektor": "Non-Energy Minerals",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 23.66,
+   "getiri": 110.0,
+   "simdi": 70.2,
+   "ciro_mn": 11.2,
+   "ozellik": [
+    "20 gün=≥+%30",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=50-60",
+    "hacim (1g/20g)=1-1,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "13.11 DOGUB Doğusan Boru Sanayi ve Tic. solo bilanço 2026 9 aylık net zararı 15,855,179 TL (Önceki: 46,892,269 TL net zarar)"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "KTLEV",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 4.42,
+   "getiri": 102.7,
+   "simdi": 71.0,
+   "ciro_mn": 1968.6,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "11.11 (Yenileme)Emlak Katılım; Katılımevim, Birevim ve İktisat Katılım’ın devri için gerekli izin ve onayları aldı",
+    "10.11 Emlak Katılım; Katılımevim, Birevim ve İktisat Katılım'ın Devri İçin Gerekli İzin ve Onayları Aldı",
+    "10.11 Emlak Katılım Bankası, Katılımevim ve Birevim'in pay devir sürecinde gerekli izinlerin tamamlandığını açıkladı"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "IDGYO",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 1.68,
+   "getiri": 92.9,
+   "simdi": 92.9,
+   "ciro_mn": 2.6,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=0,6-1x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "OZRDN",
+   "sektor": "Process Industries",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 8.3,
+   "getiri": 81.9,
+   "simdi": 73.0,
+   "ciro_mn": 4.5,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 OZRDN Özerden Ambalaj Sanayi konsolide bilanço 2026 9 aylık net zararı 30,852,827 TL (Önceki: 57,328,193 TL net zarar)"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "DSTKF",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 68.0,
+   "getiri": 80.1,
+   "simdi": 80.1,
+   "ciro_mn": 44.0,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 DSTKF Destek Finans Faktoring konsolide bilanço 2026 9 aylık net karı 1,468,459,000 TL (Önceki: 2,583,640,000 TL net kar"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "BINBN",
+   "sektor": "Commercial Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 27.12,
+   "getiri": 75.0,
+   "simdi": 52.3,
+   "ciro_mn": 88.6,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "PASEU",
+   "sektor": "Transportation",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 27.86,
+   "getiri": 73.1,
+   "simdi": 40.2,
+   "ciro_mn": 454.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 Pasifik Grubu, milletvekili Ümit Özlale'nin bazı yatırım fonlarına ilişkin iddialarını \"asılsız ve mesnetsiz\" olarak nit",
+    "19.11 Pasifik Grubu, medyaya yansıyan bazı iddialara ilişkin açıklama yaptı",
+    "13.11 Pasifik Eurasia, Çinli Xi'an Free Trade Port şirketi ile stratejik iş birliğine yönelik mutabakat zaptı imzaladı-KAP"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ODINE",
+   "sektor": "Technology Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 58.2,
+   "getiri": 71.0,
+   "simdi": 40.0,
+   "ciro_mn": 793.9,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 ODINE Odine Solutions Teknoloji Tic. ve Sanayi konsolide bilanço 2026 9 aylık net zararı 159,674,191 TL (Önceki: 27,934,"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "TMPOL",
+   "sektor": "Process Industries",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 54.45,
+   "getiri": 67.4,
+   "simdi": 45.2,
+   "ciro_mn": 146.0,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 SPK Trive Yatırım Menkul Değerler'in faaliyetlerini geçici durdurdu; bazı pay piyasası işlemleri ikle ilgili çok sayıda ",
+    "09.11 SPK tarafından duyurulan geçici lisans iptalleri - 1",
+    "09.11 SPK tarafından getirilen işlem yasakları - 1"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "BULGS",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 5.37,
+   "getiri": 61.1,
+   "simdi": 40.0,
+   "ciro_mn": 79.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "SMART",
+   "sektor": "Technology Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 11.5,
+   "getiri": 58.0,
+   "simdi": 43.5,
+   "ciro_mn": 7.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 • SMART Smartiks Yazılım konsolide bilanço 2026 9 aylık net karı 95,941,147 TL (Önceki: 35,081,667 TL net kar)"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "MMCAS",
+   "sektor": "Transportation",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 10.45,
+   "getiri": 57.9,
+   "simdi": 57.9,
+   "ciro_mn": 1.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "06.11 MMCAS Mmc Sanayi ve Ticari Yatırımlar konsolide bilanço 2026 9 aylık net zararı 1,609,990 TL (Önceki: 5,647,369 TL net z"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "BIGTK",
+   "sektor": "Consumer Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 37.86,
+   "getiri": 57.6,
+   "simdi": 49.2,
+   "ciro_mn": 143.4,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "10.11 SPK, 17 şirkete 30.09.2026 tarihli finansal raporlarının KAP'a bildirimi ile ilgili olarak ek süre verdi",
+    "10.11 BIGTK Big Medya Teknoloji konsolide bilanço 2026 9 aylık net karı 36,246,284 TL (Önceki: 29,551,178 TL net zarar)"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "FZLGY",
+   "sektor": "Consumer Durables",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 5.44,
+   "getiri": 55.1,
+   "simdi": 33.3,
+   "ciro_mn": 48.8,
+   "ozellik": [
+    "20 gün=±%5",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=50-60",
+    "hacim (1g/20g)=0,6-1x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "06.11 FZLGY Fuzul Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 9 aylık net zararı 127,454,617 TL (Önceki: 272,061,707 TL ne",
+    "06.11 FZLGY Fuzul Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2026 9 aylık net zararı 314,265,146 TL (Önceki: 309,272,155 "
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "SELEC",
+   "sektor": "Distribution Services",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 72.85,
+   "getiri": 53.3,
+   "simdi": 33.2,
+   "ciro_mn": 345.7,
+   "ozellik": [
+    "20 gün=±%5",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=0,6-1x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "10.11 Ak Yatırım SELEC için 138 TL hedef fiyat belirledi ve NÖTR tavsiyesini korudu. (Önceki hedef fiyat: 138 TL)",
+    "10.11 Bilanço analizi -SELEC (Akbank Ekonomik Araştırmalar ve Ak Yatırım)",
+    "10.11 Bilanço analizi - SELEC (İş Yatırım)"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ESCAR",
+   "sektor": "Finance",
+   "baslangic": "05.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 9.08,
+   "getiri": 51.2,
+   "simdi": 45.2,
+   "ciro_mn": 34.0,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "09.11 ESCAR Escar Filo Kiralama Hizmetleri konsolide bilanço 2026 9 aylık net zararı 1,254,516,104 TL (Önceki: 1,895,111,678 T"
+   ],
+   "haber_kontrol": true
+  }
+ ],
+ "izleme": [
+  {
+   "kod": "A1CAP",
+   "sektor": "Finance",
+   "fiyat": 2.87,
+   "ch": -4.65,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "ARASE",
+   "sektor": "Utilities",
+   "fiyat": 55.4,
+   "ch": -4.32,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "ARTMS",
+   "sektor": "Retail Trade",
+   "fiyat": 23.24,
+   "ch": -5.14,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "ATATP",
+   "sektor": "Technology Services",
+   "fiyat": 178.8,
+   "ch": -4.49,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "BIENY",
+   "sektor": "Non-Energy Minerals",
+   "fiyat": 11.48,
+   "ch": -4.89,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "HDFGS",
+   "sektor": "Finance",
+   "fiyat": 1.12,
+   "ch": -8.2,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "boşluk=<-%1,5 + kapanış konumu (gün)=günün altında"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "HEDEF",
+   "sektor": "Finance",
+   "fiyat": 5.71,
+   "ch": -9.94,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "boşluk=<-%1,5 + kapanış konumu (gün)=günün altında"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "INDES",
+   "sektor": "Distribution Services",
+   "fiyat": 8.82,
+   "ch": -3.08,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "MEYSU",
+   "sektor": "Consumer Non-Durables",
+   "fiyat": 7.31,
+   "ch": -3.82,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "MOGAN",
+   "sektor": "Utilities",
+   "fiyat": 8.71,
+   "ch": -4.29,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "NETAS",
+   "sektor": "Technology Services",
+   "fiyat": 49.44,
+   "ch": -3.34,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "RNPOL",
+   "sektor": "Producer Manufacturing",
+   "fiyat": 2.04,
+   "ch": -4.67,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "boşluk=<-%1,5 + kapanış konumu (gün)=günün altında",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "SKYLP",
+   "sektor": "Commercial Services",
+   "fiyat": 66.0,
+   "ch": -7.04,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "gün=<-%3 + sektör=Commercial Services",
+    "boşluk=<-%1,5 + kapanış konumu (gün)=günün altında"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "USHOL",
+   "sektor": "Distribution Services",
+   "fiyat": 51.75,
+   "ch": -6.59,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "5 gün=<-%8 + gün=<-%3",
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 5
+  },
+  {
+   "kod": "ADESE",
+   "sektor": "Finance",
+   "fiyat": 0.51,
+   "ch": -3.77,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 3
+  }
+ ],
+ "uyari": "Yalnızca bugün işlem gören hisseler (hayatta kalma yanlılığı), kapanış bazlı, komisyon ve kayma yok; TL enflasyonu nominal fiyatları büyütür. Yatırım tavsiyesi değildir."
+}

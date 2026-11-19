@@ -145,3 +145,6 @@ BIST gözlem arşivine her taramada 24 ek alan yazılır (GZ_EK): açılış, g�
 
 ## Kontrollü öğrenme v2 (19.11)
 ogren komutu her çalışmada arşivden sıfırdan hesaplar (veri.json gozlem_lab.bist.v2): tavana yakın (gün >= %7) ve sığ (<20 mn) hisseler dışarıda, sonuç XU100 farkıyla, kaldıraç gün gün tutarlı mı (tutarli_gun), zengin arşiv alanları dahil. En az 6 gün kanıt kapısı. Yalnızca ölçüm ve öneri; seçime etkisi yok.
+
+## Büyük Yükseliş Laboratuvarı (19.11)
+motor/buyuk.py.txt: 10 işlem günü içinde kapanış bazlı +%20 yapan hisselerin NEDEN yükseldiği. Geçmiş: Yahoo 2 yıllık günlük veri, tüm BIST; olay başlangıç günü özellikleri, kaldıraç + z + iki dönem tutarlılığı + yön ayrımı (aynı özellikte -%16 düşüş oranına göre asimetri, salt oynaklık elenir). Canlı: son 10 günde +%20 yapanlar + TradingView haber + güçlü örüntü eşleşen izleme listesi. Çıktı veri.json buyuk_lab, lab/buyuk.json, sayfa bölümü bykSek. Komut (gece lab görevi): cp $REPO/motor/buyuk.py.txt /tmp/w/buyuk.py; mkdir -p /tmp/w/lab; cd /tmp/w; python3 -I buyuk.py --motor radar.py --arsiv arsiv --veri veri.json --kayit lab/buyuk.json; sonra lab/buyuk.json depoya kopyalanır. Yalnızca ölçüm ve öneri; seçime etkisi yok.

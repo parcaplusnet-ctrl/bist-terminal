@@ -1,0 +1,273 @@
+#!/usr/bin/env python3
+"""Büyük Yükseliş Laboratuvarı (19.11, kullanıcı kararı): 10 işlem günü içinde +%20 ve üzeri yapan hisseler NEDEN yükseldi?
+SÜREKLİ ÖĞRENME: bitmez, her gece yeniden hesaplanır. Yalnızca ölçüm ve öneri; seçime etkisi yoktur (seçime girmesi için kullanıcı onayı gerekir).
+1) GEÇMİŞ: Yahoo günlük mumlar (2 yıl, tüm BIST). Olay = bir günün kapanışından sonraki 10 işlem günü içinde kapanış en az +%20. Her olayın başladığı günün
+   kapanış özellikleri (RSI, hacim, sıkışma, trend, zirveye uzaklık, endeks rejimi, sektör ...) tüm gün-hisse gözlemleriyle karşılaştırılır (kaldıraç).
+   Kapıları: asgari olay, z, iki zaman diliminde tutarlılık. Kapıyı geçmeyen bulgu "aday" bile değildir.
+2) CANLI: son 10 işlem gününde +%20 yapmış hisseler (başlangıç günü, getiri, başlangıçtaki özellikler, haber başlığı) ve bugün güçlü kanıtlı örüntülerle eşleşen izleme listesi.
+Sınırlar: yalnızca bugün işlem gören hisseler (hayatta kalma yanlılığı), kapanış bazlı, komisyon/kayma yok, TL enflasyonu nominal fiyatları şişirir (kaldıraçlar göreli).
+Kullanım: python3 -I buyuk.py --motor radar.py --arsiv arsiv --veri veri.json --kayit lab/buyuk.json"""
+import json, os, sys, math, argparse, importlib.util, datetime, itertools, collections
+
+HEDEF = 0.20            # 10 işlem günü içinde kapanış bazlı getiri
+UFUK = 10
+MIN_OLAY = 25           # tek özellik için asgari olay (özellikli gözlem içinde)
+MIN_OLAY_CIFT = 30
+Z_MIN = 4.0
+KALDIRAC_MIN = 1.6
+MIN_CIRO_MN = 5.0       # günlük ort. ciro (mn TL), 20 gün; sığ hisseler dışarıda (alınamaz)
+TAVAN = 9.0             # gün içi değişim bu değerden büyükse o gün alınamaz sayılır (tavan kovalamak yok)
+GUN_KESIF_BOL = 0.5
+
+
+def _yukle(yol, ad):
+    sp = importlib.util.spec_from_file_location(ad, yol); m = importlib.util.module_from_spec(sp); sys.modules[ad] = m; sp.loader.exec_module(m); return m
+
+
+def _sma(x, n):
+    o = [None] * len(x); s = 0.0
+    for i, v in enumerate(x):
+        s += v
+        if i >= n: s -= x[i - n]
+        if i >= n - 1: o[i] = s / n
+    return o
+
+
+def _rsi(c, n=14):
+    o = [None] * len(c)
+    if len(c) <= n: return o
+    g = [max(c[i] - c[i - 1], 0) for i in range(1, n + 1)]; l = [max(c[i - 1] - c[i], 0) for i in range(1, n + 1)]
+    ag, al = sum(g) / n, sum(l) / n
+    o[n] = 100 if al == 0 else 100 - 100 / (1 + ag / al)
+    for i in range(n + 1, len(c)):
+        d = c[i] - c[i - 1]; ag = (ag * (n - 1) + max(d, 0)) / n; al = (al * (n - 1) + max(-d, 0)) / n
+        o[i] = 100 if al == 0 else 100 - 100 / (1 + ag / al)
+    return o
+
+
+def _k(v, sinir, et):
+    if v is None or (isinstance(v, float) and math.isnan(v)): return None
+    for s, e in zip(sinir, et):
+        if v < s: return e
+    return et[-1]
+
+
+def _seri_ozellik(M, xr):
+    """M: [(t,o,h,l,c,v)], xr: {gün anahtarı: endeks 20g getirisi %}. Her gün için özellik listesi (None = hesaplanamadı)."""
+    n = len(M); T = [m[0] for m in M]; O = [m[1] for m in M]; H = [m[2] for m in M]; L = [m[3] for m in M]; C = [m[4] for m in M]; V = [m[5] for m in M]
+    s20, s50, s200 = _sma(C, 20), _sma(C, 50), _sma(C, 200); rs = _rsi(C)
+    ciro = _sma([C[i] * V[i] for i in range(n)], 20); vo20 = _sma(V, 20); vo5 = _sma(V, 5)
+    rng = [(H[i] - L[i]) / C[i] if C[i] else 0 for i in range(n)]; r5, r20 = _sma(rng, 5), _sma(rng, 20)
+    # Bollinger genişliği (20) ve son 120 günlük yüzdelik
+    bw = [None] * n
+    for i in range(19, n):
+        w = C[i - 19:i + 1]; m = sum(w) / 20; sd = (sum((x - m) ** 2 for x in w) / 20) ** .5; bw[i] = 4 * sd / m if m else None
+    out = [None] * n
+    for i in range(200, n):
+        c = C[i]
+        if not c or not C[i - 1] or ciro[i] is None: continue
+        ch = (c / C[i - 1] - 1) * 100
+        F = {}
+        F["gün"] = _k(ch, (-3, -1, 1, 3, 6), ("<-%3", "-%3/-%1", "±%1", "+%1/+%3", "+%3/+%6", "≥+%6"))
+        F["5 gün"] = _k((c / C[i - 5] - 1) * 100, (-8, -3, 3, 8, 15), ("<-%8", "-%8/-%3", "±%3", "+%3/+%8", "+%8/+%15", "≥+%15"))
+        F["20 gün"] = _k((c / C[i - 20] - 1) * 100, (-15, -5, 5, 15, 30), ("<-%15", "-%15/-%5", "±%5", "+%5/+%15", "+%15/+%30", "≥+%30"))
+        F["60 gün"] = _k((c / C[i - 60] - 1) * 100, (-25, -10, 10, 30, 70), ("<-%25", "-%25/-%10", "±%10", "+%10/+%30", "+%30/+%70", "≥+%70"))
+        h60 = max(H[i - 59:i + 1]); h252 = max(H[max(0, i - 251):i + 1]); l252 = min(L[max(0, i - 251):i + 1])
+        F["60g zirveye"] = _k((c / h60 - 1) * 100, (-25, -15, -8, -3), ("zirveye >%25", "zirveye %15-25", "zirveye %8-15", "zirveye %3-8", "zirvede (<%3)"))
+        F["52h aralık"] = _k((c - l252) / (h252 - l252) if h252 > l252 else None, (.2, .4, .6, .8), ("alt %20", "%20-40", "%40-60", "%60-80", "üst %20"))
+        F["SMA20"] = _k((c / s20[i] - 1) * 100 if s20[i] else None, (-4, 0, 4), ("<-%4 altı", "altında", "üstünde %0-4", "≥%4 üstünde"))
+        F["SMA50"] = _k((c / s50[i] - 1) * 100 if s50[i] else None, (-8, 0, 8), ("<-%8 altı", "altında", "üstünde %0-8", "≥%8 üstünde"))
+        F["SMA200"] = _k((c / s200[i] - 1) * 100 if s200[i] else None, (-15, 0, 15, 40), ("<-%15 altı", "altında", "üstünde %0-15", "%15-40 üstünde", "≥%40 üstünde"))
+        F["SMA20>SMA50"] = None if not (s20[i] and s50[i]) else ("evet" if s20[i] > s50[i] else "hayır")
+        F["RSI14"] = _k(rs[i], (30, 40, 50, 60, 70), ("<30", "30-40", "40-50", "50-60", "60-70", "≥70"))
+        F["hacim (1g/20g)"] = _k(V[i] / vo20[i] if vo20[i] else None, (.6, 1.0, 1.5, 2.5), ("<0,6x", "0,6-1x", "1-1,5x", "1,5-2,5x", "≥2,5x"))
+        F["hacim (5g/20g)"] = _k(vo5[i] / vo20[i] if vo20[i] and vo5[i] else None, (.7, 1.0, 1.5), ("<0,7x", "0,7-1x", "1-1,5x", "≥1,5x"))
+        F["aralık sıkışması"] = _k(r5[i] / r20[i] if r5[i] and r20[i] else None, (.6, .85, 1.15), ("güçlü sıkışma (<0,6)", "sıkışma (0,6-0,85)", "normal", "genişleme (≥1,15)"))
+        if bw[i] is not None:
+            gec = [x for x in bw[max(19, i - 119):i + 1] if x is not None]
+            if len(gec) >= 60: F["Bollinger dar"] = "evet (alt %20)" if sorted(gec).index(bw[i]) / len(gec) < .2 else "hayır"
+        F["kapanış konumu (gün)"] = _k((c - L[i]) / (H[i] - L[i]) if H[i] > L[i] else None, (.33, .66), ("günün altında", "ortasında", "üstünde"))
+        F["boşluk"] = _k((O[i] / C[i - 1] - 1) * 100, (-1.5, -.4, .4, 1.5), ("<-%1,5", "-%1,5/-%0,4", "±%0,4", "+%0,4/+%1,5", "≥+%1,5"))
+        yk = sum(1 for j in range(i - 4, i + 1) if C[j] > C[j - 1]); F["son 5 günde yükselen gün"] = str(yk)
+        if i >= 21:
+            rr = [C[j] / C[j - 1] - 1 for j in range(i - 19, i + 1)]; mr = sum(rr) / 20; sdv = (sum((x - mr) ** 2 for x in rr) / 20) ** .5 * 100
+            F["oynaklık (20g)"] = _k(sdv, (1.5, 2.5, 3.5, 5), ("<%1,5", "%1,5-2,5", "%2,5-3,5", "%3,5-5", "≥%5"))
+        F["günlük ciro"] = _k(ciro[i] / 1e6, (5, 20, 50, 150), ("<5 mn", "5-20 mn", "20-50 mn", "50-150 mn", "≥150 mn"))
+        F["fiyat"] = _k(c, (3, 10, 30, 100), ("<3 TL", "3-10 TL", "10-30 TL", "30-100 TL", "≥100 TL"))
+        gun = datetime.datetime.fromtimestamp(T[i], datetime.timezone.utc).strftime("%Y-%m-%d")
+        F["endeks 20g"] = _k(xr.get(gun), (-4, 0, 4), ("düşüşte (<-%4)", "zayıf (-%4/0)", "yükselişte (0/+%4)", "güçlü (≥+%4)"))
+        out[i] = (ciro[i] / 1e6, ch, {k: v for k, v in F.items() if v is not None})
+    return out
+
+
+def _gozlemler(C, X, sektor):
+    """Tüm hisse-gün gözlemleri: (gün_idx_zaman, kod, özellikler, y). y=1: olay başlangıcı; y=0: yakın zamanda olay yok; olay içi günler atılır."""
+    obs = []; canli = []
+    xr = {}
+    xc = [m[4] for m in X]
+    for i in range(20, len(X)):
+        xr[datetime.datetime.fromtimestamp(X[i][0], datetime.timezone.utc).strftime("%Y-%m-%d")] = (xc[i] / xc[i - 20] - 1) * 100
+    for kod, M in C.items():
+        n = len(M); cl = [m[4] for m in M]; F = _seri_ozellik(M, xr)
+        ev = [False] * n; dn = [False] * n
+        for i in range(n - UFUK):
+            ev[i] = max(cl[i + 1:i + 1 + UFUK]) / cl[i] - 1 >= HEDEF
+            dn[i] = min(cl[i + 1:i + 1 + UFUK]) / cl[i] - 1 <= -HEDEF * 0.8
+        for i in range(200, n - UFUK):
+            if F[i] is None: continue
+            ciro, ch, f = F[i]
+            if ciro < MIN_CIRO_MN or ch >= TAVAN: continue
+            onceki = any(ev[max(0, i - UFUK):i])
+            if ev[i] and onceki: continue
+            if (not ev[i]) and onceki: continue
+            f = dict(f)
+            if sektor.get(kod): f["sektör"] = sektor[kod]
+            obs.append((M[i][0], kod, [f"{k}={v}" for k, v in f.items()], 1 if ev[i] else 0, 1 if dn[i] else 0))
+        # canlı: son UFUK+1 gün içinde başlayan / süren olaylar
+        if n > 210 and F[n - 1] is not None:
+            canli.append((kod, M, F, ev))
+    return obs, canli, xr
+
+
+def _istatistik(obs, zaman_bol):
+    """Özellik bazlı: n, olay, oran, kaldıraç, z, iki dönemde tutarlılık."""
+    ty = sum(o[3] for o in obs) / len(obs); td = sum(o[4] for o in obs) / len(obs)
+    S = {}; DN = {}
+    for t, kod, ftr, y, dnv in obs:
+        d = 0 if t < zaman_bol else 1
+        for f in ftr:
+            s = S.setdefault(f, [0, 0, [0, 0], [0, 0]]); s[0] += 1; s[1] += y; s[2 + d][0] += 1; s[2 + d][1] += y; DN[f] = DN.get(f, 0) + dnv
+    ty1 = sum(o[3] for o in obs if o[0] < zaman_bol) / max(1, sum(1 for o in obs if o[0] < zaman_bol))
+    ty2 = sum(o[3] for o in obs if o[0] >= zaman_bol) / max(1, sum(1 for o in obs if o[0] >= zaman_bol))
+    R = []
+    for f, (n, y, a, b) in S.items():
+        if y < MIN_OLAY: continue
+        p = y / n; z = (p - ty) / math.sqrt(ty * (1 - ty) / n)
+        l1 = (a[1] / a[0] / ty1) if a[0] >= 100 and ty1 else None; l2 = (b[1] / b[0] / ty2) if b[0] >= 100 and ty2 else None
+        kd = (DN.get(f, 0) / n / td) if td else None
+        R.append({"ozellik": f, "n": n, "olay": y, "oran": round(p, 4), "kaldirac": round(p / ty, 2), "z": round(z, 1), "kaldirac_dus": round(kd, 2) if kd else None,
+                  "asimetri": round((p / ty) / kd, 2) if kd else None,
+                  "kaldirac_ilk": round(l1, 2) if l1 else None, "kaldirac_son": round(l2, 2) if l2 else None})
+    return ty, R, td
+
+
+def _gecti(r):
+    return r["kaldirac"] >= KALDIRAC_MIN and r["z"] >= Z_MIN and r["kaldirac_ilk"] and r["kaldirac_son"] and r["kaldirac_ilk"] >= 1.2 and r["kaldirac_son"] >= 1.2 and (r.get("asimetri") or 0) >= 1.25
+
+
+def ana(a):
+    R = _yukle(a.motor, "radar_m")
+    # evren ve sektör: en son arşivdeki tarama
+    sektor = {}; kodlar = []
+    fs = sorted(f for f in os.listdir(a.arsiv) if f.startswith("gozlem_bist_") and f.endswith(".json"))
+    if fs:
+        G = json.load(open(os.path.join(a.arsiv, fs[-1]))); Cc = G["cols"]; ik = Cc.index("kod"); isx = Cc.index("sektor")
+        for r in G["taramalar"][-1]["rows"]:
+            kodlar.append(r[ik]); sektor[r[ik]] = r[isx]
+    if len(kodlar) < 100: print("BÜYÜK: evren bulunamadı, atlandı"); return None
+    C = R._gunluk_hepsi(sorted(set(kodlar)))
+    X = R._oz_gunluk("XU100")
+    if not X or len(C) < 100: print("BÜYÜK: günlük veri alınamadı, atlandı"); return None
+    obs, canli, xr = _gozlemler(C, X, sektor)
+    obs.sort(key=lambda o: o[0]); bol = obs[int(len(obs) * GUN_KESIF_BOL)][0]
+    ty, tab, td = _istatistik(obs, bol)
+    gec = sorted([r for r in tab if _gecti(r)], key=lambda r: -r["kaldirac"])
+    asim = sorted([r for r in tab if r["z"] >= Z_MIN and (r.get("asimetri") or 0) >= 1.15], key=lambda r: -r["asimetri"])[:12]
+    gzy = sorted([r for r in tab if r["kaldirac"] < 0.6 and r["z"] <= -Z_MIN], key=lambda r: r["kaldirac"])
+    ilk = datetime.datetime.fromtimestamp(obs[0][0], datetime.timezone.utc).strftime("%d.%m.%Y"); son = datetime.datetime.fromtimestamp(obs[-1][0], datetime.timezone.utc).strftime("%d.%m.%Y")
+    # çiftler: kanıtı geçen tek özelliklerden + geniş adaylardan
+    adaylar = [r["ozellik"] for r in sorted(tab, key=lambda r: -r["kaldirac"])[:22]]
+    P = {}
+    for t, kod, ftr, y, _dn in obs:
+        s = set(ftr); g = [f for f in adaylar if f in s]
+        for x, yv in itertools.combinations(sorted(g), 2):
+            p = P.setdefault((x, yv), [0, 0, [0, 0], [0, 0], 0]); d = 0 if t < bol else 1
+            p[0] += 1; p[1] += y; p[2 + d][0] += 1; p[2 + d][1] += y; p[4] += _dn
+    ty1 = sum(o[3] for o in obs if o[0] < bol) / max(1, sum(1 for o in obs if o[0] < bol)); ty2 = sum(o[3] for o in obs if o[0] >= bol) / max(1, sum(1 for o in obs if o[0] >= bol))
+    cift = []
+    for (x, yv), (n, y, a1, b1, dnc) in P.items():
+        if y < MIN_OLAY_CIFT or n < 60: continue
+        p = y / n; z = (p - ty) / math.sqrt(ty * (1 - ty) / n)
+        l1 = (a1[1] / a1[0] / ty1) if a1[0] >= 40 and ty1 else None; l2 = (b1[1] / b1[0] / ty2) if b1[0] >= 40 and ty2 else None
+        cift.append({"ozellik": x + " + " + yv, "n": n, "olay": y, "oran": round(p, 4), "kaldirac": round(p / ty, 2), "z": round(z, 1),
+                     "kaldirac_ilk": round(l1, 2) if l1 else None, "kaldirac_son": round(l2, 2) if l2 else None, "_f": [x, yv],
+                     "kaldirac_dus": round(dnc / n / td, 2) if td and dnc else None, "asimetri": round((p / ty) / (dnc / n / td), 2) if td and dnc else None})
+    cift_g = sorted([c for c in cift if c["kaldirac"] >= KALDIRAC_MIN * 1.3 and c["z"] >= Z_MIN + 1 and c["kaldirac_ilk"] and c["kaldirac_son"] and c["kaldirac_ilk"] >= 1.2 and c["kaldirac_son"] >= 1.2 and (c.get("asimetri") or 0) >= 1.25], key=lambda c: -c["kaldirac"])[:15]
+    # canlı: son 10 işlem günü olayları ve izleme listesi
+    gun_say = len({o[0] for o in obs})
+    onay = {r["ozellik"]: r for r in gec[:12]}
+    ozg = lambda t: datetime.datetime.fromtimestamp(t, datetime.timezone.utc).strftime("%d.%m")
+    bugun_t = max(M[-1][0] for M in C.values()); events = []; izle = []
+    for kod, M, F, ev in canli:
+        n = len(M); cl = [m[4] for m in M]
+        # son 10 işlem gününde başlayan: i in [n-11, n-2] için max(cl[i+1:]) / cl[i] >= %20 (eldeki günlerle)
+        en = None
+        for i in range(max(200, n - 11), n - 1):
+            g = max(cl[i + 1:min(n, i + 1 + UFUK)]) / cl[i] - 1
+            if g >= HEDEF: en = (i, g); break
+        if en and F[en[0]] is not None:
+            i, g = en; f = dict(F[i][2]); sec = sektor.get(kod)
+            events.append({"kod": kod, "sektor": sec, "baslangic": ozg(M[i][0]), "gun_once": n - 1 - i, "baslangic_fiyat": round(cl[i], 2), "getiri": round(g * 100, 1),
+                           "simdi": round((cl[-1] / cl[i] - 1) * 100, 1), "ciro_mn": round(F[i][0], 1), "ozellik": [f"{k}={v}" for k, v in f.items() if k in ("hacim (1g/20g)", "aralık sıkışması", "60g zirveye", "RSI14", "SMA50", "20 gün", "52h aralık", "Bollinger dar")]})
+        if F[n - 1] is not None and F[n - 1][0] >= MIN_CIRO_MN and F[n - 1][1] < TAVAN:
+            fs_ = {f"{k}={v}" for k, v in F[n - 1][2].items()}
+            if sektor.get(kod): fs_.add("sektör=" + sektor[kod])
+            esl = [k for k in onay if k in fs_]
+            ces = [c["ozellik"] for c in cift_g if all(x in fs_ for x in c["_f"])]
+            if ces or len(esl) >= 3:
+                izle.append({"kod": kod, "sektor": sektor.get(kod), "fiyat": round(cl[-1], 2), "ch": round(F[n - 1][1], 2), "eslesen": esl[:5], "cift": ces[:3], "skor": len(esl) + 2 * len(ces)})
+    events.sort(key=lambda e: -e["getiri"])
+    kc = collections.Counter(e["baslangic"] for e in events); kume, kume_not = None, None
+    if events:
+        gk, gn_ = kc.most_common(1)[0]; kume = {"gun": gk, "pay": round(gn_ / len(events), 2), "n": gn_}
+        if gn_ / len(events) >= .6: kume_not = f"Canlı olayların %{gn_ * 100 // len(events)}'i aynı gün ({gk}) başladı: bu bireysel hisse hikayesi değil, piyasa geneli dip sonrası toparlanma / spekülatif dalga. Neden analizinde bu ayrım önemli."
+    izle.sort(key=lambda e: -e["skor"])
+    for c in cift_g: c.pop("_f", None)
+    for c in cift: c.pop("_f", None)
+    gc = collections.Counter(o[0] for o in obs if o[3]); top10 = sum(v for _, v in gc.most_common(10)); toplam_o = sum(gc.values())
+    yog = {"olay_gunu": len(gc), "ilk10_pay": round(top10 / toplam_o, 2) if toplam_o else None,
+           "en_yogun": [{"gun": datetime.datetime.fromtimestamp(k, datetime.timezone.utc).strftime("%d.%m.%Y"), "olay": v} for k, v in gc.most_common(5)]}
+    kanit = bool(gec) and gun_say >= 120
+    H = {"guncelleme": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3))).strftime("%d.%m %H:%M"), "versiyon": "1.0",
+         "tanim": f"Olay: bir günün kapanışından sonraki {UFUK} işlem günü içinde kapanış en az +%{int(HEDEF*100)}. Evren: günlük ort. ciro ≥ {MIN_CIRO_MN:g} mn TL, o gün tavan (≥ %{TAVAN:g}) değil. Gözlem: her hisse-gün (olay içi günler hariç). Kaldıraç = özellik varken olay başlama oranı / tüm gözlemlerde oran. Kapı: ≥ {MIN_OLAY} olay, kaldıraç ≥ {KALDIRAC_MIN}, z ≥ {Z_MIN:g}, iki dönemde de ≥ 1,2, ve yön ayrımı: aynı özellikte -%16 düşüş olayı oranından en az 1,25 kat daha fazla yükseliş (salt oynaklık elenir).",
+         "donem": f"{ilk} - {son}", "hisse": len(C), "gozlem": len(obs), "olay": sum(o[3] for o in obs), "taban": round(ty, 4), "gun": gun_say,
+         "durum": ("Kanıt var" if len(gec) >= 3 else "Sınırlı kanıt") if kanit else "Veri biriktiriliyor", "kume": kume, "kume_not": kume_not, "yogunluk": yog, "taban_dus": round(td, 4), "tek": gec[:20], "asimetrik": asim, "cift": cift_g, "dusuk": gzy[:10],
+         "olaylar": events[:25], "izleme": izle[:15],
+         "uyari": "Yalnızca bugün işlem gören hisseler (hayatta kalma yanlılığı), kapanış bazlı, komisyon ve kayma yok; TL enflasyonu nominal fiyatları büyütür. Yatırım tavsiyesi değildir."}
+    return H
+
+
+def haber_ekle(R, H):
+    """Canlı olayların başlangıcından bu yana TradingView haber başlıkları (son 30 gün)."""
+    lim = datetime.datetime.now().timestamp() - 30 * 86400
+    for o in H.get("olaylar", []):
+        try:
+            j = R.http(f"https://news-headlines.tradingview.com/v2/headlines?client=web&lang=tr&symbol=BIST:{o['kod']}&streaming=false")
+            items = [i for i in j.get("items", []) if i["published"] > lim]
+            gun_bas = datetime.datetime.now() - datetime.timedelta(days=o["gun_once"] + 4)
+            yak = [i for i in items if i["published"] >= gun_bas.timestamp()]
+            o["haber"] = [datetime.datetime.fromtimestamp(i["published"], datetime.timezone(datetime.timedelta(hours=3))).strftime("%d.%m") + " " + i["title"][:120] for i in yak[:3]]
+            o["haber_kontrol"] = True
+        except Exception:
+            o["haber_kontrol"] = False
+        import time as _t; _t.sleep(.25)
+
+
+def main():
+    p = argparse.ArgumentParser(); p.add_argument("--motor", default="radar.py"); p.add_argument("--arsiv", default="arsiv"); p.add_argument("--veri", default="veri.json")
+    p.add_argument("--kayit", default="lab/buyuk.json"); a = p.parse_args()
+    H = ana(a)
+    if not H: return
+    try: haber_ekle(_yukle(a.motor, "radar_h"), H)
+    except Exception as e: print("UYARI: haber", e)
+    V = json.load(open(a.veri)); V["buyuk_lab"] = H
+    json.dump(V, open(a.veri, "w"), ensure_ascii=False, separators=(",", ":"))
+    os.makedirs(os.path.dirname(a.kayit) or ".", exist_ok=True); json.dump(H, open(a.kayit, "w"), ensure_ascii=False, indent=1)
+    print(f"BÜYÜK: {H['hisse']} hisse, {H['gozlem']} gözlem, {H['olay']} olay (taban %{H['taban']*100:.2f}) · tek kanıtlı {len(H['tek'])} · çift {len(H['cift'])} · canlı olay {len(H['olaylar'])} · izleme {len(H['izleme'])}")
+    for r in H["asimetrik"][:10]: print(f"   [asim] {r['asimetri']} (x{r['kaldirac']}/dus x{r['kaldirac_dus']}) n={r['n']} olay={r['olay']} {r['ozellik']} ({r['kaldirac_ilk']}/{r['kaldirac_son']})")
+    for c in H["cift"][:5]: print(f"   [cift] x{c['kaldirac']} asim {c['asimetri']} olay={c['olay']} {c['ozellik']}")
+    for r in H["tek"][:8]: print(f"   x{r['kaldirac']} (düşüş x{r['kaldirac_dus']}, asimetri {r['asimetri']}) z={r['z']} n={r['n']} olay={r['olay']} · {r['ozellik']} (ilk x{r['kaldirac_ilk']}, son x{r['kaldirac_son']})")
+
+
+if __name__ == "__main__":
+    main()
