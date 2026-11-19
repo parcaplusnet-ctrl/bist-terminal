@@ -173,7 +173,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 @media (max-width:640px){.ogrSh{flex-direction:column;align-items:stretch;text-align:center;gap:10px}.ogrSh .btn{width:100%;max-width:240px;align-self:center}}
 .hrkBH{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;min-height:52px;box-sizing:border-box}.hrkBH h3{margin:0;font-size:13px;line-height:1.35;min-width:0}.hrkBH .btn{flex:none;width:132px;height:30px;padding:0;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 @media (max-width:640px){.hrkBH{flex-direction:column;align-items:stretch;justify-content:center;gap:10px;text-align:center}.hrkBH .btn{width:100%;max-width:240px;align-self:center}}
-.tw.kay{max-height:320px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM Plex Sans",system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding-top:7px;padding-bottom:7px}.tw.kay{max-height:320px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .tw.kay th{position:sticky;top:0;z-index:1}
 #lcBul{max-height:130px;overflow:auto}#learn{border-bottom:1px solid var(--line)}
 .tw.kay.sonuc{max-height:260px}.tw.kay.sonuc td{padding-top:6px;padding-bottom:6px}
@@ -374,8 +374,9 @@ details.ad[open] summary::after{transform:rotate(90deg)}
     <div class="k"><small>İzleme listesi</small><b id="bykI">—</b><em id="bykId">—</em></div>
    </div>
    <p class="note" style="border-top:0" id="bykNot">—</p>
-   <div class="split" style="padding:12px 16px"><div class="tw"><table id="bykE"></table></div><div class="tw"><table id="bykX"></table></div></div>
-   <div class="tw kay" tabindex="0" aria-label="Direnç ve korku endeksi özellikleri, kaydırılabilir"><table id="bykD"></table></div>
+   <div class="tw"><table id="bykE"></table></div>
+   <div class="tw"><table id="bykX"></table></div>
+   <div class="tw kay" tabindex="0" aria-label="Direnç ve korku endeksi özellikleri, kaydırılabilir"><table id="bykR"></table></div>
    <div class="tw kay" tabindex="0" aria-label="Canlı büyük yükselişler, kaydırılabilir"><table id="bykL"></table></div>
    <div class="tw kay" tabindex="0" aria-label="İzleme listesi, kaydırılabilir"><table id="bykW"></table></div>
    <div class="note" id="bykN">—</div>
@@ -610,15 +611,17 @@ function bykSek(B){const sek=$("bykSek");if(!sek)return;if(!B||!B.tanim){sek.hid
  txt($("bykC"),(B.olaylar||[]).length);txt($("bykCd"),B.kume?`%${Math.round(B.kume.pay*100)}'i ${B.kume.gun} başlangıçlı`:"son 10 işlem günü");
  txt($("bykI"),(B.izleme||[]).length);txt($("bykId"),"güçlü örüntü eşleşen (öneri değil)");
  txt($("bykNot"),B.tanim+(B.kume_not?" "+B.kume_not:""));
- const mk=(id,bas,rows,msg)=>{const T=$(id);T.textContent="";const th=document.createElement("thead"),tr=document.createElement("tr");bas.forEach(h=>{const e=document.createElement("th");e.textContent=h;tr.append(e)});th.append(tr);const tb=document.createElement("tbody");
-  if(!rows.length){const r=document.createElement("tr"),c=document.createElement("td");c.colSpan=bas.length;c.textContent=msg;r.append(c);tb.append(r)}
-  rows.forEach(rw=>{const r=document.createElement("tr");rw.forEach(c=>{const e=document.createElement("td");if(c&&typeof c==="object"){e.textContent=c.t==null?"—":c.t;if(c.c)e.className=c.c}else e.textContent=c==null?"—":c;r.append(e)});tb.append(r)});T.append(th,tb)};
- const kd=x=>[x.ozellik,x.olay,pc(x.oran),x.kaldirac+"x",x.asimetri==null?"—":x.asimetri+"x",(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—")];
- mk("bykE",["Yükselişten önceki özellik (tek)","Olay","Oran","Kaldıraç","Yön ayrımı","İlk / son yarı"],(B.tek||[]).slice(0,8).map(kd),"Kapıyı geçen tek özellik yok");
- mk("bykX",["Özellik çifti","Olay","Oran","Kaldıraç","Yön ayrımı","İlk / son yarı"],(B.cift||[]).slice(0,8).map(kd),"Kapıyı geçen çift yok");
-mk("bykD",["Direnç ve korku endeksi özelliği","Gözlem","Olay","+%20 kaldıraç","Düşüş kaldıraç","Yön ayrımı","İlk / son yarı"],(B.direnc||[]).map(x=>[x.ozellik,x.n,x.olay,x.kaldirac+"x",(x.kaldirac_dus==null?"—":x.kaldirac_dus+"x"),x.asimetri==null?"—":x.asimetri+"x",(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—")]),"Direnç verisi yok");
- mk("bykL",["Hisse","Sektör","Başlangıç","Gün önce","En yüksek","Şimdi","Başlangıçtaki özellikler","Haber (başlangıçtan beri)"],(B.olaylar||[]).slice(0,15).map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),x.baslangic,x.gun_once,{t:f1(x.getiri),c:"up"},{t:f1(x.simdi),c:cls(x.simdi)},(x.ozellik||[]).slice(0,3).join(" · "),(x.haber&&x.haber.length)?x.haber[0]:(x.haber_kontrol?"haber yok":"—")]),"Son 10 işlem gününde +%20 yapan yok");
- mk("bykW",["İzleme (örüntü eşleşen)","Sektör","Fiyat","Gün %","Skor","Eşleşen özellikler"],(B.izleme||[]).slice(0,10).map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),x.fiyat,{t:f1(x.ch),c:cls(x.ch)},x.skor,(x.cift&&x.cift.length?x.cift[0]:(x.eslesen||[]).slice(0,2).join(" · "))]),"Eşleşen yok");
+ const kd=x=>row=>{cell(row,x.ozellik,"l");cell(row,x.olay);cell(row,pc(x.oran));cell(row,x.kaldirac+"x","num");cell(row,x.asimetri==null?"—":x.asimetri+"x");cell(row,(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—"))};
+ const hd=[["Yükselişten önceki özellik","l"],"Olay","Oran","Kaldıraç","Yön ayrımı","İlk / son yarı"];
+ table($("bykE"),hd,(B.tek||[]).slice(0,8).map(kd),"Kapıyı geçen tek özellik yok");
+ table($("bykX"),[["Özellik çifti","l"],hd[1],hd[2],hd[3],hd[4],hd[5]],(B.cift||[]).slice(0,8).map(kd),"Kapıyı geçen çift yok");
+ const GR=[["endeks farkı","5g endeks farkı","5 günlük getiri - endeks (puan)"],["endeks farkı","10g endeks farkı","10 günlük getiri - endeks (puan)"],["direnç (son 10 gün)","direnç (son 10 gün)","Endeks düşüş günlerinde tutunma (son 10 gün)"],["direnç hacmi","direnç hacmi","Tutunurken hacim (20 gün ortalamasına göre)"],["VIX korelasyonu","VIX korelasyonu (20g)","Hissenin VIX ile 20 günlük korelasyonu"],["VIX betası","VIX betası (20g)","Hissenin VIX'e 20 günlük duyarlılığı (beta)"]];
+ const dr=B.direnc||[],by=n=>dr.filter(x=>x.ozellik.indexOf(n+"=")===0);
+ const DB=table($("bykR"),[["Direnç ve korku endeksi","l"],"Gözlem","Olay","+%20 kaldıraç","Düşüş kaldıraç","Yön ayrımı","İlk / son yarı"],[],"Direnç verisi yok");
+ if(dr.length){DB.textContent="";GR.forEach(g=>{const L=by(g[1]);if(!L.length)return;const gr=DB.insertRow();gr.className="grp";const gc=gr.insertCell();gc.colSpan=7;gc.className="l";gc.textContent=g[2];
+  L.forEach(x=>{const r=DB.insertRow();const y=x.kaldirac>=1.3&&x.asimetri>=1.15,z=x.kaldirac<=.75;cell(r,x.ozellik.slice(g[1].length+1),"l");cell(r,x.n);cell(r,x.olay);cell(r,x.kaldirac+"x",y?"num up":z?"num dn":"num");cell(r,x.kaldirac_dus==null?"—":x.kaldirac_dus+"x","num");cell(r,x.asimetri==null?"—":x.asimetri+"x");cell(r,(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—"))})})}
+ table($("bykL"),["Hisse",["Sektör","l"],"Başlangıç","Gün önce","En yüksek","Şimdi",["Başlangıçtaki özellikler","l"],["Haber (başlangıçtan beri)","l"]],(B.olaylar||[]).slice(0,15).map(x=>row=>{kodCell(row,x.kod);cell(row,(x.sektor||"").replace(/ Services| Industries/,""),"l");cell(row,x.baslangic);cell(row,x.gun_once);cell(row,f1(x.getiri),"num up");cell(row,f1(x.simdi),"num "+cls(x.simdi));cell(row,(x.ozellik||[]).slice(0,3).join(" · "),"l wrapt");cell(row,(x.haber&&x.haber.length)?x.haber[0]:(x.haber_kontrol?"haber yok":"—"),"l wrapt")}),"Son 10 işlem gününde +%20 yapan yok");
+ table($("bykW"),["Hisse",["Sektör","l"],"Fiyat","Gün %","Skor",["Eşleşen özellikler","l"]],(B.izleme||[]).slice(0,10).map(x=>row=>{kodCell(row,x.kod);cell(row,(x.sektor||"").replace(/ Services| Industries/,""),"l");cell(row,x.fiyat,"num");cell(row,f1(x.ch),"num "+cls(x.ch));cell(row,x.skor);cell(row,(x.cift&&x.cift.length?x.cift[0]:(x.eslesen||[]).slice(0,2).join(" · ")),"l wrapt")}),"Eşleşen yok");
  txt($("bykN"),(B.uyari||"")+" Kapıdan geçen bulgular yalnızca öneridir; seçime girmesi için senin onayın gerekir.")}
 function srpSek(S){const sek=$("srpSek");if(!sek)return;if(!S||!S.tanim){sek.hidden=true;return}sek.hidden=false;
  const pc=v=>v==null?"—":"%"+(Math.round(v*1000)/10).toString().replace(".",","),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",",")+"%";
