@@ -4,5 +4,11 @@
   "tarih": "18.11",
   "bulgu": "Özellik laboratuvarı: 1869 grafik (623 günlük, 623 1S, 623 4S), 325 özellik ölçüldü, 14 kullanılıyor, 13 elendi, 17 az örnek. En iyi yeni kombinasyon: atr_0.05_0.08+genis_alim+guclu_yesil (+%5 oranı %39,3, stop %35,1, getiri farkı +1,03).",
   "degisiklik": "3 yeni özellik önerildi (onay bekliyor): dip20_yakin_donus (elendi, fark -5,3), dusus_serisi_kirildi (test, fark +0,4), ic_mum_sikisma (elendi, fark -4,3)."
+ },
+ {
+  "no": 2,
+  "tarih": "19.11",
+  "bulgu": "Özellik laboratuvarı: tur 7, 372 özellik ölçüldü, 16 tanesi kullanılıyor (hem geçmişte hem son 60 günde tabanı geçiyor); en iyi kombinasyon: genis_alim + atr %8+ (+%5 oranı %39, taban %21). Durum değişikliği yok.",
+  "degisim": "3 yeni özellik önerildi: hacim_kurudu_patladi (oran %23, fark +2,6, test), ema50_destek_donus (oran %21, fark +0,7, test), bosluk_guclu_kapanis (oran %25, fark +4,3, test)"
  }
 ]

@@ -40,5 +40,47 @@
    "ornek": 1951,
    "durum": "elendi"
   }
+ },
+ {
+  "id": "hacim_kurudu_patladi",
+  "aciklama": "Dün hacim ortalamanın %60 altındaydı, bugün 1,5 katı ve üstü (sessizlikten sonra patlama)",
+  "kod": "ek(\"hacim_kurudu_patladi\", \"Dün hacim ortalamanın %60 altındaydı, bugün 1,5 katı ve üstü (sessizlikten sonra patlama)\", lambda d: (d.rv.shift(1) < 0.6) & (d.rv >= 1.5))",
+  "tarih": "19.11",
+  "ilk_olcum": {
+   "oran": 0.2307,
+   "stop": 0.4877,
+   "fark": 0.0256,
+   "getiri_fark": -0.195,
+   "ornek": 4382,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "ema50_destek_donus",
+  "aciklama": "Fiyat EMA50'nin hemen üstünde (%2 içinde) ve RSI yukarı dönüyor (destekten dönüş)",
+  "kod": "ek(\"ema50_destek_donus\", \"Fiyat EMA50'nin hemen üstünde (%2 içinde) ve RSI yukarı dönüyor (destekten dönüş)\", lambda d: (d.ema50 < 0) & (d.ema50 >= -0.02) & (d.rsi_d > 0))",
+  "tarih": "19.11",
+  "ilk_olcum": {
+   "oran": 0.2126,
+   "stop": 0.3087,
+   "fark": 0.0075,
+   "getiri_fark": 0.252,
+   "ornek": 11185,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "bosluk_guclu_kapanis",
+  "aciklama": "Güne +%1 üstü boşlukla açıldı ve gün yükseğine yakın kapattı (üst %30)",
+  "kod": "ek(\"bosluk_guclu_kapanis\", \"Güne +%1 üstü boşlukla açıldı ve gün yükseğine yakın kapattı (üst %30)\", lambda d: (d.bosluk >= 0.01) & (d.clpos >= 0.7))",
+  "tarih": "19.11",
+  "ilk_olcum": {
+   "oran": 0.2481,
+   "stop": 0.4236,
+   "fark": 0.043,
+   "getiri_fark": 0.085,
+   "ornek": 6575,
+   "durum": "test"
+  }
  }
 ]
