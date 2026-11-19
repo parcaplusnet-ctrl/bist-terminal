@@ -139,3 +139,6 @@ Genel isabet = (hedefe ulaşan "Başarılı" + "Kâr korundu") / sonuçlanan (Ba
 
 ## 19.11 ABD gün sonu taraması (kullanıcı kararı)
 ABD seansı İstanbul saatiyle 17:30-00:00 (kış saati). Saatlik görevin 18:16 ABD taraması açılıştan 45 dk sonradır; kapanış hiç ölçülmüyordu. Pazartesi 22:16 görevi yerine Salı-Cumartesi 00:16'da (kapanıştan 16 dk sonra) ABD taraması ve açık kayıt kontrolü çalışır. Motor: ABD için saat 06:00'dan önce çalışan taramada `vade()` bir önceki takvim gününe göre hesaplanır (seçim önceki seansın kapanışına aittir; vade 2 ABD işlem günü). ABD modülü yalnızca laboratuvardır, kasaya girmez.
+
+## Zengin arşiv taraması (19.11)
+BIST gözlem arşivine her taramada 24 ek alan yazılır (GZ_EK): açılış, gün içi yüksek/düşük, hacim (lot), açılıştan değişim, boşluk, ATR, ADX, VWAP, SMA20/50/200, günlük oynaklık, 3-6 ay ve YTD getiri, Stoch, CCI, Mom, Bollinger bandı, beta, F/K, TradingView öneri skoru. Yalnızca öğrenme verisidir, seçime etkisi yoktur. Eski arşiv satırları otomatik None ile genişler. Arşiv boyutu yaklaşık 1,8 MB/gün.

@@ -58,6 +58,12 @@ BASE = ["close", "open", "high", "low", "volume", "RSI", "MACD.macd", "MACD.sign
 EXTRA = ["name", "description", "sector", "market_cap_basic", "change_from_open", "relative_volume_10d_calc", "Perf.W",
          "Perf.1M", "High.1M", "Low.1M", "SMA50", "MACD.macd[1]", "MACD.signal[1]", "average_volume_10d_calc", "average_volume_30d_calc"]
 COLS = EXTRA + [b + t for t in TF for b in BASE]
+# Zengin arşiv: her taramada saklanan ek alanlar (seçime etkisi yok; yalnızca öğrenme verisi). (arşiv adı, TradingView sütunu)
+GZ_EK = [("acilis", "open"), ("yuksek", "high"), ("dusuk", "low"), ("hacim_lot", "volume"), ("ch_acilis", "change_from_open"), ("bosluk", "gap"),
+         ("atr", "ATR"), ("adx", "ADX"), ("vwap", "VWAP"), ("sma20", "SMA20"), ("sma50", "SMA50"), ("sma200", "SMA200"), ("vol_g", "Volatility.D"),
+         ("p3m", "Perf.3M"), ("p6m", "Perf.6M"), ("pytd", "Perf.YTD"), ("stoch", "Stoch.K"), ("cci", "CCI20"), ("mom", "Mom"),
+         ("bb_ust", "BB.upper"), ("bb_alt", "BB.lower"), ("beta", "beta_1_year"), ("fk", "price_earnings_ttm"), ("oneri", "Recommend.All")]
+GZ_EK_COLS = list(dict.fromkeys(c for _, c in GZ_EK))
 
 def rows(j, cols):
     out = []
@@ -218,7 +224,7 @@ def ozet(S, ek=None):
 
 def cmd_bist(a):
     W, esik = kurallar(a.rules, a.veri)
-    cols = COLS + ["indexes"]
+    cols = COLS + [c for c in GZ_EK_COLS if c not in COLS] + ["indexes"]
     j = scan("turkey", {"filter": [{"left": "type", "operation": "equal", "right": "stock"}, {"left": "exchange", "operation": "equal", "right": "BIST"}],
                         "markets": ["turkey"], "columns": cols, "sort": {"sortBy": "name", "sortOrder": "asc"}, "range": [0, 1500]})
     R = rows(j, cols); ac = acik_kodlar(a.veri); si = seans_acik("bist"); S = []
@@ -228,6 +234,7 @@ def cmd_bist(a):
         ix = [i.get("proname", "") for i in (o.get("indexes") or [])]
         s["katman"] = "XU030" if "BIST:XU030" in ix else "XU050" if "BIST:XU050" in ix else "XU100" if "BIST:XU100" in ix else None
         s["acik"] = s["kod"] in ac
+        s["gz"] = [r2(o.get(c)) if isinstance(o.get(c), (int, float)) else None for _, c in GZ_EK]
         s["sek"] = next((x for x in BIST_SEK if "BIST:" + x in ix), None)  # BIST sektör endeksi kodu (sektör laboratuvarı bonusu için)
         S.append(s)
     xu = scan("turkey", {"symbols": {"tickers": ["BIST:XU100"]}, "columns": ["close", "change", "Perf.W"]})["data"][0]["d"]
@@ -818,7 +825,7 @@ def cmd_kaydet(a):
 # 1-2 işlem günü sonra gerçekleşen hareketle eşleştirilip "neden yükseldi/düştü" öğrenilir.
 GZ_COLS = ["kod", "fiyat", "ch", "rv", "puan", "rsi", "rsi1s", "rsi4s", "mt", "uygun", "asiri", "g_trend",
            "RSI-MACD", "Trend", "Hacim", "Uyum", "Dip", "Risk", "tk1S", "tk4S", "tkG", "pw", "p1m", "cfo", "h1m", "l1m",
-           "sektor", "katman", "mcap_mlr", "why", "likit_mn"]
+           "sektor", "katman", "mcap_mlr", "why", "likit_mn"] + [a for a, _ in GZ_EK]
 
 def cmd_gozlem(a):
     """cikti/<piyasa>.json → arsiv/gozlem_<piyasa>_YYYY-MM-DD.json içine bu taramanın tüm hisse anlık görüntüsünü ekler."""
@@ -847,7 +854,7 @@ def _gz_satir(s):
             pk.get("RSI-MACD"), pk.get("Trend"), pk.get("Hacim"), pk.get("Uyum"), pk.get("Dip"), pk.get("Risk"),
             (tk.get("1S") or [None] * 3)[2], (tk.get("4S") or [None] * 3)[2], (tk.get("G") or [None] * 3)[2],
             oz.get("pw"), oz.get("p1m"), oz.get("cfo"), oz.get("h1m"), oz.get("l1m"),
-            s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")]
+            s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")] + (s.get("gz") or [None] * len(GZ_EK))
 
 def _hareket_kurallari():
     """Kullanıcının onayladığı hareket laboratuvarı kuralları (rules.json hareket_kurallari). Yoksa boş: seçime etkisi yoktur."""
