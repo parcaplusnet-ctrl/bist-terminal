@@ -1250,5 +1250,697 @@
    "tarih": "2026-11-18",
    "neden": "olumsuz: 27.10 bilanço net zarar 86,8 mn TL (önceki kâr); 16.11 SPK yasak listeleri"
   }
+ },
+ "surpriz_haber": {
+  "2026-11-19|PKART": [
+   {
+    "ts": 1794801699,
+    "baslik": "SPK, 2 halka açık ortaklığın pay ihracını onayladı"
+   },
+   {
+    "ts": 1793374487,
+    "baslik": "PKART Plastikkart Akıllı Kart İletişim Sistemleri Sanayi ve Tic. solo bilanço 2026 9 aylık net karı 28,070,268 TL (Önceki: 5,390,861 TL net "
+   },
+   {
+    "ts": 1786384045,
+    "baslik": "PKART Plastikkart Akıllı Kart İletişim Sistemleri Sanayi ve Tic. solo bilanço 2026 6 aylık net karı 35,574,605 TL (Önceki: 385,396 TL net ka"
+   },
+   {
+    "ts": 1778644729,
+    "baslik": "VBTS kapsamında PKART.E ve SURGY.E payları seans başından seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1777564470,
+    "baslik": "PKART Plastikkart Akıllı Kart İletişim Sistemleri Sanayi ve Tic. solo bilanço 2026 3 aylık net karı 17,853,471 TL (Önceki: 1,378,344 TL net "
+   },
+   {
+    "ts": 1772423943,
+    "baslik": "Plastikkart, sermaye artışı hususunda SPK'na başvurdu"
+   },
+   {
+    "ts": 1772164652,
+    "baslik": "Plastikkart, sermaye artış kararı aldı"
+   },
+   {
+    "ts": 1771260490,
+    "baslik": "PKART Plastikkart Akıllı Kart İletişim Sistemleri Sanayi ve Tic. solo bilanço 2025 Yıllık net karı 68,884,267 TL (Önceki: 79,595,427 TL net "
+   },
+   {
+    "ts": 1761883220,
+    "baslik": "PKART Plastikkart Akıllı Kart İletişim Sistemleri Sanayi ve Tic. solo bilanço 2025 9 aylık net zararı 4,155,399 TL (Önceki: 73,194,516 TL ne"
+   },
+   {
+    "ts": 1756372495,
+    "baslik": "Plastikkart, iki farklı vergi ceza ihbarnamesi tebliğ edildiğini, söz konusu cezalara ilişkin olarak uzlaşma yolunu tercih etmeyerek yargı y"
+   },
+   {
+    "ts": 1749803928,
+    "baslik": "KAP: PKART  [ ] PLASTİKKART AKILLI KART İLETİŞİM SİSTEMLERİ SANAYİ VE TİCARET A.Ş.  4. YÖNETİM KURULU-II"
+   },
+   {
+    "ts": 1749628625,
+    "baslik": "KAP: PKART  [ ] PLASTİKKART AKILLI KART İLETİŞİM SİSTEMLERİ SANAYİ VE TİCARET A.Ş.  Şirket Genel Bilgi Formu"
+   }
+  ],
+  "2026-11-19|LYDYE": [
+   {
+    "ts": 1793115373,
+    "baslik": "LYDYE Lydia Yeşil Enerji Kaynakları solo bilanço 2026 9 aylık net zararı 3,110,154,782 TL (Önceki: 672,409,091 TL net kar)"
+   },
+   {
+    "ts": 1789963162,
+    "baslik": "Lydia Yeşil Enerji, Batıliman Liman İşletmeleri'nin devralınması yoluyla planlanan birleşme sürecini sona erdirdiğini açıkladı"
+   },
+   {
+    "ts": 1785858949,
+    "baslik": "LYDYE Lydia Yeşil Enerji Kaynakları solo bilanço 2026 6 aylık net zararı 691,085,531 TL (Önceki: 791,547,175 TL net kar)"
+   },
+   {
+    "ts": 1777392493,
+    "baslik": "LYDYE Lydia Yeşil Enerji Kaynakları solo bilanço 2026 3 aylık net zararı 614,132,063 TL (Önceki: 472,077,942 TL net kar)"
+   },
+   {
+    "ts": 1772423943,
+    "baslik": "Batıçim bağlı ortaklığı Batıliman Liman İşletmeleri'nin tüm aktif ve pasifleri ile birlikte bir kül halinde tasfiyesiz infisah yoluyla devro"
+   },
+   {
+    "ts": 1762315207,
+    "baslik": "VBTS kapsamında BORLS.E, KLRHO.E, LYDYE.E ve PRDGS.E payları seans başından 4 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere ko"
+   },
+   {
+    "ts": 1761624012,
+    "baslik": "LYDYE Lydia Yeşil Enerji Kaynakları solo bilanço 2025 9 aylık net karı 518,307,678 TL (Önceki: 58,016,276 TL net kar)"
+   },
+   {
+    "ts": 1751292836,
+    "baslik": "KAP: LYDYE  [ ] LYDİA YEŞİL ENERJİ KAYNAKLARI A.Ş.  Birleşme İşlemlerine İlişkin Bildirim"
+   },
+   {
+    "ts": 1750841904,
+    "baslik": "KAP:   [LYDYE ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1748963524,
+    "baslik": "KAP: LYDYE  [ ] LYDİA YEŞİL ENERJİ KAYNAKLARI A.Ş.  1. PAY SAHİPLERİ"
+   },
+   {
+    "ts": 1748923110,
+    "baslik": "Lydia genel müdürlüğüne vekaleten Abdullah Yavaş getirildi"
+   },
+   {
+    "ts": 1748878537,
+    "baslik": "KAP: LYDYE  [ ] LYDİA YEŞİL ENERJİ KAYNAKLARI A.Ş.  Şirket Genel Bilgi Formu"
+   }
+  ],
+  "2026-11-19|EDATA": [
+   {
+    "ts": 1794801699,
+    "baslik": "SPK tarafından getirilen işlem yasakları - 1"
+   },
+   {
+    "ts": 1794801699,
+    "baslik": "SPK tarafından verilen geçici lisans iptal kararları - 1"
+   },
+   {
+    "ts": 1794801699,
+    "baslik": "SPK tarafından yapılan suç duyuruları - 1"
+   },
+   {
+    "ts": 1793117941,
+    "baslik": "EDATA E-data Teknoloji Pazarlama solo bilanço 2026 9 aylık net zararı 86,838,079 TL (Önceki: 1,525,652 TL net kar)"
+   },
+   {
+    "ts": 1787198354,
+    "baslik": "MT Portföy Yönetimi'nin kurucusu ve yöneticisi olduğu fonların EDATA sermayesi içindeki toplam pay oranı 4.864141%'den 5.013331%'e çıktı"
+   },
+   {
+    "ts": 1787111949,
+    "baslik": "E-Data'nın üç ortağı zorunlu pay alım teklifinde bulunma yükümlülüğü kapsamında SPK'na başvuruda bulundu"
+   },
+   {
+    "ts": 1786118550,
+    "baslik": "EDATA E-data Teknoloji Pazarlama solo bilanço 2026 6 aylık net zararı 103,308,309 TL (Önceki: 1,132,489 TL net kar)"
+   },
+   {
+    "ts": 1786089605,
+    "baslik": "E-DATA'da pay pay devrine ilişkin Rekabet Kurumu'na yapılan başvurunun olumlu sonuçlandığı bildirildi"
+   },
+   {
+    "ts": 1782100750,
+    "baslik": "VBTS kapsamında EDATA.E, ENSRI.E, FRIGO.E ve INFO.E payları seans başından 21 Temmuz seans sonuna kadar açığa satışa ve kredili işlemlere ko"
+   },
+   {
+    "ts": 1777476051,
+    "baslik": "EDATA E-data Teknoloji Pazarlama solo bilanço 2026 3 aylık net zararı 57,888,264 TL (Önceki: 845,505 TL net kar)"
+   },
+   {
+    "ts": 1776744052,
+    "baslik": "E-Data Teknoloji'dek pay devri işlemine yönelik gerekli izin ve onayların alınması amacıyla Rekabet Kurumu'na başvuruldu"
+   },
+   {
+    "ts": 1776415984,
+    "baslik": "E-Data Teknoloji, D3 Security Management Systems ile Türkiye yetkili distribütörlüğü konusunda sözleşme imzaladı"
+   }
+  ],
+  "2026-11-19|HKTM": [
+   {
+    "ts": 1794237578,
+    "baslik": "• HKTM Hidropar Hareket Kontrol Teknolojileri Merkezi Sanayi ve Tic. konsolide bilanço 2026 9 aylık net zararı 208,319,315 TL (Önceki: 56,75"
+   },
+   {
+    "ts": 1791863995,
+    "baslik": "Hidropar, bağlı ortaklıklarının güçlendirilmesi, organizasyon yapısının sadeleştirilmesi ve finansal yapısının kuvvetlendirilmesi amacıyla b"
+   },
+   {
+    "ts": 1790222557,
+    "baslik": "SPK, Hidropar eski YK üyeleri ve Pardus Portföy'e piyasa bozucu eylem nedeniyle toplam 71 mln TL para cezası verdi"
+   },
+   {
+    "ts": 1790222365,
+    "baslik": "SPK tarafından verilen idari para cezaları"
+   },
+   {
+    "ts": 1788407987,
+    "baslik": "Hidropar'da zorunlu pay alım teklifi için SPK'ya başvuru yapıldı"
+   },
+   {
+    "ts": 1787544025,
+    "baslik": "Hidropar'ın iki pay sahibi şirketin sermayesinin toplamda %22,76'sını, oy haklarının ise toplamda %57,09'unu temsil eden payların devri husu"
+   },
+   {
+    "ts": 1787328129,
+    "baslik": "Hidropar ortakları, şirketteki toplam %22.76 oranındaki paylarının devri için $6.5 mln bedelle pay devir sözleşmesi imzaladı-KAP"
+   },
+   {
+    "ts": 1786804081,
+    "baslik": "HKTM Hidropar Hareket Kontrol Teknolojileri Merkezi Sanayi ve Tic. konsolide bilanço 2026 6 aylık net zararı 134,478,677 TL (Önceki: 39,438,"
+   },
+   {
+    "ts": 1785124842,
+    "baslik": "Hidropar, SFM Makine'ye ait %80 Payı  satıyor"
+   },
+   {
+    "ts": 1782791896,
+    "baslik": "SPK tarafından getirilen işlem yasakları"
+   },
+   {
+    "ts": 1782187166,
+    "baslik": "Hidropar, \tMakers Makine Ekipmanları şirketinin %67'sini şirket ortağına satıyor"
+   },
+   {
+    "ts": 1779422375,
+    "baslik": "Borsa İstanbul , BIST KOBİ Sanayi Endeksi Dönemsel Endeks değişikliklerini açıkladı"
+   }
+  ],
+  "2026-11-19|TKNKA": [
+   {
+    "ts": 1788148837,
+    "baslik": "VBTS kapsamında AKFIS.E ve TKNKA.E payları seans başından 29 Eylül seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   }
+  ],
+  "2026-11-19|PRZMA": [
+   {
+    "ts": 1793373076,
+    "baslik": "PRZMA Prizma Pres Matbaacılık Yayıncılık Sanayi ve Tic. solo bilanço 2026 9 aylık net zararı 186,434,609 TL (Önceki: 42,359,975 TL net zarar"
+   },
+   {
+    "ts": 1789358395,
+    "baslik": "Tera Yatırım, Pusula Finans Holding paylarının planlanan devralınma sürecine ilişkin açıklama yaptı"
+   },
+   {
+    "ts": 1788148834,
+    "baslik": "VBTS kapsamında PRZMA.E paylarında seans başından 29 Eylül seans sonuna kadar brüt takas uygulanacak"
+   },
+   {
+    "ts": 1787198354,
+    "baslik": "Prizma Pres'te oy haklarının çoğunluğu DLT Turizm ve Ticaret'e geçti"
+   },
+   {
+    "ts": 1787025560,
+    "baslik": "VBTS kapsamında PRZMA.E payları seans başından 17 Eylül seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1786374968,
+    "baslik": "PRZMA Prizma Pres Matbaacılık Yayıncılık Sanayi ve Tic. solo bilanço 2026 6 aylık net zararı 132,237,224 TL (Önceki: 20,010,082 TL net zarar"
+   },
+   {
+    "ts": 1784174314,
+    "baslik": "Prizma Pres, tahsisli sermaye artırımı işleminden vazgeçilmesine karar verdi"
+   },
+   {
+    "ts": 1783051168,
+    "baslik": "VBTS kapsamında PRZMA.E payları seans başından 31 Temmuz seans sonuna kadar emir paketi tedbiri ile işlem görecek"
+   },
+   {
+    "ts": 1782705560,
+    "baslik": "Prizma Pres'te zorunlu pay alım teklifine ilişkin gerekli başvurular, kontrol değişikliğinin gerçekleşmesini takiben yapılacak"
+   },
+   {
+    "ts": 1782705560,
+    "baslik": "VBTS kapsamında INFO.E ve PRZMA.E paylarında seans başından 28 Temmuz seans sonuna kadar brüt takas uygulanacak"
+   },
+   {
+    "ts": 1780631977,
+    "baslik": "VBTS kapsamında PRZMA.E payları seans başından 3 Temmuz seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1780545558,
+    "baslik": "Prizma Pres pay devri görüşmelerinde taraf değişikliği planlanıyor"
+   }
+  ],
+  "2026-11-19|PKENT": [
+   {
+    "ts": 1793373293,
+    "baslik": "PKENT Petrokent Turizm solo bilanço 2026 9 aylık net karı 261,130,484 TL (Önceki: 174,700,720 TL net kar)"
+   },
+   {
+    "ts": 1786390492,
+    "baslik": "PKENT Petrokent Turizm solo bilanço 2026 6 aylık net zararı 201,317,440 TL (Önceki: 173,340,590 TL net zarar)"
+   },
+   {
+    "ts": 1777562030,
+    "baslik": "PKENT Petrokent Turizm solo bilanço 2026 3 aylık net zararı 139,121,733 TL (Önceki: 87,053,889 TL net zarar)"
+   },
+   {
+    "ts": 1772118800,
+    "baslik": "PKENT Petrokent Turizm solo bilanço 2025 Yıllık net karı 178,499,985 TL (Önceki: 211,510,088 TL net kar)"
+   },
+   {
+    "ts": 1769008367,
+    "baslik": "KAP: PKENT  [ ] PETROKENT TURİZM A.Ş.  Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim"
+   },
+   {
+    "ts": 1767796041,
+    "baslik": "KAP:   [PKENT ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1765857628,
+    "baslik": "Petrokent Turizm ortaklarından Nurullah Ercan'ın sahip olduğu şirket sermayesinin %9,85'ine karşılık gelen payların satışı TSP'nda bugün ger"
+   },
+   {
+    "ts": 1765339150,
+    "baslik": "Petrokent Turizm'in Abant Oteli işletmeye alındı"
+   },
+   {
+    "ts": 1762939701,
+    "baslik": "Petrokent Turizm: Şirketimizin ticari faaliyetleri ile ilgili herhangi bir hukuki süreç bulunmamakta olup, önümüzdeki süreçte de faaliyetler"
+   },
+   {
+    "ts": 1761883166,
+    "baslik": "PKENT Petrokent Turizm solo bilanço 2025 9 aylık net karı 174,700,720 TL (Önceki: 230,721,717 TL net kar)"
+   },
+   {
+    "ts": 1745985607,
+    "baslik": "Petrokent'ın 2025 yılı 3 aylık konsolide olmayan net zararı 87.053.889 TL (2024/3 aylık: 161.591.303 TL)"
+   },
+   {
+    "ts": 1745939423,
+    "baslik": "KAP: PKENT  [ ] PETROKENT TURİZM A.Ş.  Finansal Durum Tablosu (Bilanço)"
+   }
+  ],
+  "2026-11-19|ISKPL": [
+   {
+    "ts": 1794238359,
+    "baslik": "• ISKPL Işık Plastik Sanayi ve Dış Tic. Pazarlama konsolide bilanço 2026 9 aylık net karı 302,223,091 TL (Önceki: 259,866,569 TL net kar)"
+   },
+   {
+    "ts": 1789968820,
+    "baslik": "Işık Plastik, paylarının geri alımına yönelik bir geri alım programı başlatılmasına karar verdi"
+   },
+   {
+    "ts": 1786984316,
+    "baslik": "ISKPL Işık Plastik Sanayi ve Dış Tic. Pazarlama konsolide bilanço 2026 6 aylık net karı 252,104,204 TL (Önceki: 200,640,606 TL net kar)"
+   },
+   {
+    "ts": 1784523558,
+    "baslik": "Haziran Ayında Dahilde İşleme İzin Belgesi Alan BİST Firmaları"
+   },
+   {
+    "ts": 1781063976,
+    "baslik": "VBTS kapsamında ISKPL.E payları seans başından 9 Temmuz seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1777953565,
+    "baslik": "Atlas Portföy Yönetimi'nin  Işık Plastik sermayesinde ve oy haklarında payları %10 sınırının üzerine çıktı"
+   },
+   {
+    "ts": 1774929500,
+    "baslik": "VBTS kapsamında AKFIS.E, ISKPL.E ve RALYH.E payları seans başından 29 Nisan seans sonuna kadar açığa satışa ve kredili işlemlere konu edilem"
+   },
+   {
+    "ts": 1774843182,
+    "baslik": "Işık Plastik hisselerine ilişkin Toptan Alış Satış İşlem bildirimi yapıldı"
+   },
+   {
+    "ts": 1773639591,
+    "baslik": "Şubat ayında Dahilde İşleme İzin Belgesi alan BİST firmaları"
+   },
+   {
+    "ts": 1772596757,
+    "baslik": "Işık Plastik'in kar payı dağıtım teklifi belli oldu"
+   },
+   {
+    "ts": 1771267495,
+    "baslik": "ISKPL Işık Plastik Sanayi ve Dış Tic. Pazarlama konsolide bilanço 2025 Yıllık net karı 222,810,994 TL (Önceki: 394,381,791 TL net kar)"
+   },
+   {
+    "ts": 1767188433,
+    "baslik": "KAP:   [BOBET BRYAT CANTE ENTRA HEDEF ISKPL LILAK LOGO MARKA ORCAY OSTIM SAHOL SISE SNICA TUCLK TUREX ] MERKEZİ KAYIT KURULUŞU A.Ş.  Borsada"
+   }
+  ],
+  "2026-11-19|AKFIS": [
+   {
+    "ts": 1793632422,
+    "baslik": "AKFIS Akfen İnşaat Turizm ve Tic. konsolide bilanço 2026 9 aylık net karı 461,808,000 TL (Önceki: 539,660,000 TL net kar)"
+   },
+   {
+    "ts": 1792393107,
+    "baslik": "Selim Akın, Akfen İnşaat YKB'si olarak görevine devam ediyor-Akfen İnşaat/KAP"
+   },
+   {
+    "ts": 1792150686,
+    "baslik": "Akfen İnşaat, Bilişim Vadisi Terminal İstanbul Yerleşkesi'ndeki çatı onarım ve tadilat işlerine yönelik toplam 340 milyon TL + KDV tutarında"
+   },
+   {
+    "ts": 1788148837,
+    "baslik": "VBTS kapsamında AKFIS.E ve TKNKA.E payları seans başından 29 Eylül seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1786679973,
+    "baslik": "SPK, 3 şirketin sermaye artırımına onay verdi."
+   },
+   {
+    "ts": 1785994304,
+    "baslik": "AKFIS Akfen İnşaat Turizm ve Tic. konsolide bilanço 2026 6 aylık net karı 268,304,000 TL (Önceki: 501,324,000 TL net kar)"
+   },
+   {
+    "ts": 1782791896,
+    "baslik": "VBTS kapsamında AKFIS.E payları seans başından 29 Temmuz seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1779076846,
+    "baslik": "SPK Bülteni diğer başvuru sonuçları - Akfen İnşaat, Akfen Yenilenebilir"
+   },
+   {
+    "ts": 1778749553,
+    "baslik": "Toplantı notları - AKFYE-AKFIS-AKFG (Ziraat Yatırım)"
+   },
+   {
+    "ts": 1778166805,
+    "baslik": "AKFIS Akfen İnşaat Turizm ve Tic. konsolide bilanço 2026 3 aylık net karı 809,821,000 TL (Önceki: 146,784,000 TL net zarar)"
+   },
+   {
+    "ts": 1776744052,
+    "baslik": "Akfen İnşaat bağlı ortaklıklarının nakit fazlasının şirket hesaplarına aktarımının tamamlandığını bildirdi"
+   },
+   {
+    "ts": 1774929500,
+    "baslik": "VBTS kapsamında AKFIS.E, ISKPL.E ve RALYH.E payları seans başından 29 Nisan seans sonuna kadar açığa satışa ve kredili işlemlere konu edilem"
+   }
+  ],
+  "2026-11-19|BMSTL": [
+   {
+    "ts": 1793591971,
+    "baslik": "BMS Birleşik Metal, eylülde 4.212 ton üretim, 4.561 ton satış gerçekleştirdi"
+   },
+   {
+    "ts": 1793373610,
+    "baslik": "BMSTL Bms Birleşik Metal Sanayi ve Tic. konsolide bilanço 2026 9 aylık net karı 3,399,040 TL (Önceki: 27,123,617 TL net zarar)"
+   },
+   {
+    "ts": 1793016398,
+    "baslik": "BMS Birleşik Metal, Kuzey Amerika'da bulunan bir müşterisinden 1.725.196 ABD doları tutarında yeni sipariş aldı"
+   },
+   {
+    "ts": 1785252300,
+    "baslik": "BMSTL Bms Birleşik Metal Sanayi ve Tic. konsolide bilanço 2026 6 aylık net zararı 11,353,073 TL (Önceki: 39,733,087 TL net zarar)"
+   },
+   {
+    "ts": 1784523558,
+    "baslik": "Haziran Ayında Dahilde İşleme İzin Belgesi Alan BİST Firmaları"
+   },
+   {
+    "ts": 1781755213,
+    "baslik": "SPK, 2 şirketin sermaye artırımını onayladı"
+   },
+   {
+    "ts": 1778255435,
+    "baslik": "BMSTL Bms Birleşik Metal Sanayi ve Tic. konsolide bilanço 2026 3 aylık net zararı 32,821,003 TL (Önceki: 55,011,746 TL net zarar)"
+   },
+   {
+    "ts": 1773156859,
+    "baslik": "BMSTL BMS Birleşik Metal Sanayi ve Tic. konsolide bilanço 2025 Yıllık net zararı 70,252,172 TL (Önceki: 11,145,016 TL net zarar)"
+   },
+   {
+    "ts": 1771819168,
+    "baslik": "FTSE Global EIS değişiklikleri açıklandı"
+   },
+   {
+    "ts": 1767607473,
+    "baslik": "KAP:   [BMSTL ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1766548699,
+    "baslik": "BMS Birleşik Metal, pay geri alım programı kapsamında geri alınan 1.498.973 TL nominal değerdeki paylarının tamamının Borsa İstanbul'da satı"
+   },
+   {
+    "ts": 1764561501,
+    "baslik": "VBTS kapsamında BMSTL.E paylarında seans başından 31 Aralık seans sonuna kadar brüt takas uygulanacak"
+   }
+  ],
+  "2026-11-19|AHSGY": [
+   {
+    "ts": 1793381668,
+    "baslik": "AHSGY Ahes Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 9 aylık net karı 42,665,676 TL (Önceki: 1,481,565,225 TL net kar)"
+   },
+   {
+    "ts": 1789531187,
+    "baslik": "VBTS kapsamında AHSGY.E ve KZGYO.E payları seans başından 15 Ekim seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1786334366,
+    "baslik": "AHSGY Ahes Gayrimenkul Yatırım Ortaklığı A.Ş. solo bilanço 2026 6 aylık net zararı 54.961.649 TL (Önceki: 82.964.858 TL net kar)"
+   },
+   {
+    "ts": 1781582375,
+    "baslik": "Borsa İstanbul, endekslerde kullanılan fiili dolaşımdaki pay oranı değişikliklerini açıkladı"
+   },
+   {
+    "ts": 1779681593,
+    "baslik": "Ahes GYO'nın kar payı dağıtım teklifi belli oldu"
+   },
+   {
+    "ts": 1777496048,
+    "baslik": "AHSGY Ahes Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 3 aylık net zararı 66,130,209 TL (Önceki: 17,376,803 TL net zarar)"
+   },
+   {
+    "ts": 1772769485,
+    "baslik": "VBTS kapsamında AHSGY.E, EDATA.E ve MOPAS.E payları seans başından 3 Nisan seans sonuna kadar açığa satışa ve kredili işlemlere konu edileme"
+   },
+   {
+    "ts": 1772228497,
+    "baslik": "AHSGY Ahes Gayrimenkul Yatırım Ortaklığı solo bilanço 2025 Yıllık net karı 3,124,905,674 TL (Önceki: 271,903,182 TL net zarar)"
+   },
+   {
+    "ts": 1769672967,
+    "baslik": "KAP:   [AHSGY ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1769007255,
+    "baslik": "KAP: AHSGY  [ ] AHES GAYRİMENKUL YATIRIM ORTAKLIĞI A.Ş.  İhale Süreci / Sonucu"
+   },
+   {
+    "ts": 1768795164,
+    "baslik": "VBTS kapsamında AHSGY.E paylarında seans başından 18 Şubat seans sonuna kadar brüt takas uygulanacak"
+   },
+   {
+    "ts": 1768579552,
+    "baslik": "KAP:   [AHSGY ] BORSA İSTANBUL A.Ş.  BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu"
+   }
+  ],
+  "2026-11-19|EKIM": [
+   {
+    "ts": 1794455988,
+    "baslik": "Ekim Turizm'in Yatırımcı Sunumu yayınlandı"
+   },
+   {
+    "ts": 1794455988,
+    "baslik": "Ekim Turizm'in yatırımcı sunumu yayınlandı"
+   },
+   {
+    "ts": 1794251137,
+    "baslik": "• EKIM Ekim Turizm Tic. ve Sanayi konsolide bilanço 2026 9 aylık net zararı 4,185,229,903 TL (Önceki: 2,250,627,311 TL net zarar)"
+   },
+   {
+    "ts": 1791267208,
+    "baslik": "Ekim Turizm: 13 Temmuz 2026-30 Eylül 2026 döneminde yeni kiralama sözleşmeleri doğrultusunda, toplam 394 adet araç için 853.080.289 TL tutar"
+   },
+   {
+    "ts": 1786722618,
+    "baslik": "EKIM Ekim Turizm Tic. ve Sanayi konsolide bilanço 2026 6 aylık net karı 11,448,288 TL (Önceki: 1,312,331,892 TL net zarar)"
+   },
+   {
+    "ts": 1785988765,
+    "baslik": "BIST Geri Alım Endeksi dönemsel değişiklikleri açıklandı"
+   },
+   {
+    "ts": 1784009458,
+    "baslik": "Ekim Turizm, pay geri alım programı başlatılmasına karar verdi"
+   },
+   {
+    "ts": 1783922670,
+    "baslik": "Ekim Turizm: Kurumsal müşterilerimizin kullanımına tahsis edilmek üzere toplam 555 adet araç 1.425.370.545 TL toplam yatırım bedeliyle satın"
+   }
+  ],
+  "2026-11-19|HEKTS": [
+   {
+    "ts": 1793988632,
+    "baslik": "HEKTS Hektaş Tic. T.a.ş. konsolide bilanço 2026 9 aylık net zararı 3,234,582,325 TL (Önceki: 3,220,527,469 TL net zarar)"
+   },
+   {
+    "ts": 1792123173,
+    "baslik": "Hektaş, tahsisli sermaye artırımı sonrasında ana ortağı OYAK'ın şirketteki pay oranının %50'nin üzerine yükseldiğini bildirdi"
+   },
+   {
+    "ts": 1791806076,
+    "baslik": "Hektaş'ın 702.1 mln TL nominal değerli payları borsada işlem gören statüde ihraç edildi-MKK"
+   },
+   {
+    "ts": 1790828357,
+    "baslik": "SPK Bülteni diğer başvuru sonuçları - Hektaş"
+   },
+   {
+    "ts": 1790828357,
+    "baslik": "SPK, bir şirketin pay ihraç belgesini onayladı"
+   },
+   {
+    "ts": 1790654363,
+    "baslik": "Hektaş, şirket paylarında imtiyaz yaratılmasına ilişkin başvurusundan vazgeçilmesine karar verdi"
+   },
+   {
+    "ts": 1788148889,
+    "baslik": "Hektaş bağlı ortaklığı Ferbis'in halka arzı ileride yeniden değerlendirilmek üzere ertelendi"
+   },
+   {
+    "ts": 1786947357,
+    "baslik": "Deniz Yatırım HEKTS için 3.9 TL hedef fiyat belirledi ve TUT tavsiyesini korudu. (Önceki hedef fiyat: 4.3 TL)"
+   },
+   {
+    "ts": 1786727195,
+    "baslik": "HEKTS Hektaş Tic. T.a.ş. konsolide bilanço 2026 6 aylık net zararı 2,108,363,976 TL (Önceki: 1,643,603,554 TL net zarar)"
+   },
+   {
+    "ts": 1783578655,
+    "baslik": "Hisse Notu: HEKTS (Deniz Yatırım)"
+   },
+   {
+    "ts": 1783051169,
+    "baslik": "Hektaş sermaye artış kararı aldı"
+   },
+   {
+    "ts": 1782359908,
+    "baslik": "Hektaş paylarının toptan alış satış işlemleri kapsamındaki satışı bugün gerçekleştirilecek"
+   }
+  ],
+  "2026-11-19|ARFYE": [
+   {
+    "ts": 1793373042,
+    "baslik": "ARFYE Arf Bio Yenilenebilir Enerji Üretim solo bilanço 2026 9 aylık net zararı 74,612,903 TL (Önceki: 134,183,260 TL net zarar)"
+   },
+   {
+    "ts": 1786115590,
+    "baslik": "ARFYE Arf Bio Yenilenebilir Enerji Üretim solo bilanço 2026 6 aylık net zararı 53,521,099 TL (Önceki: 104,443,262 TL net zarar)"
+   },
+   {
+    "ts": 1780919332,
+    "baslik": "ARF Bio/Arslan: Organik tarım tarafında hedefimiz Avrupa ve Latin Amerika ve Kuzey Afrika - APara"
+   },
+   {
+    "ts": 1777351162,
+    "baslik": "Bilanço analizi - ARFYE (Pusula Yatırım)"
+   },
+   {
+    "ts": 1777303842,
+    "baslik": "ARFYE Arf Bio Yenilenebilir Enerji Üretim solo bilanço 2026 3 aylık net karı 8,309,193 TL (Önceki: 67,035,968 TL net zarar)"
+   },
+   {
+    "ts": 1772176532,
+    "baslik": "ARF Bio YKB Vekili Melih Arslan Matriks YouTube kanalına konuk oldu: “2024-2025 arasında hasılat %75 arttı”"
+   },
+   {
+    "ts": 1772175360,
+    "baslik": "ARF Bio/Arslan: Sektör açısından zor günler geçti, bu yıl ve 2027 için daha umutluyuz-Matriks YouTube"
+   },
+   {
+    "ts": 1772175183,
+    "baslik": "ARF Bio/Arslan: 2026 yılı dezenflasyon ile finansal yüklerin azalacağı bir yıl olacak-Matriks YouTube"
+   },
+   {
+    "ts": 1772175107,
+    "baslik": "ARF Bio/Arslan: Yatırımların tamamlanması ile 3. yıldaki kar marjı %30'lara yaklaşacak-Matriks YouTube"
+   },
+   {
+    "ts": 1772175020,
+    "baslik": "ARF Bio/Arslan: 2027 sonu veya 2028 ilk çeyrekte seradan ilk ürünleri almış oluruz-Matriks YouTube"
+   },
+   {
+    "ts": 1772174988,
+    "baslik": "ARF Bio/Arslan: Halka arz fonundan önce mikroalg yatırımı, ardından sera yatırımını yapacağız -Matriks YouTube"
+   },
+   {
+    "ts": 1772174958,
+    "baslik": "ARF Bio/Arslan: Organik ürünlerimize özellikle AB ülkelerinden talepler var-Matriks YouTube"
+   }
+  ],
+  "2026-11-19|SKYMD": [
+   {
+    "ts": 1793373712,
+    "baslik": "SKYMD Şeker Yatırım Menkul Değerler solo bilanço 2026 9 aylık net zararı 244,225,268 TL (Önceki: 112,502,219 TL net zarar)"
+   },
+   {
+    "ts": 1789473178,
+    "baslik": "Makro analiz - Bütçe Dengesi (Şeker Yatırım)"
+   },
+   {
+    "ts": 1789367144,
+    "baslik": "GYO Sektörü Prim/İskonto Analizi Raporu (Şeker Yatırım)"
+   },
+   {
+    "ts": 1789043517,
+    "baslik": "Yabancı Menkul Kıymet Stoku Verileri ve BIST Yabancı Payı (Şeker Yatırım)"
+   },
+   {
+    "ts": 1788273722,
+    "baslik": "Aylık strateji - Eylül (Şeker Yatırım)"
+   },
+   {
+    "ts": 1787838827,
+    "baslik": "Beyaz Eşya Sektörü Temmuz 2026 Verileri (Şeker Yatırım)"
+   },
+   {
+    "ts": 1787294701,
+    "baslik": "Fx Bülten (Şeker Yatırım)"
+   },
+   {
+    "ts": 1787208584,
+    "baslik": "Fx Bülten  (Şeker Yatırım)"
+   },
+   {
+    "ts": 1786625631,
+    "baslik": "Makro Not-Ödemeler Dengesi (Şeker Yatırım)"
+   },
+   {
+    "ts": 1786392024,
+    "baslik": "SKYMD Şeker Yatırım Menkul Değerler solo bilanço 2026 6 aylık net zararı 167,973,766 TL (Önceki: 80,691,238 TL net zarar)"
+   },
+   {
+    "ts": 1781150426,
+    "baslik": "SPK, 7 şirketin borçlanma aracı ihracına onay verdi"
+   },
+   {
+    "ts": 1777573531,
+    "baslik": "SKYMD Şeker Yatırım Menkul Değerler solo bilanço 2026 3 aylık net zararı 76,765,590 TL (Önceki: 72,771,250 TL net zarar)"
+   }
+  ]
  }
 }
