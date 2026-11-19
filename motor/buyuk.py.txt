@@ -52,8 +52,9 @@ def _k(v, sinir, et):
     return et[-1]
 
 
-def _seri_ozellik(M, xr):
+def _seri_ozellik(M, ctx):
     """M: [(t,o,h,l,c,v)], xr: {gün anahtarı: endeks 20g getirisi %}. Her gün için özellik listesi (None = hesaplanamadı)."""
+    xr = ctx["xr"]; xd = ctx["xd"]; vd = ctx["vd"]; x5 = ctx["x5"]; x10 = ctx["x10"]
     n = len(M); T = [m[0] for m in M]; O = [m[1] for m in M]; H = [m[2] for m in M]; L = [m[3] for m in M]; C = [m[4] for m in M]; V = [m[5] for m in M]
     s20, s50, s200 = _sma(C, 20), _sma(C, 50), _sma(C, 200); rs = _rsi(C)
     ciro = _sma([C[i] * V[i] for i in range(n)], 20); vo20 = _sma(V, 20); vo5 = _sma(V, 5)
@@ -62,6 +63,7 @@ def _seri_ozellik(M, xr):
     bw = [None] * n
     for i in range(19, n):
         w = C[i - 19:i + 1]; m = sum(w) / 20; sd = (sum((x - m) ** 2 for x in w) / 20) ** .5; bw[i] = 4 * sd / m if m else None
+    gunler = [datetime.datetime.fromtimestamp(t_, datetime.timezone.utc).strftime("%Y-%m-%d") for t_ in T]
     out = [None] * n
     for i in range(200, n):
         c = C[i]
@@ -92,6 +94,34 @@ def _seri_ozellik(M, xr):
         if i >= 21:
             rr = [C[j] / C[j - 1] - 1 for j in range(i - 19, i + 1)]; mr = sum(rr) / 20; sdv = (sum((x - mr) ** 2 for x in rr) / 20) ** .5 * 100
             F["oynaklık (20g)"] = _k(sdv, (1.5, 2.5, 3.5, 5), ("<%1,5", "%1,5-2,5", "%2,5-3,5", "%3,5-5", "≥%5"))
+        # DİRENÇ ve korku endeksi (19.11, kullanıcı fikri): piyasa düşerken tutunan hisse
+        g = gunler[i]
+        if g in x5 and i >= 5: F["5g endeks farkı"] = _k((c / C[i - 5] - 1) * 100 - x5[g], (-6, -2, 2, 6), ("<-6 puan", "-6/-2", "±2", "+2/+6", "≥+6 puan"))
+        if g in x10 and i >= 10: F["10g endeks farkı"] = _k((c / C[i - 10] - 1) * 100 - x10[g], (-10, -3, 3, 10), ("<-10 puan", "-10/-3", "±3", "+3/+10", "≥+10 puan"))
+        dn_n = held = 0; hv = []
+        for j in range(i - 9, i + 1):
+            xj = xd.get(gunler[j])
+            if xj is not None and xj <= -0.7 and C[j - 1]:
+                dn_n += 1; rj = (C[j] / C[j - 1] - 1) * 100
+                if rj > xj:
+                    held += 1
+                    if vo20[j] and V[j]: hv.append(V[j] / vo20[j])
+        if dn_n >= 2:
+            oran = held / dn_n
+            F["direnç (son 10 gün)"] = "dirençli (≥%75 tuttu)" if oran >= .75 else "zayıf (<%35 tuttu)" if oran < .35 else "karışık"
+            if oran >= .6 and hv: F["direnç hacmi"] = _k(sum(hv) / len(hv), (.8, 1.3), ("sessiz (<0,8x)", "normal", "hacimli (≥1,3x)"))
+        else:
+            F["direnç (son 10 gün)"] = "düşüş günü az"
+        if vd and i >= 20:
+            xs = []; ys = []
+            for j in range(i - 19, i + 1):
+                vj = vd.get(gunler[j])
+                if vj is not None and C[j - 1]: xs.append(vj); ys.append((C[j] / C[j - 1] - 1) * 100)
+            if len(xs) >= 15:
+                mx_, my_ = sum(xs) / len(xs), sum(ys) / len(ys); sxx = sum((a_ - mx_) ** 2 for a_ in xs); syy = sum((b_ - my_) ** 2 for b_ in ys)
+                if sxx > 0 and syy > 0:
+                    sxy = sum((a_ - mx_) * (b_ - my_) for a_, b_ in zip(xs, ys)); F["VIX korelasyonu (20g)"] = _k(sxy / math.sqrt(sxx * syy), (-.4, -.1, .1), ("güçlü ters (<-0,4)", "ters", "ilişkisiz", "aynı yönlü"))
+                    F["VIX betası (20g)"] = _k(sxy / sxx, (-.3, 0, .15), ("ters (<-0,3)", "hafif ters", "nötr", "aynı yönlü"))
         F["günlük ciro"] = _k(ciro[i] / 1e6, (5, 20, 50, 150), ("<5 mn", "5-20 mn", "20-50 mn", "50-150 mn", "≥150 mn"))
         F["fiyat"] = _k(c, (3, 10, 30, 100), ("<3 TL", "3-10 TL", "10-30 TL", "30-100 TL", "≥100 TL"))
         gun = datetime.datetime.fromtimestamp(T[i], datetime.timezone.utc).strftime("%Y-%m-%d")
@@ -100,15 +130,24 @@ def _seri_ozellik(M, xr):
     return out
 
 
-def _gozlemler(C, X, sektor):
+def _vix():
+    return None
+
+
+def _gozlemler(C, X, sektor, vix=None):
     """Tüm hisse-gün gözlemleri: (gün_idx_zaman, kod, özellikler, y). y=1: olay başlangıcı; y=0: yakın zamanda olay yok; olay içi günler atılır."""
     obs = []; canli = []
-    xr = {}
-    xc = [m[4] for m in X]
+    xr = {}; xd = {}; x5 = {}; x10 = {}
+    xc = [m[4] for m in X]; gx = [datetime.datetime.fromtimestamp(m[0], datetime.timezone.utc).strftime("%Y-%m-%d") for m in X]
     for i in range(20, len(X)):
-        xr[datetime.datetime.fromtimestamp(X[i][0], datetime.timezone.utc).strftime("%Y-%m-%d")] = (xc[i] / xc[i - 20] - 1) * 100
+        xr[gx[i]] = (xc[i] / xc[i - 20] - 1) * 100; xd[gx[i]] = (xc[i] / xc[i - 1] - 1) * 100; x5[gx[i]] = (xc[i] / xc[i - 5] - 1) * 100; x10[gx[i]] = (xc[i] / xc[i - 10] - 1) * 100
+    vd = {}
+    if vix:
+        vk = sorted(vix)
+        for a_, b_ in zip(vk, vk[1:]): vd[b_] = (vix[b_] / vix[a_] - 1) * 100
+    ctx = {"xr": xr, "xd": xd, "x5": x5, "x10": x10, "vd": vd}
     for kod, M in C.items():
-        n = len(M); cl = [m[4] for m in M]; F = _seri_ozellik(M, xr)
+        n = len(M); cl = [m[4] for m in M]; F = _seri_ozellik(M, ctx)
         ev = [False] * n; dn = [False] * n
         for i in range(n - UFUK):
             ev[i] = max(cl[i + 1:i + 1 + UFUK]) / cl[i] - 1 >= HEDEF
@@ -126,7 +165,7 @@ def _gozlemler(C, X, sektor):
         # canlı: son UFUK+1 gün içinde başlayan / süren olaylar
         if n > 210 and F[n - 1] is not None:
             canli.append((kod, M, F, ev))
-    return obs, canli, xr
+    return obs, canli, ctx
 
 
 def _istatistik(obs, zaman_bol):
@@ -168,11 +207,17 @@ def ana(a):
     C = R._gunluk_hepsi(sorted(set(kodlar)))
     X = R._oz_gunluk("XU100")
     if not X or len(C) < 100: print("BÜYÜK: günlük veri alınamadı, atlandı"); return None
-    obs, canli, xr = _gozlemler(C, X, sektor)
+    vix = None
+    try:
+        j = R.http("https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?range=2y&interval=1d", deneme=2, bekle=1.5); r = j["chart"]["result"][0]
+        vix = {datetime.datetime.fromtimestamp(t_, datetime.timezone.utc).strftime("%Y-%m-%d"): c_ for t_, c_ in zip(r["timestamp"], r["indicators"]["quote"][0]["close"]) if c_}
+    except Exception as e: print("UYARI: VIX geçmişi alınamadı (korku özellikleri atlandı):", e)
+    obs, canli, ctx = _gozlemler(C, X, sektor, vix)
     obs.sort(key=lambda o: o[0]); bol = obs[int(len(obs) * GUN_KESIF_BOL)][0]
     ty, tab, td = _istatistik(obs, bol)
     gec = sorted([r for r in tab if _gecti(r)], key=lambda r: -r["kaldirac"])
     asim = sorted([r for r in tab if r["z"] >= Z_MIN and (r.get("asimetri") or 0) >= 1.15], key=lambda r: -r["asimetri"])[:12]
+    direnc = sorted([r for r in tab if any(k in r["ozellik"] for k in ("direnç", "VIX", "endeks farkı"))], key=lambda r: r["ozellik"])
     gzy = sorted([r for r in tab if r["kaldirac"] < 0.6 and r["z"] <= -Z_MIN], key=lambda r: r["kaldirac"])
     ilk = datetime.datetime.fromtimestamp(obs[0][0], datetime.timezone.utc).strftime("%d.%m.%Y"); son = datetime.datetime.fromtimestamp(obs[-1][0], datetime.timezone.utc).strftime("%d.%m.%Y")
     # çiftler: kanıtı geçen tek özelliklerden + geniş adaylardan
@@ -231,7 +276,7 @@ def ana(a):
     H = {"guncelleme": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3))).strftime("%d.%m %H:%M"), "versiyon": "1.0",
          "tanim": f"Olay: bir günün kapanışından sonraki {UFUK} işlem günü içinde kapanış en az +%{int(HEDEF*100)}. Evren: günlük ort. ciro ≥ {MIN_CIRO_MN:g} mn TL, o gün tavan (≥ %{TAVAN:g}) değil. Gözlem: her hisse-gün (olay içi günler hariç). Kaldıraç = özellik varken olay başlama oranı / tüm gözlemlerde oran. Kapı: ≥ {MIN_OLAY} olay, kaldıraç ≥ {KALDIRAC_MIN}, z ≥ {Z_MIN:g}, iki dönemde de ≥ 1,2, ve yön ayrımı: aynı özellikte -%16 düşüş olayı oranından en az 1,25 kat daha fazla yükseliş (salt oynaklık elenir).",
          "donem": f"{ilk} - {son}", "hisse": len(C), "gozlem": len(obs), "olay": sum(o[3] for o in obs), "taban": round(ty, 4), "gun": gun_say,
-         "durum": ("Kanıt var" if len(gec) >= 3 else "Sınırlı kanıt") if kanit else "Veri biriktiriliyor", "kume": kume, "kume_not": kume_not, "yogunluk": yog, "taban_dus": round(td, 4), "tek": gec[:20], "asimetrik": asim, "cift": cift_g, "dusuk": gzy[:10],
+         "durum": ("Kanıt var" if len(gec) >= 3 else "Sınırlı kanıt") if kanit else "Veri biriktiriliyor", "kume": kume, "kume_not": kume_not, "yogunluk": yog, "taban_dus": round(td, 4), "tek": gec[:20], "asimetrik": asim, "direnc": direnc, "cift": cift_g, "dusuk": gzy[:10],
          "olaylar": events[:25], "izleme": izle[:15],
          "uyari": "Yalnızca bugün işlem gören hisseler (hayatta kalma yanlılığı), kapanış bazlı, komisyon ve kayma yok; TL enflasyonu nominal fiyatları büyütür. Yatırım tavsiyesi değildir."}
     return H

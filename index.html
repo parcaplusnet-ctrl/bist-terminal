@@ -375,6 +375,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    </div>
    <p class="note" style="border-top:0" id="bykNot">—</p>
    <div class="split" style="padding:12px 16px"><div class="tw"><table id="bykE"></table></div><div class="tw"><table id="bykX"></table></div></div>
+   <div class="tw kay" tabindex="0" aria-label="Direnç ve korku endeksi özellikleri, kaydırılabilir"><table id="bykD"></table></div>
    <div class="tw kay" tabindex="0" aria-label="Canlı büyük yükselişler, kaydırılabilir"><table id="bykL"></table></div>
    <div class="tw kay" tabindex="0" aria-label="İzleme listesi, kaydırılabilir"><table id="bykW"></table></div>
    <div class="note" id="bykN">—</div>
@@ -615,6 +616,7 @@ function bykSek(B){const sek=$("bykSek");if(!sek)return;if(!B||!B.tanim){sek.hid
  const kd=x=>[x.ozellik,x.olay,pc(x.oran),x.kaldirac+"x",x.asimetri==null?"—":x.asimetri+"x",(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—")];
  mk("bykE",["Yükselişten önceki özellik (tek)","Olay","Oran","Kaldıraç","Yön ayrımı","İlk / son yarı"],(B.tek||[]).slice(0,8).map(kd),"Kapıyı geçen tek özellik yok");
  mk("bykX",["Özellik çifti","Olay","Oran","Kaldıraç","Yön ayrımı","İlk / son yarı"],(B.cift||[]).slice(0,8).map(kd),"Kapıyı geçen çift yok");
+mk("bykD",["Direnç ve korku endeksi özelliği","Gözlem","Olay","+%20 kaldıraç","Düşüş kaldıraç","Yön ayrımı","İlk / son yarı"],(B.direnc||[]).map(x=>[x.ozellik,x.n,x.olay,x.kaldirac+"x",(x.kaldirac_dus==null?"—":x.kaldirac_dus+"x"),x.asimetri==null?"—":x.asimetri+"x",(x.kaldirac_ilk||"—")+" / "+(x.kaldirac_son||"—")]),"Direnç verisi yok");
  mk("bykL",["Hisse","Sektör","Başlangıç","Gün önce","En yüksek","Şimdi","Başlangıçtaki özellikler","Haber (başlangıçtan beri)"],(B.olaylar||[]).slice(0,15).map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),x.baslangic,x.gun_once,{t:f1(x.getiri),c:"up"},{t:f1(x.simdi),c:cls(x.simdi)},(x.ozellik||[]).slice(0,3).join(" · "),(x.haber&&x.haber.length)?x.haber[0]:(x.haber_kontrol?"haber yok":"—")]),"Son 10 işlem gününde +%20 yapan yok");
  mk("bykW",["İzleme (örüntü eşleşen)","Sektör","Fiyat","Gün %","Skor","Eşleşen özellikler"],(B.izleme||[]).slice(0,10).map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),x.fiyat,{t:f1(x.ch),c:cls(x.ch)},x.skor,(x.cift&&x.cift.length?x.cift[0]:(x.eslesen||[]).slice(0,2).join(" · "))]),"Eşleşen yok");
  txt($("bykN"),(B.uyari||"")+" Kapıdan geçen bulgular yalnızca öneridir; seçime girmesi için senin onayın gerekir.")}
