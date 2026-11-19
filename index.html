@@ -140,6 +140,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .ogrb{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;padding:10px 16px;margin:0 0 10px;border:1px solid var(--warn);background:var(--warn-bg);color:var(--warn);font-size:13px;line-height:1.45}.ogrb[hidden]{display:none}.ogrb b{letter-spacing:.04em}.ogrb.acik{border-color:var(--line);background:transparent;color:var(--mut)}
 /* kasa */
 .kasa{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}.ksGun:empty{display:none}.ksGun .k{border-bottom:0}.ksGun .k:last-child{border-right:1px solid var(--line)}.ksGun .k b{font-size:20px}
+@media (min-width:1101px){.glg6{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .kasa .k{border-right:1px solid var(--line)}.kasa .k:last-child{border-right:0}
 .seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg button{cursor:pointer;background:transparent;border:1px solid var(--line2);border-radius:6px;padding:5px 12px;font-size:12.5px;color:var(--mut)}
@@ -350,6 +351,19 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    <div class="tw kay" tabindex="0" aria-label="Özellik tablosu, kaydırılabilir"><table id="ozT"></table></div>
    <div class="note">Her özelliği taşıyan hisselerin 2 işlem günü içinde +%5 yapma oranı tüm hisselerin ortalamasıyla (taban) karşılaştırılır. Fark +10 puan ve üstü: kullanılıyor · -3 ve altı: elendi · arası: test.</div>
   </section>
+  <section class="sec" id="glgSek" hidden><div class="sh"><h2>Gölge deney · model ilk %1, radar filtresi olmadan</h2><p id="glgTag">—</p></div>
+   <div class="kasa glg6">
+    <div class="k"><small>Gölge · sonuçlanan</small><b id="glgN">—</b><em id="glgNd">—</em></div>
+    <div class="k"><small>Gölge · isabet</small><b id="glgI">—</b><em id="glgId">—</em></div>
+    <div class="k"><small>Gölge · stop</small><b id="glgS">—</b><em id="glgSd">—</em></div>
+    <div class="k"><small>Gerçek seçim · sonuçlanan</small><b id="glgN2">—</b><em id="glgN2d">—</em></div>
+    <div class="k"><small>Gerçek seçim · isabet</small><b id="glgI2">—</b><em id="glgI2d">—</em></div>
+    <div class="k"><small>Gerçek seçim · stop</small><b id="glgS2">—</b><em id="glgS2d">—</em></div>
+   </div>
+   <p class="note" style="border-top:0" id="glgNot">—</p>
+   <div class="tw kay" tabindex="0" aria-label="Gölge deney kayıtları, kaydırılabilir"><table id="glgT"></table></div>
+   <div class="note">Gölge deney seçimi, kasayı ve öğrenme aşaması sayacını etkilemez. Amaç: radar puanı ve uygun filtresi, model ilk kademesine değer katıyor mu? Az örnekle sonuç çıkarılmaz; karar için en az 30 sonuçlanan gölge kayıt beklenir. Yatırım tavsiyesi değildir.</div>
+  </section>
   <section class="sec" id="hrkSek"><div class="sh"><h2>Hareket laboratuvarı · dünkü hareketler ve sürekli öğrenme</h2><p id="hrkTag">—</p></div>
    <div class="kasa">
     <div class="k"><small>Ölçülen gün</small><b id="hrkG">—</b><em id="hrkGd">—</em></div>
@@ -540,6 +554,22 @@ function kripto(K){if(!K)return;const b=K.btc||{},g=K.grup||{},T=K.tahminler||[]
 
 /* laboratuvar */
 const P0=v=>v==null?"—":"%"+Math.round(v*100),F0=v=>v==null?"—":(v>0?"+":"")+Math.round(v*100);
+function glgSek(G){const sek=$("glgSek");if(!sek)return;if(!G||!G.ozet){sek.hidden=true;return}sek.hidden=false;
+ const O=G.ozet,pc=v=>v==null?"—":"%"+Math.round(v*100),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",",")+"%";
+ txt($("glgTag"),`güncelleme ${O.guncelleme||"—"} · ${O.kademe||""}`);
+ const a=O.golge||{},b=O.radar_filtreli||{};
+ txt($("glgN"),a.n||0);txt($("glgNd"),`${O.bekleyen||0} kayıt sonuç bekliyor`);txt($("glgI"),pc(a.isabet));txt($("glgId"),a.n?"ort. getiri "+f2(a.ort_getiri):"sonuçlanan kayıt yok");txt($("glgS"),pc(a.stop));txt($("glgSd"),"2 gün içinde stop oranı");
+ txt($("glgN2"),b.n||0);txt($("glgN2d"),"kalite kapısı + radar filtresi");txt($("glgI2"),pc(b.isabet));txt($("glgI2d"),b.n?"ort. getiri "+f2(b.ort_getiri):"sonuçlanan kayıt yok");txt($("glgS2"),pc(b.stop));txt($("glgS2d"),"2 gün içinde stop oranı");
+ const u=O.radar_uygun||{},d=O.radar_uygun_degil||{};
+ txt($("glgNot"),`Gölge kayıtlar içinde radar uygun: ${u.n||0} sonuç (isabet ${pc(u.isabet)}, stop ${pc(u.stop)}); radar uygun değil: ${d.n||0} sonuç (isabet ${pc(d.isabet)}, stop ${pc(d.stop)}). ${G.tanim||""}`);
+ const T=$("glgT");T.textContent="";const mk=(r,tag,v,c)=>{const e=document.createElement(tag);e.textContent=v==null?"—":v;if(c)e.className=c;r.append(e)};
+ const th=document.createElement("thead"),tr=document.createElement("tr");["Hisse","Seçim","Model","Radar puanı","Radar","Derinlik","Sonuç","Değişim"].forEach(h=>mk(tr,"th",h));th.append(tr);
+ const tb=document.createElement("tbody"),L=(G.kayitlar||[]).slice().reverse().slice(0,20);
+ if(!L.length){const r=document.createElement("tr"),c=document.createElement("td");c.colSpan=8;c.textContent="Henüz gölge kayıt yok";r.append(c);tb.append(r)}
+ L.forEach(x=>{const r=document.createElement("tr");mk(r,"td",x.kod);mk(r,"td",x.tarama);mk(r,"td",x.model==null?"—":Number(x.model).toFixed(2).replace(".",","));mk(r,"td",x.radar_puan==null?"—":String(x.radar_puan).replace(".",","));
+  mk(r,"td",x.radar_uygun?"uygun":"uygun değil",x.radar_uygun?"up":"mut");mk(r,"td",x.derinlik||"—");const bs=x.sonuc==="Başarılı"||x.sonuc==="Kâr korundu"?"up":x.sonuc==="Stop"?"dn":"";mk(r,"td",x.sonuc,bs);
+  mk(r,"td",x.degisim==null?"—":f2(x.degisim*100),x.degisim==null?"":cls(x.degisim));tb.append(r)});
+ T.append(th,tb)}
 function hrkLab(H){const sek=$("hrkSek");if(!sek)return;if(!H){sek.hidden=true;return}sek.hidden=false;
  const f1=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(1).replace(".",","),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",","),pc=v=>v==null?"—":"%"+Math.round(v*100);
  const mk=(t,tag,v,c)=>{const e=document.createElement(tag);e.textContent=v==null?"—":v;if(c)e.className=c;t.append(e);return e};
@@ -618,7 +648,7 @@ function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son
  if(!liveOn)txt($("sess"),`${st.tarama||D.guncelleme||"—"} · ${st.oturum||""} · ${st.taranan||"?"} hisse`);txt($("nxt"),nextScan());
  {const Y=D.yurtdisi||{},LB=window.LABS=window.LABS||{};LB.bist=open.length;LB.abd=(Y.history||[]).filter(r=>r.sonuc==="Bekliyor").length;LB.kri=((D.kripto||{}).hisseler||[]).length;LB.isabet=done.length?bas/done.length:null;LB.next=nextScan();if(pz&&pz.xu100!=null)LB.xu=pz.xu100;if(!liveOn)LB.top=(D.picks||[])[0]||null;LB.live=liveOn}
  txt($("fyT"),(TVET||FY_ET||st.tarama||D.guncelleme||"—")+" · 15 dk gecikmeli"+(TVET?" · sürekli":""));
- takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
+ takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);glgSek(D.golge);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
 
 /* eski kural (06.11): son günü olmayan 'Başarısız' kayıtlar bugünkü kurala göre gösterilir */
 function eskiDuzelt(D){(D.history||[]).forEach(r=>{if(r.sonuc!=="Başarısız"||r.bitis)return;r.eski_kural=1;if(r.max_degisim!=null&&r.max_degisim>=0.05){r.sonuc="Başarılı";r.hedef_tarih=r.hedef_tarih||r.kontrol}else if(r.degisim!=null&&r.degisim<=-0.03){r.sonuc="Stop";r.stop_tarih=r.stop_tarih||r.kontrol}else r.sonuc="Erken kapandı"})}

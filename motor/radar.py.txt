@@ -463,7 +463,8 @@ def sonuclandir(r, mumlar, piyasa, giris_alan="giris"):
 def cmd_kontrol(a):
     V = json.load(open(a.veri)); deg = []
     gruplar = [("history", V.get("history", []), "bist", "giris", ".IS"), ("yurtdisi", V.get("yurtdisi", {}).get("history", []), "abd", "giris", ""),
-               ("kripto", V.get("kripto", {}).get("hisseler", []), "abd", "fiyat", ""), ("lab_bist", V.get("lab_bist", {}).get("hisseler", []), "bist", "giris", ".IS")]
+               ("kripto", V.get("kripto", {}).get("hisseler", []), "abd", "fiyat", ""), ("lab_bist", V.get("lab_bist", {}).get("hisseler", []), "bist", "giris", ".IS"),
+               ("golge", V.get("golge", {}).get("kayitlar", []), "bist", "giris", ".IS")]
     for ad, L, pz, ga, ek in gruplar:
         for r in L:
             if r.get("sonuc") != "Bekliyor": continue
@@ -615,6 +616,32 @@ def _lab_agirlik():
 
 PORTFOY_MAX = 10   # sanal portföy üst sınırı (kullanıcı kuralı). Takip için elle sayı sınırı yoktur: sınırları model öğrenir (gunluk_n, kademe_yuzde)
 
+GOLGE_GUN_MAX = 3; GOLGE_ACIK_MAX = 6
+
+def _golge(V, B, KK, MJ, BAN, tarih, bitis):
+    """Gölge deney (19.11 kullanıcı kararı): kalite kapısı modelinin evren içi ilk %kademe hissesi, radar puanı ve uygun filtresi OLMADAN sanal izlenir.
+    Seçime, kasaya ve öğrenme aşaması sayacına GİRMEZ; yalnızca radar filtresinin değer katıp katmadığını ölçer (hareket laboratuvarında radar uygun grubu taban altı çıktı).
+    Kurallar: yasaklı hisse alınmaz; açık gölge kaydı olan hisse tekrar eklenmez; günde en çok 3 yeni, en çok 6 açık kayıt; stop/hedef/vade gerçek seçimlerle aynıdır."""
+    G = V.setdefault("golge", {}); L = G.setdefault("kayitlar", [])
+    G["tanim"] = "Gölge deney: kalite kapısı modelinin evren içi ilk kademesi, radar puanı ve uygun filtresi olmadan. Seçime, kasaya ve öğrenme aşaması sayacına girmez; radar filtresinin değer katıp katmadığını ölçer."
+    q = int(((MJ or {}).get("dogrulama") or {}).get("kademe_yuzde") or 3); kesim = max(1, round(len(KK) * q / 100))
+    tum = {s["kod"]: s for s in B.get("tum", [])}; acik = {r["kod"] for r in L if r.get("sonuc") == "Bekliyor"}
+    bugun = tarih.split()[0]; bn = sum(1 for r in L if str(r.get("tarama", "")).startswith(bugun)); yeni = []
+    for kod, sk in sorted(KK.items(), key=lambda kv: -kv[1])[:kesim]:
+        if kod in BAN or kod in acik or kod not in tum: continue
+        if bn + len(yeni) >= GOLGE_GUN_MAX or len(acik) + len(yeni) >= GOLGE_ACIK_MAX: break
+        s = tum[kod]
+        if not s.get("stop") or not s.get("fiyat"): continue
+        yeni.append({"tarama": tarih, "kod": kod, "giris": s["fiyat"], "stop": s["stop"], "bitis": bitis, "model": sk, "radar_puan": s.get("puan"), "radar_uygun": bool(s.get("uygun")),
+                     "radar_neden": (s.get("sebep") or "")[:140], "derinlik": s.get("derinlik"), "kontrol": None, "kontrol_fiyat": None, "degisim": None, "max_degisim": None, "min_degisim": None,
+                     "hedef_tarih": None, "stop_tarih": None, "sonuc": "Bekliyor", "hata": None})
+    L.extend(yeni); G["kayitlar"] = L[-300:]
+    bit = lambda X: [h for h in X if h.get("sonuc") in ("Başarılı", "Kâr korundu", "Stop", "Başarısız", "Erken kapandı") and h.get("degisim") is not None]
+    gb = bit(G["kayitlar"]); ana = bit([h for h in V.get("history", []) if h.get("model") is not None])
+    G["ozet"] = {"golge": _kk_istat(gb), "radar_filtreli": _kk_istat(ana), "radar_uygun": _kk_istat([h for h in gb if h.get("radar_uygun")]), "radar_uygun_degil": _kk_istat([h for h in gb if not h.get("radar_uygun")]),
+                 "bekleyen": sum(1 for r in G["kayitlar"] if r.get("sonuc") == "Bekliyor"), "kademe": f"ilk %{q} = {kesim} hisse", "guncelleme": tarih}
+    print(f"GÖLGE: model ilk %{q} ({kesim} hisse), yeni {[r['kod'] for r in yeni]}, bekleyen {G['ozet']['bekleyen']}, sonuçlanan {G['ozet']['golge']['n']} (gerçek seçim {G['ozet']['radar_filtreli']['n']})")
+
 def cmd_adaylar(a):
     B = json.load(open(a.girdi)); K = {k["kod"]: k for k in json.load(open(a.karar))}; V = json.load(open(a.veri))
     tarih = simdi().strftime("%d.%m %H:%M"); bitis = vade(a.piyasa)
@@ -716,6 +743,9 @@ def cmd_adaylar(a):
         Y["piyasa"] = B["ozet"]["piyasa"]; Y.setdefault("scans", []).append(sc)
     if a.piyasa == "bist":
         V["ogrenme_asamasi"] = _ogrenme_asamasi(V, tarih)
+        if KK is not None:
+            try: _golge(V, B, KK, MJ, BAN, tarih, bitis)
+            except Exception as e: print("UYARI: gölge deney", e)
         _lp, _lt = _lab_puan(); _uy = []
         if _lt is None: _uy.append("Laboratuvar puan dosyası yok ya da 3 günden eski: lab bonusu uygulanmadı")
         V["saglik"] = {"zaman": simdi().strftime("%d.%m %H:%M"), "lab_puan_tarih": _lt, "lab_hisse": len(_lp), "lab_agirlik": _lab_agirlik(), "uyarilar": _uy}
