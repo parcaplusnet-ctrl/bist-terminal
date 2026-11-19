@@ -136,3 +136,6 @@ Genel isabet = (hedefe ulaşan "Başarılı" + "Kâr korundu") / sonuçlanan (Ba
 
 ## 19.11 Gölge deney (kullanıcı kararı)
 `adaylar --piyasa bist` her taramada kalite kapısı modelinin evren içi ilk kademesini (şu an ilk %1) radar puanı ve uygun filtresi OLMADAN `veri.json -> golge.kayitlar` içine sanal kayıt olarak ekler (yasaklı hisse hariç; günde en çok 3 yeni, en çok 6 açık kayıt; stop/hedef/vade gerçek seçimlerle aynı). `kontrol` komutu bu kayıtları da sonuçlandırır. `golge.ozet` gölge ve gerçek (radar filtreli) seçimlerin isabet ve stop oranlarını yan yana verir. Seçime, kasaya ve öğrenme aşaması sayacına GİRMEZ; yalnızca radar filtresinin değer katıp katmadığını ölçer. Karar için en az 30 sonuçlanan gölge kayıt beklenir.
+
+## 19.11 ABD gün sonu taraması (kullanıcı kararı)
+ABD seansı İstanbul saatiyle 17:30-00:00 (kış saati). Saatlik görevin 18:16 ABD taraması açılıştan 45 dk sonradır; kapanış hiç ölçülmüyordu. Pazartesi 22:16 görevi yerine Salı-Cumartesi 00:16'da (kapanıştan 16 dk sonra) ABD taraması ve açık kayıt kontrolü çalışır. Motor: ABD için saat 06:00'dan önce çalışan taramada `vade()` bir önceki takvim gününe göre hesaplanır (seçim önceki seansın kapanışına aittir; vade 2 ABD işlem günü). ABD modülü yalnızca laboratuvardır, kasaya girmez.

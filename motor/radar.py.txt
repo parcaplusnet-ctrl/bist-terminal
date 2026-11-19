@@ -514,7 +514,9 @@ def is_gunu_ekle(n, gun, piyasa="bist"):
 
 def vade(piyasa="bist", an=None):
     """Vade = seçimden SONRAKİ 2 tam işlem günü. Seans içinde seçilen hissede seçim gününün kalanı ek süredir (gün sayılmaz)."""
-    return is_gunu_ekle((an or simdi()).replace(hour=12), 2, piyasa)
+    n = an or simdi()
+    if piyasa == "abd" and an is None and n.hour < 6: n = n - datetime.timedelta(days=1)   # ABD gün sonu taraması (00:16 İstanbul): seçim önceki seansın kapanışına aittir, vade ondan hesaplanır
+    return is_gunu_ekle(n.replace(hour=12), 2, piyasa)
 
 def _kalite_kapisi(a, B, V):
     """Kalite kapısı (§16): model.json ile tüm evrenin günlük grafiğini puanlar. Döner: ({kod: skor}, model) ya da (None, None)."""
