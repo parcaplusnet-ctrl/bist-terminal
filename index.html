@@ -364,6 +364,20 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    <div class="tw kay" tabindex="0" aria-label="Gölge deney kayıtları, kaydırılabilir"><table id="glgT"></table></div>
    <div class="note">Gölge deney seçimi, kasayı ve öğrenme aşaması sayacını etkilemez. Amaç: radar puanı ve uygun filtresi, model ilk kademesine değer katıyor mu? Az örnekle sonuç çıkarılmaz; karar için en az 30 sonuçlanan gölge kayıt beklenir. Yatırım tavsiyesi değildir.</div>
   </section>
+  <section class="sec" id="srpSek" hidden><div class="sh"><h2>Sürpriz yükselenler · yatay başlayıp +%5 yapanlar</h2><p id="srpTag">—</p></div>
+   <div class="kasa glg6">
+    <div class="k"><small>Ölçülen gün</small><b id="srpG">—</b><em id="srpGd">—</em></div>
+    <div class="k"><small>Yatay başlayan</small><b id="srpY">—</b><em id="srpYd">—</em></div>
+    <div class="k"><small>+%5 yapan</small><b id="srpO">—</b><em id="srpOd">—</em></div>
+    <div class="k"><small>Taban oran</small><b id="srpT">—</b><em id="srpTd">—</em></div>
+    <div class="k"><small>En sık neden</small><b id="srpK">—</b><em id="srpKd">—</em></div>
+    <div class="k"><small>Tipik başlangıç</small><b id="srpS">—</b><em id="srpSd">—</em></div>
+   </div>
+   <p class="note" style="border-top:0" id="srpNot">—</p>
+   <div class="tw kay" tabindex="0" aria-label="Sürpriz yükselen hisseler, kaydırılabilir"><table id="srpL"></table></div>
+   <div class="split" style="padding:12px 16px"><div class="tw"><table id="srpC"></table></div><div class="tw"><table id="srpE"></table></div></div>
+   <div class="note" id="srpEN">—</div>
+  </section>
   <section class="sec" id="hrkSek"><div class="sh"><h2>Hareket laboratuvarı · dünkü hareketler ve sürekli öğrenme</h2><p id="hrkTag">—</p></div>
    <div class="kasa">
     <div class="k"><small>Ölçülen gün</small><b id="hrkG">—</b><em id="hrkGd">—</em></div>
@@ -570,6 +584,24 @@ function glgSek(G){const sek=$("glgSek");if(!sek)return;if(!G||!G.ozet){sek.hidd
   mk(r,"td",x.radar_uygun?"uygun":"uygun değil",x.radar_uygun?"up":"mut");mk(r,"td",x.derinlik||"—");const bs=x.sonuc==="Başarılı"||x.sonuc==="Kâr korundu"?"up":x.sonuc==="Stop"?"dn":"";mk(r,"td",x.sonuc,bs);
   mk(r,"td",x.degisim==null?"—":f2(x.degisim*100),x.degisim==null?"":cls(x.degisim));tb.append(r)});
  T.append(th,tb)}
+function srpSek(S){const sek=$("srpSek");if(!sek)return;if(!S||!S.tanim){sek.hidden=true;return}sek.hidden=false;
+ const pc=v=>v==null?"—":"%"+(Math.round(v*1000)/10).toString().replace(".",","),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",",")+"%";
+ const B=S.bugun||S.son_gun,tb=S.taban||{};
+ txt($("srpTag"),B?`${B.gun.split("-").reverse().slice(0,2).join(".")} ${B.devam?"canlı · son tarama "+B.son:"tamamlandı · "+B.ilk+" - "+B.son}`:"—");
+ txt($("srpG"),S.gun_sayisi||0);txt($("srpGd"),"tamamlanmış gün (ölçüm)");
+ txt($("srpY"),B?B.yatay_n:"—");txt($("srpYd"),"sabah |değişim| ≤ %1, ciro ≥ 20 mn ₺");
+ txt($("srpO"),B?B.olay_n:"—");txt($("srpOd"),B&&B.yatay_n?pc(B.olay_n/B.yatay_n)+" · gün içi zirve ≥ +%5":"—");
+ txt($("srpT"),pc(tb.oran));txt($("srpTd"),`${tb.olay_n||0} olay / ${tb.yatay_n||0} yatay başlayan`);
+ const k0=(S.kategoriler||[])[0];txt($("srpK"),k0?k0.kategori:"—");txt($("srpKd"),k0?`olayların ${pc(k0.pay)}'i`:"olay yok");
+ const s0=(S.saat_dagilimi||[]).slice().sort((a,b)=>b.n-a.n)[0],top=(S.saat_dagilimi||[]).reduce((a,x)=>a+x.n,0);txt($("srpS"),s0?s0.saat:"—");txt($("srpSd"),s0&&top?`olayların ${pc(s0.n/top)}'i bu saatte başladı`:"—");
+ txt($("srpNot"),S.tanim);
+ const mkT=(id,bas,rows,msg)=>{const T=$(id);T.textContent="";const th=document.createElement("thead"),tr=document.createElement("tr");bas.forEach(h=>{const e=document.createElement("th");e.textContent=h;tr.append(e)});th.append(tr);const tb=document.createElement("tbody");
+  if(!rows.length){const r=document.createElement("tr"),c=document.createElement("td");c.colSpan=bas.length;c.textContent=msg;r.append(c);tb.append(r)}
+  rows.forEach(rw=>{const r=document.createElement("tr");rw.forEach(c=>{const e=document.createElement("td");if(c&&typeof c==="object"){e.textContent=c.t==null?"—":c.t;if(c.c)e.className=c.c}else e.textContent=c==null?"—":c;r.append(e)});tb.append(r)});T.append(th,tb)};
+ mkT("srpL",["Hisse","Sektör","Sabah","Başlangıç","Zirve","Şimdi / kapanış","Hacim (başl.)","Sektör arkadaşları","Neden","Haber"],((B&&B.liste)||[]).map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),f2(x.sabah),`${x.baslangic} (${f2(x.baslangic_ch)})`,{t:f2(x.zirve),c:"up"},{t:f2(x.son),c:cls(x.son)},x.rv_baslangic==null?"—":String(x.rv_baslangic).replace(".",",")+"x",x.es_sektor_ort==null?"—":f2(x.es_sektor_ort),x.kategori,x.haber?`${x.haber_saat}: ${x.haber}`:(x.haber_kontrol?"haber yok":"—")]),"Bugün yatay başlayıp +%5 yapan hisse yok");
+ mkT("srpC",["Neden kategorisi","Olay","Pay","Ort. zirve","Ort. kapanış"],(S.kategoriler||[]).map(x=>[x.kategori,x.n,pc(x.pay),f2(x.ort_zirve),f2(x.ort_son)]),"Henüz tamamlanmış gün yok");
+ mkT("srpE",["Erken işaret (ilk saat)","Örnek","İsabet","Taban katı","Kapanış getirisi","Durum"],(S.erken_isaret||[]).map(x=>[x.kosul,x.n,pc(x.isabet),x.kat==null?"—":x.kat+"x",x.ort_kapanis_getiri==null?"—":f2(x.ort_kapanis_getiri),x.durum]),"Veri yok");
+ txt($("srpEN"),(S.erken_isaret_not||"")+" Yatırım tavsiyesi değildir.")}
 function hrkLab(H){const sek=$("hrkSek");if(!sek)return;if(!H){sek.hidden=true;return}sek.hidden=false;
  const f1=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(1).replace(".",","),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",","),pc=v=>v==null?"—":"%"+Math.round(v*100);
  const mk=(t,tag,v,c)=>{const e=document.createElement(tag);e.textContent=v==null?"—":v;if(c)e.className=c;t.append(e);return e};
@@ -648,7 +680,7 @@ function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son
  if(!liveOn)txt($("sess"),`${st.tarama||D.guncelleme||"—"} · ${st.oturum||""} · ${st.taranan||"?"} hisse`);txt($("nxt"),nextScan());
  {const Y=D.yurtdisi||{},LB=window.LABS=window.LABS||{};LB.bist=open.length;LB.abd=(Y.history||[]).filter(r=>r.sonuc==="Bekliyor").length;LB.kri=((D.kripto||{}).hisseler||[]).length;LB.isabet=done.length?bas/done.length:null;LB.next=nextScan();if(pz&&pz.xu100!=null)LB.xu=pz.xu100;if(!liveOn)LB.top=(D.picks||[])[0]||null;LB.live=liveOn}
  txt($("fyT"),(TVET||FY_ET||st.tarama||D.guncelleme||"—")+" · 15 dk gecikmeli"+(TVET?" · sürekli":""));
- takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);glgSek(D.golge);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
+ takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);glgSek(D.golge);srpSek((D.hareket_lab||{}).surpriz);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
 
 /* eski kural (06.11): son günü olmayan 'Başarısız' kayıtlar bugünkü kurala göre gösterilir */
 function eskiDuzelt(D){(D.history||[]).forEach(r=>{if(r.sonuc!=="Başarısız"||r.bitis)return;r.eski_kural=1;if(r.max_degisim!=null&&r.max_degisim>=0.05){r.sonuc="Başarılı";r.hedef_tarih=r.hedef_tarih||r.kontrol}else if(r.degisim!=null&&r.degisim<=-0.03){r.sonuc="Stop";r.stop_tarih=r.stop_tarih||r.kontrol}else r.sonuc="Erken kapandı"})}

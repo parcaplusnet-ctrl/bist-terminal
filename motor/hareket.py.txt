@@ -197,6 +197,196 @@ def aciklama(feats):
     return " ve ".join(feats)
 
 
+# ---- Sürpriz yükselenler (19.11, kullanıcı kararı): gün içinde YATAY başlayıp +%5 ve üstüne çıkan hisseler ----
+SURPRIZ_YATAY = 1.0        # sabah taramasında |gün değişimi| bu değerin altındaysa "yatay başladı"
+SURPRIZ_ESIK = 5.0         # gün içi en yüksek gün değişimi bu değere ulaşırsa "sürpriz yükselen"
+SURPRIZ_BASLA = 2.0        # hareketin başlangıcı: sabaha göre ilk +2 puanlık sıçrama yapan tarama
+SURPRIZ_LIKIT = 20.0       # günlük ciro (mn TL) altı hisseler dışlanır (sığ hisse sıçramaları gürültüdür)
+SURPRIZ_RV = 2.0           # başlangıç taramasında göreli hacim bu değerin üstündeyse "hacim patlaması"
+
+
+def _dk(s):
+    try:
+        h, m = str(s).split(":")[:2]
+        return int(h) * 60 + int(m)
+    except Exception:
+        return 0
+
+
+def _surpriz_gun(R, g, gun, simdi, bugun):
+    """Bir günün sürpriz yükselen kayıtları. Dönen: (özet, olaylar) ya da None. Bugün için canlı (gün devam ediyor)."""
+    T = [t for t in g.get("taramalar", []) if t.get("rows")]
+    if len(T) < 2 or hhmm(T[0]["saat"]) > SABAH_EN_GEC:
+        return None
+    C = g["cols"]; ix = {c: k for k, c in enumerate(C)}
+    devam = hhmm(T[-1]["saat"]) < GUN_SONU_EN_ERKEN
+    if devam and gun != bugun:
+        return None                     # eski ve eksik gün: ölçülmez
+    S = [{r[0]: r for r in t["rows"]} for t in T]
+    sek = collections.defaultdict(list)
+    for kod, r in S[0].items():
+        sek[r[ix["sektor"]]].append(kod)
+    yatay = []
+    for kod, r in S[0].items():
+        ch0 = r[ix["ch"]]
+        lk = r[ix["likit_mn"]] if "likit_mn" in ix else None
+        if ch0 is None or abs(ch0) > SURPRIZ_YATAY or not r[1] or (lk is not None and lk < SURPRIZ_LIKIT):
+            continue
+        yatay.append(kod)
+    olaylar = []
+    for kod in yatay:
+        seri = []
+        for i, s in enumerate(S):
+            r = s.get(kod)
+            seri.append((T[i]["saat"], r[ix["ch"]], r[ix["rv"]], r[1]) if r and r[ix["ch"]] is not None and r[1] else None)
+        if seri[0] is None:
+            continue
+        ch0 = seri[0][1]
+        gecer = [(i, x) for i, x in enumerate(seri) if x is not None and i > 0]
+        if not gecer:
+            continue
+        zi, zx = max(gecer, key=lambda q: q[1][1])
+        if zx[1] < SURPRIZ_ESIK:
+            continue
+        bi = next((i for i, x in gecer if x[1] >= ch0 + SURPRIZ_BASLA), zi)
+        bx = seri[bi]
+        son = next((x for x in reversed(seri) if x is not None), None)
+        sec = S[0][kod][ix["sektor"]]
+        es = [k for k in sek.get(sec, []) if k != kod and S[bi].get(k) and S[0].get(k)]
+        farklar = [S[bi][k][ix["ch"]] - S[0][k][ix["ch"]] for k in es if S[bi][k][ix["ch"]] is not None and S[0][k][ix["ch"]] is not None]
+        es_ort = round(sum(farklar) / len(farklar), 2) if farklar else None
+        es_yuk = sum(1 for k in es if S[bi][k][ix["ch"]] is not None and S[bi][k][ix["ch"]] >= 3.0)
+        x0, xb = xu(T[0]), xu(T[bi])
+        ex = round((xb / x0 - 1) * 100, 2) if (x0 and xb) else None
+        F = set(R._ozellikler(S[0][kod], C, "bist"))
+        ozl = [f for f in sorted(F) if f.split("=")[0] in ("hacim", "gün", "puan", "RSI G", "1 ay zirve", "hafta")]
+        rv0, rvb = seri[0][2], bx[2]
+        kat = ("sektör hareketi" if (es_ort is not None and es_ort >= 1.0 and len(farklar) >= 5)
+               else "hacim patlaması" if (rvb is not None and rvb >= SURPRIZ_RV)
+               else "piyasa geneli" if (ex is not None and ex >= 1.0)
+               else "açıklanamayan")
+        olaylar.append({"gun": gun, "kod": kod, "sektor": sec, "sabah": round(ch0, 2), "baslangic": bx[0], "baslangic_ch": round(bx[1], 2), "zirve": round(zx[1], 2), "zirve_saat": zx[0],
+                        "son": round(son[1], 2) if son else None, "son_saat": son[0] if son else None, "rv_sabah": rv0, "rv_baslangic": rvb,
+                        "es_sektor_ort": es_ort, "es_sektor_yukselen": es_yuk, "endeks_degisim": ex, "fiyat_baslangic": bx[3], "fiyat_zirve": zx[3], "fiyat_son": son[3] if son else None,
+                        "kategori": kat, "haber": None, "haber_saat": None, "ozellik": ozl})
+    olaylar.sort(key=lambda o: -o["zirve"])
+    return {"gun": gun, "devam": devam, "yatay_n": len(yatay), "olay_n": len(olaylar), "ilk": T[0]["saat"], "son": T[-1]["saat"], "n_tarama": len(T)}, olaylar, (S, T, ix, yatay, sek)
+
+
+def _haber_ekle(R, olaylar, kayit, simdi):
+    """Her olay için hareketten önce (önceki gün 17:00'dan başlangıç taramasına +30 dk) yayınlanmış haber başlığı var mı? Sonuç kalıcı önbellekte (ağ yoksa atlanır)."""
+    H = kayit.setdefault("surpriz_haber", {})
+    getirilen = 0
+    for o in olaylar:
+        k = f"{o['gun']}|{o['kod']}"
+        if (k not in H or o["gun"] == simdi.strftime("%Y-%m-%d")) and getirilen < 25:
+            try:
+                j = R.http(f"https://news-headlines.tradingview.com/v2/headlines?client=web&lang=tr&symbol=BIST:{o['kod']}&streaming=false", deneme=2, bekle=1.0)
+                H[k] = [{"ts": i["published"], "baslik": str(i["title"])[:140]} for i in (j.get("items") or [])[:12]]
+                getirilen += 1
+                import time as _t
+                _t.sleep(.3)
+            except Exception:
+                continue
+        L = H.get(k)
+        if L is None:
+            continue
+        g = datetime.datetime.strptime(o["gun"], "%Y-%m-%d")
+        lo = (g - datetime.timedelta(days=1)).replace(hour=17) - datetime.timedelta(hours=3)          # İstanbul -> UTC
+        hh, mm = o["baslangic"].split(":")[:2]
+        hi = g.replace(hour=int(hh), minute=int(mm)) - datetime.timedelta(hours=3) + datetime.timedelta(minutes=30)
+        lo_ts = lo.replace(tzinfo=datetime.timezone.utc).timestamp(); hi_ts = hi.replace(tzinfo=datetime.timezone.utc).timestamp()
+        uy = [x for x in L if lo_ts <= x["ts"] <= hi_ts]
+        if uy:
+            x = max(uy, key=lambda z: z["ts"])
+            o["haber"] = x["baslik"]
+            o["haber_saat"] = (datetime.datetime.fromtimestamp(x["ts"], datetime.timezone.utc) + datetime.timedelta(hours=3)).strftime("%d.%m %H:%M")
+            o["kategori"] = "haber"
+        o["haber_kontrol"] = True
+    return olaylar
+
+
+def surpriz(R, G, bugun, simdi, kayit):
+    """HL['surpriz']: bugünkü (canlı) ve en son tamamlanmış günün sürpriz yükselenleri, taban oranlar, saat ve neden dağılımı, erken işaret adayları (yalnızca ölçüm; kural değil)."""
+    gunler, tum, erken_veri = [], [], []
+    for gun in sorted(G):
+        r = _surpriz_gun(R, G[gun], gun, simdi, bugun)
+        if not r:
+            continue
+        ozet, olaylar, (S, T, ix, yatay, sek) = r
+        gunler.append(ozet); tum.append((ozet, olaylar))
+        if not ozet["devam"] and len(T) >= 3:
+            # erken işaret: ikinci taramadaki (ilk saat sonrası) durum -> sonraki taramalarda +%5'e ulaşma
+            ev = {o["kod"] for o in olaylar}
+            for kod in yatay:
+                if kod not in S[1] or kod not in S[0]:
+                    continue
+                a0, a1 = S[0][kod], S[1][kod]
+                if a1[ix["ch"]] is None or a0[ix["ch"]] is None or not a1[1] or a1[ix["ch"]] >= SURPRIZ_ESIK:
+                    continue
+                sec = a0[ix["sektor"]]
+                es = [k for k in sek.get(sec, []) if k != kod and k in S[1] and S[1][k][ix["ch"]] is not None and S[0][k][ix["ch"]] is not None]
+                esf = [S[1][k][ix["ch"]] - S[0][k][ix["ch"]] for k in es]
+                es_ort = (sum(esf) / len(esf)) if esf else None
+                sonra = [S[i][kod][ix["ch"]] for i in range(2, len(S)) if kod in S[i] and S[i][kod][ix["ch"]] is not None]
+                if not sonra:
+                    continue
+                kap = S[-1][kod][ix["ch"]] if kod in S[-1] else None
+                erken_veri.append({"gun": ozet["gun"], "d1": a1[ix["ch"]] - a0[ix["ch"]], "rv1": a1[ix["rv"]], "es": es_ort, "hit": max(sonra) >= SURPRIZ_ESIK,
+                                   "getiri": ((S[-1][kod][1] / a1[1] - 1) * 100) if (kod in S[-1] and S[-1][kod][1]) else None})
+    HS = {"tanim": f"Sabah taramasında |gün değişimi| ≤ %{SURPRIZ_YATAY:g} (yatay başlayan, günlük ciro ≥ {SURPRIZ_LIKIT:g} mn TL) olup gün içinde en az +%{SURPRIZ_ESIK:g}'e çıkan hisse. Başlangıç = sabaha göre ilk +{SURPRIZ_BASLA:g} puanlık sıçrama yapan tarama. Neden kategorisi otomatiktir: haber (önceki gün 17:00 ile başlangıç +30 dk arasında yayın), sektör hareketi (aynı sektörün diğer hisseleri sabahtan başlangıca kadar ortalama en az +1 puan yükseldi), hacim patlaması (başlangıçta göreli hacim ≥ {SURPRIZ_RV:g}x), piyasa geneli (endeks sabaha göre ≥ +1), açıklanamayan. Yalnızca ölçüm; seçime etkisi yoktur.",
+          "gun_sayisi": len([g for g in gunler if not g["devam"]]), "gunler": [], "bugun": None, "son_gun": None, "saat_dagilimi": [], "kategoriler": [], "erken_isaret": [], "taban": None}
+    if not tum:
+        HS["not"] = "Ölçülebilir gün yok (sabah taraması <= 11:30 ve en az 2 tarama gerekir)."
+        return HS
+    # haber kontrolü: yalnızca bugün ve en son tamamlanmış gün (eskiler önbellekten)
+    bugun_k = next((x for x in tum if x[0]["gun"] == bugun), None)
+    son_k = next((x for x in reversed(tum) if not x[0]["devam"]), None)
+    for k in (bugun_k, son_k):
+        if k:
+            _haber_ekle(R, k[1], kayit, simdi)
+    H = kayit.get("surpriz_haber") or {}
+    for ozet, olaylar in tum:
+        if ozet["gun"] not in (bugun_k[0]["gun"] if bugun_k else None, son_k[0]["gun"] if son_k else None):
+            _haber_ekle_onbellek = [o for o in olaylar if f"{o['gun']}|{o['kod']}" in H]
+            if _haber_ekle_onbellek:
+                _haber_ekle(R, _haber_ekle_onbellek, kayit, simdi)
+    son_gunler = {o["gun"] for o, _ in tum[-10:]}
+    kayit["surpriz_haber"] = {k: v for k, v in (kayit.get("surpriz_haber") or {}).items() if k.split("|")[0] in son_gunler}
+    tam = [x for x in tum if not x[0]["devam"]]
+    HS["gunler"] = [{"gun": o["gun"], "yatay_n": o["yatay_n"], "olay_n": o["olay_n"], "oran": round(o["olay_n"] / o["yatay_n"], 3) if o["yatay_n"] else None, "devam": o["devam"]} for o, _ in tum[-10:]]
+    ty, to = sum(o["yatay_n"] for o, _ in tam), sum(o["olay_n"] for o, _ in tam)
+    HS["taban"] = {"yatay_n": ty, "olay_n": to, "oran": round(to / ty, 4) if ty else None}
+    def liste(k):
+        o, ol = k
+        return {"gun": o["gun"], "devam": o["devam"], "ilk": o["ilk"], "son": o["son"], "yatay_n": o["yatay_n"], "olay_n": o["olay_n"], "liste": ol[:30]}
+    HS["bugun"] = liste(bugun_k) if bugun_k else None
+    HS["son_gun"] = liste(son_k) if son_k else None
+    tum_ol = [o for _, ol in tam for o in ol]
+    sd = collections.Counter(o["baslangic"][:2] + ":00" for o in tum_ol)
+    HS["saat_dagilimi"] = [{"saat": s, "n": n} for s, n in sorted(sd.items())]
+    kd = collections.defaultdict(list)
+    for o in tum_ol:
+        kd[o["kategori"]].append(o)
+    HS["kategoriler"] = sorted([{"kategori": k, "n": len(v), "pay": round(len(v) / len(tum_ol), 3), "ort_zirve": round(sum(x["zirve"] for x in v) / len(v), 2),
+                                 "ort_son": round(sum(x["son"] for x in v if x["son"] is not None) / max(1, sum(1 for x in v if x["son"] is not None)), 2)} for k, v in kd.items()], key=lambda r: -r["n"])
+    taban_oran = (to / ty) if ty else None
+    kosullar = [("İlk saat +2 puan ve üstü", lambda e: e["d1"] >= 2.0), ("İlk saat +2 puan ve göreli hacim ≥ 1,5x", lambda e: e["d1"] >= 2.0 and (e["rv1"] or 0) >= 1.5),
+                ("İlk saat +1 puan ve göreli hacim ≥ 2x", lambda e: e["d1"] >= 1.0 and (e["rv1"] or 0) >= 2.0), ("Göreli hacim ≥ 2x (fiyattan bağımsız)", lambda e: (e["rv1"] or 0) >= 2.0),
+                ("Sektör arkadaşları ilk saatte ort. +1 puan ve üstü", lambda e: e["es"] is not None and e["es"] >= 1.0)]
+    ng_ = len({e["gun"] for e in erken_veri})
+    for ad, f in kosullar:
+        S_ = [e for e in erken_veri if f(e)]
+        n = len(S_); h = sum(e["hit"] for e in S_)
+        gl = [e["getiri"] for e in S_ if e["getiri"] is not None]
+        oran = round(h / n, 3) if n else None
+        durum = "Veri biriktiriliyor" if (ng_ < MIN_GUN or n < 30) else ("taban üstü" if (oran is not None and taban_oran and oran >= 1.5 * taban_oran) else "taban civarı")
+        HS["erken_isaret"].append({"kosul": ad, "n": n, "isabet": oran, "kat": round(oran / taban_oran, 1) if (oran is not None and taban_oran) else None,
+                                   "ort_kapanis_getiri": round(sum(gl) / len(gl), 2) if gl else None, "durum": durum})
+    HS["erken_isaret_not"] = f"Erken işaret = ikinci taramadaki (ilk saat sonrası) durum; isabet = sonraki taramalarda +%{SURPRIZ_ESIK:g}'e ulaşma. {ng_} gün, yatay başlayan hisseler. Kanıt kapısı: en az {MIN_GUN} gün ve 30 örnek; geçse bile yalnızca öneri, seçime kullanıcı onayı olmadan girmez."
+    return HS
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--motor", default="radar.py")
@@ -233,6 +423,10 @@ def main():
                        "ileri_ornek": ILERI_N, "ileri_etki": ILERI_ORAN,
                        "not": "Sabah taraması (<= 11:30) -> gün sonu taraması (>= 17:45), endekse göre. Kilitli (|sabah gün| >= %9,5) hisseler dışlanır. Önerilen örüntü ancak kullanıcı onayıyla seçime girer."},
           "oruntular": [], "sistemler": [], "dun": None, "onayli": []}
+    try:
+        HL["surpriz"] = surpriz(R, G, bugun, simdi, kayit)
+    except Exception as e:
+        print("UYARI: sürpriz yükselen ölçümü", repr(e))
     if ng == 0:
         HL["not"] = "Ölçülebilir tamamlanmış gün yok (sabah ve gün sonu taraması gerekir)."
         V["hareket_lab"] = HL
