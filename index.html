@@ -1344,38 +1344,50 @@ const st2=document.createElement("style");
   b.textContent=(X.v>=0?"+":"")+X.v.toFixed(2).replace(".",",")+"%";b.className=X.v>=0?"up":"dn";if(l)l.textContent="";b.classList.remove("fl-up","fl-dn");if(window.LABS)window.LABS.xu=X.v}
 
 
- function vixGorsel(xu,vx,ch){const W=1080,H=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");const F="Inter,Segoe UI,Arial,sans-serif",kor=ch>=0;
-  const AC=kor?"#e5484d":"#2fbf8a",ACS=kor?"#f2a1a4":"#9be3c6",GOLD="#c9a96a",MUT="#8d9bb0";
-  const sp=(v)=>{try{g.letterSpacing=v+"px"}catch(e){}};
-  let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#0a111d");gr.addColorStop(1,"#101c2e");g.fillStyle=gr;g.fillRect(0,0,W,H);
-  const gl=g.createRadialGradient(W/2,560,40,W/2,560,620);gl.addColorStop(0,kor?"rgba(229,72,77,.16)":"rgba(47,191,138,.15)");gl.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gl;g.fillRect(0,0,W,H);
-  g.strokeStyle="rgba(201,169,106,.38)";g.lineWidth=2;g.strokeRect(36,36,W-72,H-72);
-  g.fillStyle=AC;g.fillRect(36,36,W-72,6);
-  g.textBaseline="alphabetic";g.textAlign="left";g.fillStyle=GOLD;g.font="700 24px "+F;sp(5);g.fillText("BIST YÜKSELİŞ RADARI",84,112);
-  g.textAlign="right";g.fillStyle=MUT;g.font="500 24px "+F;sp(1);g.fillText(new Date().toLocaleDateString("tr-TR",{timeZone:"Europe/Istanbul",day:"2-digit",month:"long",year:"numeric"}),W-84,112);
-  g.strokeStyle="rgba(255,255,255,.12)";g.lineWidth=1;g.beginPath();g.moveTo(84,140);g.lineTo(W-84,140);g.stroke();
-  g.textAlign="left";g.fillStyle=MUT;g.font="600 22px "+F;sp(6);g.fillText("PİYASA DUYGUSU",84,208);
-  g.fillStyle="#fff";g.font="800 92px "+F;sp(1);g.fillText(kor?"Korku artıyor":"Güven artıyor",84,300);
-  g.fillStyle=ACS;g.font="500 30px "+F;sp(0);g.fillText(kor?"VIX yükseldi; piyasada risk iştahı zayıflıyor.":"VIX geriledi; piyasada risk iştahı güçleniyor.",84,352);
-  const cx=W/2,cy=730,R=290,r=232,lo=10,hi=40,ang=v=>Math.PI+Math.PI*(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo);
-  const Z=[[10,20,"#2fbf8a","GÜVEN"],[20,30,"#e0a43a","TEMKİN"],[30,40,"#e5484d","KORKU"]];const act=vx<20?0:vx<30?1:2;
-  Z.forEach((z,i)=>{g.beginPath();g.arc(cx,cy,(R+r)/2,ang(z[0])+.012,ang(z[1])-.012);g.lineWidth=R-r;g.lineCap="butt";g.strokeStyle=z[2];g.globalAlpha=i===act?1:.28;g.stroke();g.globalAlpha=1});
-  g.fillStyle=MUT;g.font="600 20px "+F;sp(2);g.textAlign="center";[10,20,30,40].forEach(t=>{const a=ang(t);g.fillText(String(t),cx+Math.cos(a)*(R+30),cy+Math.sin(a)*(R+30)+7)});
-  Z.forEach((z,i)=>{const a=ang((z[0]+z[1])/2);g.fillStyle=i===act?"#fff":"rgba(255,255,255,.5)";g.font="700 18px "+F;sp(3);g.fillText(z[3],cx+Math.cos(a)*((R+r)/2),cy+Math.sin(a)*((R+r)/2)+6)});
-  const na=ang(vx);g.strokeStyle="#fff";g.lineWidth=5;g.lineCap="round";g.beginPath();g.moveTo(cx+Math.cos(na)*(r-62),cy+Math.sin(na)*(r-62));g.lineTo(cx+Math.cos(na)*(r-8),cy+Math.sin(na)*(r-8));g.stroke();
-  
-  const f=(v,d)=>Number(v).toFixed(d).replace(".",",");
-  g.textAlign="center";g.fillStyle="#fff";g.font="800 120px "+F;sp(0);g.fillText(f(vx,2),cx,cy-8);
-  g.fillStyle=MUT;g.font="600 22px "+F;sp(6);g.fillText("VIX KORKU ENDEKSİ",cx,cy+36);
-  const by=850,bh=150,bw=(W-168-24)/2;
-  function box(x,lbl,val,col,up){g.fillStyle="rgba(255,255,255,.04)";g.fillRect(x,by,bw,bh);g.fillStyle=col;g.fillRect(x,by,5,bh);g.strokeStyle="rgba(255,255,255,.10)";g.lineWidth=1;g.strokeRect(x+.5,by+.5,bw-1,bh-1);
-   g.textAlign="left";g.fillStyle=MUT;g.font="600 21px "+F;sp(4);g.fillText(lbl,x+34,by+48);
-   g.fillStyle=col;g.font="800 60px "+F;sp(0);const tx=x+34+(up==null?0:60);g.fillText(val,tx,by+114);
-   if(up!=null){g.beginPath();const t0=by+72,t1=by+114;if(up){g.moveTo(x+34,t1);g.lineTo(x+74,t1);g.lineTo(x+54,t0)}else{g.moveTo(x+34,t0);g.lineTo(x+74,t0);g.lineTo(x+54,t1)}g.closePath();g.fill()}}
+
+ function vixGorsel(xu,vx,ch){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");const F="Inter,Segoe UI,Arial,sans-serif",kor=ch>=0;
+  const AC=kor?"#ee5560":"#34d399",ACS=kor?"#f4a6ab":"#a2ebcd",MUT="#8d9bb0",UP="#34d399",DN="#ee5560";
+  const sp=v=>{try{g.letterSpacing=v+"px"}catch(e){}},f=(v,d)=>Number(v).toFixed(d).replace(".",",");
+  const gold=(x0,x1)=>{const q=g.createLinearGradient(x0,0,x1,0);q.addColorStop(0,"#8f7440");q.addColorStop(.35,"#f1dfb0");q.addColorStop(.6,"#c9a96a");q.addColorStop(1,"#8f7440");return q};
+  let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#060a12");gr.addColorStop(.55,"#0b1423");gr.addColorStop(1,"#070c16");g.fillStyle=gr;g.fillRect(0,0,W,H);
+  g.save();g.strokeStyle="rgba(255,255,255,.028)";g.lineWidth=1;for(let i=-H;i<W;i+=26){g.beginPath();g.moveTo(i,0);g.lineTo(i+H,H);g.stroke()}g.restore();
+  let gl=g.createRadialGradient(W/2,840,30,W/2,840,640);gl.addColorStop(0,kor?"rgba(238,85,96,.20)":"rgba(52,211,153,.17)");gl.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gl;g.fillRect(0,0,W,H);
+  gl=g.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.8);gl.addColorStop(0,"rgba(0,0,0,0)");gl.addColorStop(1,"rgba(0,0,0,.55)");g.fillStyle=gl;g.fillRect(0,0,W,H);
+  g.lineWidth=1.5;g.strokeStyle=gold(40,W-40);g.strokeRect(40,40,W-80,H-80);g.strokeStyle="rgba(201,169,106,.16)";g.lineWidth=1;g.strokeRect(54,54,W-108,H-108);
+  g.strokeStyle="#e3c887";g.lineWidth=3;const cl=46;[[40,40,1,1],[W-40,40,-1,1],[40,H-40,1,-1],[W-40,H-40,-1,-1]].forEach(([x,y,dx,dy])=>{g.beginPath();g.moveTo(x,y+dy*cl);g.lineTo(x,y);g.lineTo(x+dx*cl,y);g.stroke()});
+  const mx=96,my=124;g.strokeStyle="#d6b978";g.lineWidth=2.5;for(const k of[10,19,28]){g.beginPath();g.arc(mx,my+10,k,Math.PI,2*Math.PI);g.stroke()}g.fillStyle="#d6b978";g.beginPath();g.arc(mx,my+10,3.5,0,7);g.fill();
+  g.textAlign="left";g.font="700 23px "+F;sp(6);g.fillStyle=gold(134,420);g.fillText("BIST YÜKSELİŞ RADARI",134,my+14);
+  g.textAlign="right";g.fillStyle=MUT;g.font="500 23px "+F;sp(1);g.fillText(new Date().toLocaleDateString("tr-TR",{timeZone:"Europe/Istanbul",day:"2-digit",month:"long",year:"numeric"}),W-90,my+14);
+  let hl=g.createLinearGradient(90,0,W-90,0);hl.addColorStop(0,"rgba(201,169,106,0)");hl.addColorStop(.5,"rgba(201,169,106,.6)");hl.addColorStop(1,"rgba(201,169,106,0)");g.fillStyle=hl;g.fillRect(90,my+48,W-180,1.5);
+  g.textAlign="center";g.fillStyle=MUT;g.font="600 21px "+F;sp(9);g.fillText("PİYASA DUYGUSU",W/2,250);
+  g.fillStyle="#fff";g.font="800 112px "+F;sp(-1);g.fillText(kor?"Korku artıyor":"Güven artıyor",W/2,362);
+  g.fillStyle=AC;g.fillRect(W/2-44,392,88,5);
+  g.fillStyle=ACS;g.font="500 29px "+F;sp(0);g.fillText(kor?"VIX yükseldi; piyasada risk iştahı zayıflıyor.":"VIX geriledi; piyasada risk iştahı güçleniyor.",W/2,452);
+  const cx=W/2,cy=884,R=290,TH=44,r=R-TH,mid=R-TH/2,lo=10,hi=40,ang=v=>Math.PI+Math.PI*(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo);
+  const lerp=(a,b,t)=>a+(b-a)*t,hx=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)),col=v=>{const c=[[10,"#34d399"],[25,"#e8b04a"],[40,"#ee5560"]];let i=v<25?0:1;const t=(Math.min(40,Math.max(10,v))-c[i][0])/(c[i+1][0]-c[i][0]),A=hx(c[i][1]),B=hx(c[i+1][1]);return "rgb("+A.map((x,k)=>Math.round(lerp(x,B[k],t))).join(",")+")"};
+  g.beginPath();g.arc(cx,cy,R+10,Math.PI,2*Math.PI);g.arc(cx,cy,r-10,2*Math.PI,Math.PI,true);g.closePath();g.fillStyle="rgba(255,255,255,.035)";g.fill();
+  const step=.25,cur=Math.min(hi,Math.max(lo,vx));
+  g.beginPath();g.arc(cx,cy,mid,ang(cur),ang(hi));g.lineWidth=TH;g.lineCap="butt";g.strokeStyle="rgba(255,255,255,.07)";g.stroke();
+  for(let v=lo;v<cur;v+=step){const on=true;g.save();if(on){g.shadowColor=col(v+step/2);g.shadowBlur=22}g.beginPath();g.arc(cx,cy,mid,ang(v)-.002,ang(Math.min(cur,v+step))+.002);g.lineWidth=TH;g.lineCap="butt";g.strokeStyle=col(v+step/2);g.globalAlpha=on?1:.16;g.stroke();g.restore()}
+  for(let v=lo;v<=hi;v++){const a=ang(v),M=v%5===0,r0=R+22,r1=R+(M?44:34);g.strokeStyle=M?"rgba(255,255,255,.7)":"rgba(255,255,255,.28)";g.lineWidth=M?2.5:1.5;g.beginPath();g.moveTo(cx+Math.cos(a)*r0,cy+Math.sin(a)*r0);g.lineTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);g.stroke()}
+  g.textAlign="center";g.font="600 22px "+F;sp(1);g.fillStyle=MUT;[10,20,30,40].forEach(t=>{const a=ang(t);g.fillText(String(t),cx+Math.cos(a)*(R+76),cy+Math.sin(a)*(R+76)+8)});
+  const act=vx<20?0:vx<30?1:2;[[15,"GÜVEN"],[25,"TEMKİN"],[35,"KORKU"]].forEach((z,i)=>{const a=ang(z[0]);g.save();g.translate(cx+Math.cos(a)*(r-30),cy+Math.sin(a)*(r-30));g.rotate(a+Math.PI/2);g.fillStyle=i===act?"#fff":"rgba(255,255,255,.4)";g.font="700 17px "+F;sp(4);g.fillText(z[1],0,6);g.restore()});
+  const na=ang(vx),nl=r-62,nb=14;g.save();g.shadowColor="rgba(255,255,255,.55)";g.shadowBlur=18;g.fillStyle="#fff";g.beginPath();g.moveTo(cx+Math.cos(na)*nl,cy+Math.sin(na)*nl);g.lineTo(cx+Math.cos(na+Math.PI/2)*nb,cy+Math.sin(na+Math.PI/2)*nb);g.lineTo(cx+Math.cos(na-Math.PI/2)*nb,cy+Math.sin(na-Math.PI/2)*nb);g.closePath();g.fill();g.restore();
+  g.beginPath();g.arc(cx,cy,26,0,7);g.fillStyle="#0b1423";g.fill();g.lineWidth=4;g.strokeStyle="#d6b978";g.stroke();g.beginPath();g.arc(cx,cy,8,0,7);g.fillStyle="#d6b978";g.fill();
+  g.textAlign="center";g.fillStyle="#fff";g.font="800 124px "+F;sp(-2);g.fillText(f(vx,2),cx,cy+138);
+  g.fillStyle=MUT;g.font="600 21px "+F;sp(8);g.fillText("VIX KORKU ENDEKSİ",cx,cy+192);
+  const by=1100,bh=124,bw=(W-192-28)/2;
+  function box(x,lbl,val,c,up){let q=g.createLinearGradient(x,by,x,by+bh);q.addColorStop(0,"rgba(255,255,255,.075)");q.addColorStop(1,"rgba(255,255,255,.02)");g.fillStyle=q;g.fillRect(x,by,bw,bh);
+   q=g.createLinearGradient(x,by,x+bw,by+bh);q.addColorStop(0,"rgba(214,185,120,.7)");q.addColorStop(.5,"rgba(214,185,120,.12)");q.addColorStop(1,"rgba(214,185,120,.45)");g.strokeStyle=q;g.lineWidth=1.5;g.strokeRect(x+.75,by+.75,bw-1.5,bh-1.5);
+   g.fillStyle=c;g.fillRect(x,by,5,bh);g.textAlign="left";g.fillStyle=MUT;g.font="600 20px "+F;sp(5);g.fillText(lbl,x+36,by+40);
+   g.fillStyle=c;g.font="800 62px "+F;sp(-1);const t0=by+60,t1=by+101;let tx=x+36;
+   if(up!=null){g.beginPath();if(up){g.moveTo(tx,t1);g.lineTo(tx+42,t1);g.lineTo(tx+21,t0)}else{g.moveTo(tx,t0);g.lineTo(tx+42,t0);g.lineTo(tx+21,t1)}g.closePath();g.fill();tx+=62}
+   g.fillText(val,tx,by+101)}
   const sg=v=>(v>=0?"+":"-")+f(Math.abs(v),2)+"%";
-  box(84,"BIST 100 GÜNLÜK",xu==null?"-":sg(xu),xu==null?"#fff":(xu>=0?"#2fbf8a":"#e5484d"),xu==null?null:xu>=0);
-  box(84+bw+24,"VIX GÜNLÜK",f(Math.abs(ch),2)+"%",kor?"#e5484d":"#2fbf8a",kor);
-  g.textAlign="center";g.fillStyle="rgba(141,155,176,.8)";g.font="500 19px "+F;sp(1);g.fillText("Bilgilendirme amaçlıdır, yatırım tavsiyesi değildir.  "+new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour:"2-digit",minute:"2-digit"}),W/2,1036);
+  box(96,"BIST 100 GÜNLÜK",xu==null?"-":sg(xu),xu==null?"#fff":(xu>=0?UP:DN),xu==null?null:xu>=0);
+  box(96+bw+28,"VIX GÜNLÜK",(ch>=0?"+":"-")+f(Math.abs(ch),2)+"%",kor?DN:UP,kor);
+  g.fillStyle=hl;g.fillRect(90,1264,W-180,1);
+  g.textAlign="center";g.fillStyle="rgba(141,155,176,.85)";g.font="500 19px "+F;sp(1);g.fillText("Bilgilendirme amaçlıdır, yatırım tavsiyesi değildir.  ·  "+new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour:"2-digit",minute:"2-digit"}),W/2,1300);
   sp(0);return cv}
  async function vixKopyala(){const b=document.getElementById("vxC");const bil=(c)=>{b.classList.remove("ok","er");b.classList.add(c);clearTimeout(bil.t);bil.t=setTimeout(()=>b.classList.remove("ok","er"),2000)};
   const VL=window.VXL&&Date.now()-window.VXL.t<600000?window.VXL:null,st=((((window.D||D||{}).yurtdisi||{}).piyasa||{}).vix)||null;const vx=VL?VL.v:st&&st.v,ch=VL?VL.c:st&&st.ch;
