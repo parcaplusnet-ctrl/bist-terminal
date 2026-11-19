@@ -922,6 +922,79 @@ def _ozellikler(r, C, piyasa):
         if w: F.append("sinyal=" + ("hacimle yükseldi" if "hacimle yükseldi" in w else w))
     return F
 
+def _kova2(v, sinirlar, etiketler):
+    if v is None or (isinstance(v, float) and math.isnan(v)): return None
+    for s, e in zip(sinirlar, etiketler):
+        if v < s: return e
+    return etiketler[-1]
+
+def _ozellikler2(r, C):
+    """Kontrollü öğrenme için özellikler: mevcut kovalar + zengin arşiv alanları (açılış boşluğu, ATR, ADX, VWAP, SMA, Bollinger, getiri...)."""
+    x = dict(zip(C, r)); F = list(_ozellikler(r, C, "bist")); fi = x.get("fiyat")
+    def ek(k, e):
+        if e is not None: F.append(f"{k}={e}")
+    if x.get("acilis") is None: return F
+    ek("boşluk", _kova2(x.get("bosluk"), (-2, -.5, .5, 2), ("<-%2", "-%2/-%0,5", "±%0,5", "+%0,5/+%2", "≥+%2")))
+    ek("açılıştan beri", _kova2(x.get("ch_acilis"), (-2, -.5, .5, 2), ("<-%2", "-%2/-%0,5", "±%0,5", "+%0,5/+%2", "≥+%2")))
+    if fi:
+        ek("ATR/fiyat", _kova2((x.get("atr") or 0) / fi * 100 if x.get("atr") else None, (2, 4, 6), ("<%2", "%2-4", "%4-6", "≥%6")))
+        ek("VWAP", None if not x.get("vwap") else "üstünde" if fi >= x["vwap"] else "altında")
+        for k in ("sma20", "sma50", "sma200"):
+            ek(k.upper() + " konum", None if not x.get(k) else _kova2((fi / x[k] - 1) * 100, (-5, 0, 5), ("<-%5 altı", "altı", "üstü %0-5", "≥%5 üstü")))
+        if x.get("bb_ust") and x.get("bb_alt") and x["bb_ust"] > x["bb_alt"]:
+            ek("Bollinger %b", _kova2((fi - x["bb_alt"]) / (x["bb_ust"] - x["bb_alt"]), (0, .25, .75, 1), ("altında", "alt çeyrek", "orta", "üst çeyrek", "üstünde")))
+        if x.get("yuksek") and x.get("dusuk") and x["yuksek"] > x["dusuk"]:
+            ek("gün aralığında konum", _kova2((fi - x["dusuk"]) / (x["yuksek"] - x["dusuk"]), (.25, .5, .75), ("alt çeyrek", "alt-orta", "üst-orta", "üst çeyrek")))
+    ek("ADX", _kova2(x.get("adx"), (15, 25, 40), ("<15 trendsiz", "15-25", "25-40", "≥40 güçlü trend")))
+    ek("günlük oynaklık", _kova2(x.get("vol_g"), (2, 4, 6), ("<%2", "%2-4", "%4-6", "≥%6")))
+    ek("3 ay", _kova2(x.get("p3m"), (-20, 0, 20, 60), ("<-%20", "-%20/0", "0/+%20", "+%20/+%60", "≥+%60")))
+    ek("Stoch", _kova2(x.get("stoch"), (20, 80), ("<20", "20-80", "≥80")))
+    ek("TV öneri", _kova2(x.get("oneri"), (-.5, -.1, .1, .5), ("Güçlü Sat", "Sat", "Nötr", "Al", "Güçlü Al")))
+    return F
+
+def _ogren_v2(a, V, piyasa="bist", ust_ch=7.0, min_likit=20.0):
+    """Kontrollü öğrenme: sıfırdan yeniden hesaplanır (arşivden). Tavan/tavana yakın hisseler (gün >= %7) ve sığ hisseler dışarıda;
+    sonuç piyasa (XU100) farkıyla ölçülür; özelliğin kaldıracı gün gün tutarlı mı kontrol edilir. Yalnızca öneri üretir."""
+    D = {}
+    for f in sorted(os.listdir(a.arsiv)) if os.path.isdir(a.arsiv) else []:
+        if f.startswith(f"gozlem_{piyasa}_") and f.endswith(".json"):
+            G = json.load(open(os.path.join(a.arsiv, f))); D[G["tarih"]] = G
+    gunler = sorted(D); bugun = simdi().strftime("%Y-%m-%d"); T = {"n": 0, "yuk": 0, "dus": 0, "ex": 0.0, "pos": 0}; O = {}; gsay = set()
+    def xu(t): return ((t.get("piyasa") or {}).get("xu100") or {}).get("v")
+    for i, gun in enumerate(gunler):
+        G = D[gun]; C = G["cols"]; sonra = gunler[i + 1:]
+        if not G["taramalar"] or len(sonra) < 2 or (sonra[1] == bugun and simdi().hour * 60 + simdi().minute < 1090): continue
+        ufuk = sonra[:2]; seri = {}
+        for g2 in ufuk:
+            for t in D[g2]["taramalar"]:
+                for r in t["rows"]: seri.setdefault(r[0], []).append(r[1])
+        x1 = xu(D[ufuk[1]]["taramalar"][-1])
+        for tar in (G["taramalar"][0], G["taramalar"][-1]):
+            x0 = xu(tar); bm = (x1 / x0 - 1) if x0 and x1 else 0.0; gsay.add(gun)
+            for r in tar["rows"]:
+                d = dict(zip(C, r)); S = seri.get(r[0]); f0 = r[1]
+                if not S or not f0 or (d.get("ch") or 0) >= ust_ch or (d.get("likit_mn") or 0) < min_likit: continue
+                yuk = max(S) / f0 - 1 >= a.esik_yuk; dus = min(S) / f0 - 1 <= -a.esik_dus; ex = S[-1] / f0 - 1 - bm
+                T["n"] += 1; T["yuk"] += yuk; T["dus"] += dus; T["ex"] += ex; T["pos"] += ex > 0
+                for ft in _ozellikler2(r, C):
+                    o = O.setdefault(ft, {"n": 0, "yuk": 0, "dus": 0, "ex": 0.0, "pos": 0, "g": {}})
+                    o["n"] += 1; o["yuk"] += yuk; o["dus"] += dus; o["ex"] += ex; o["pos"] += ex > 0
+                    gg = o["g"].setdefault(gun, [0, 0]); gg[0] += 1; gg[1] += yuk
+    if not T["n"]: return
+    ty = T["yuk"] / T["n"]; tablo = []
+    for ft, o in O.items():
+        if o["n"] < a.min_n: continue
+        tut = sum(1 for n_, y_ in o["g"].values() if n_ >= 5 and y_ / n_ > ty); gn = sum(1 for n_, _ in o["g"].values() if n_ >= 5)
+        tablo.append({"ozellik": ft, "n": o["n"], "yukselis": round(o["yuk"] / o["n"], 3), "kaldirac": round(o["yuk"] / o["n"] / ty, 2) if ty else None,
+                      "dusus": round(o["dus"] / o["n"], 3), "ort_fark": round(o["ex"] / o["n"] * 100, 2), "piyasayi_gecen": round(o["pos"] / o["n"], 3),
+                      "tutarli_gun": f"{tut}/{gn}"})
+    tablo.sort(key=lambda r: -(r["kaldirac"] or 0))
+    gn = len(gsay); kanit = gn >= 6
+    P = V.setdefault("gozlem_lab", {}).setdefault(piyasa, {})
+    P["v2"] = {"guncelleme": simdi().strftime("%d.%m %H:%M"), "gun": gn, "evren": f"gün < %{ust_ch:g}, ciro ≥ {min_likit:g} mn ₺", "taban": {"n": T["n"], "yukselis": round(ty, 3), "dusus": round(T["dus"] / T["n"], 3),
+               "ort_fark": round(T["ex"] / T["n"] * 100, 2), "piyasayi_gecen": round(T["pos"] / T["n"], 3)},
+               "durum": "Kanıt yeterli" if kanit else f"Veri biriktiriliyor ({gn}/6 gün)", "tablo": tablo[:40], "zayif": sorted(tablo, key=lambda r: r["ort_fark"])[:10]}
+
 def cmd_ogren(a):
     """Arşivdeki gözlemleri 2 işlem günü sonraki fiyatlarla eşleştirir; özellik bazında yükseliş (+%5) / düşüş (-%3) oranlarını biriktirir."""
     V = json.load(open(a.veri)); piyasa = a.piyasa
@@ -990,6 +1063,8 @@ def cmd_ogren(a):
         Lk = V.setdefault("likidite", {}); eski = Lk.get("min", 20)
         Lk.update({"min": mn, "taban": 20, "tavan": 100, "guncelleme": simdi().strftime("%d.%m %H:%M"), "bantlar": bant, "katilim": LIK["katilim"]})
         if mn != eski: P["bulgular"].append(f"Likidite eşiği {eski} mn ₺ → {mn} mn ₺ (zayıf kalan sığ bant: ortalama getiri ve düşüş oranı tabanın kötüsü).")
+    try: _ogren_v2(a, V, piyasa)
+    except Exception as e: print("UYARI: kontrollü öğrenme", e)
     P["guncelleme"] = simdi().strftime("%d.%m %H:%M")
     json.dump(V, open(a.veri, "w"), ensure_ascii=False, separators=(",", ":"))
     son = P["hareketler"][-1] if P["hareketler"] else None

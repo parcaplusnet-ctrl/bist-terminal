@@ -142,3 +142,6 @@ ABD seansı İstanbul saatiyle 17:30-00:00 (kış saati). Saatlik görevin 18:16
 
 ## Zengin arşiv taraması (19.11)
 BIST gözlem arşivine her taramada 24 ek alan yazılır (GZ_EK): açılış, gün içi yüksek/düşük, hacim (lot), açılıştan değişim, boşluk, ATR, ADX, VWAP, SMA20/50/200, günlük oynaklık, 3-6 ay ve YTD getiri, Stoch, CCI, Mom, Bollinger bandı, beta, F/K, TradingView öneri skoru. Yalnızca öğrenme verisidir, seçime etkisi yoktur. Eski arşiv satırları otomatik None ile genişler. Arşiv boyutu yaklaşık 1,8 MB/gün.
+
+## Kontrollü öğrenme v2 (19.11)
+ogren komutu her çalışmada arşivden sıfırdan hesaplar (veri.json gozlem_lab.bist.v2): tavana yakın (gün >= %7) ve sığ (<20 mn) hisseler dışarıda, sonuç XU100 farkıyla, kaldıraç gün gün tutarlı mı (tutarli_gun), zengin arşiv alanları dahil. En az 6 gün kanıt kapısı. Yalnızca ölçüm ve öneri; seçime etkisi yok.
