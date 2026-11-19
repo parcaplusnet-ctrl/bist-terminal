@@ -414,7 +414,7 @@ let D=null,LIVE=null,liveOn=false,FY=null,FY_ET="",LC=null;const seen=new Set();
 
 /* saat */
 setInterval(()=>{try{txt($("clock"),new Date().toLocaleTimeString("tr-TR",{timeZone:"Europe/Istanbul",hour12:false,hour:"2-digit",minute:"2-digit"})+" İST")}catch(e){}},1000);
-function nextScan(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));for(let d=0;d<8;d++){const x=new Date(n);x.setDate(n.getDate()+d);const wd=x.getDay();if(wd===0||wd===6)continue;for(const[h,m]of[[10,16],[11,16],[12,16],[13,16],[14,16],[15,16],[16,16],[17,31],[19,0]]){const t=new Date(x);t.setHours(h,m,0,0);if(t>n)return`${d===0?"bugün":d===1?"yarın":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"][wd]} ${h}:${String(m).padStart(2,"0")}`}}return"—"}
+function nextScan(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));for(let d=0;d<8;d++){const x=new Date(n);x.setDate(n.getDate()+d);const wd=x.getDay();if(wd===0||wd===6)continue;for(const[h,m]of[[10,16],[11,16],[12,16],[13,16],[14,16],[15,16],[16,16],[17,16],[18,16]]){const t=new Date(x);t.setHours(h,m,0,0);if(t>n)return`${d===0?"bugün":d===1?"yarın":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"][wd]} ${h}:${String(m).padStart(2,"0")}`}}return"—"}
 
 /* sekmeler */
 (function(){const B=[...document.querySelectorAll(".tab")];const show=p=>{B.forEach(b=>{const on=b.dataset.p===p;b.setAttribute("aria-selected",on);$("p-"+b.dataset.p).hidden=!on});try{localStorage.setItem("sekme",p)}catch(e){}if(typeof kes10==="function"&&typeof D!=="undefined"&&D)kes10()};
@@ -573,7 +573,7 @@ function labSec(){const O=(D&&D.lab_ozellik)||{},T=O.tur;let X=T?Object.assign({
   const L=(X.ozellikler||[]).concat(eski),sy={kullaniliyor:0,test:0,elendi:0};L.forEach(o=>{if(sy[o.durum]!=null)sy[o.durum]++});
   X=Object.assign({},X,{ozellikler:L,sayac:sy})}
  if(X)labCanli(X)}
-function lcNext(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));for(let d=0;d<2;d++)for(const h of[12,16,21]){const t=new Date(n);t.setDate(n.getDate()+d);t.setHours(h,41,0,0);if(t>n)return(d?"yarın ":"")+h+":41"}return"—"}
+function lcNext(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));for(let d=0;d<8;d++){const x=new Date(n);x.setDate(n.getDate()+d);const wd=x.getDay();if(wd===0||wd===6)continue;const q=new Date(x);q.setHours(21,41,0,0);if(q>n)return(d===0?"bugün ":d===1?"yarın ":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"][wd]+" ")+"21:41"}return"—"}
 function labCanli(L){if(!L)return;const f=v=>Number(v||0).toLocaleString("tr-TR"),g=L.grafik||{},s=L.sayac||{};
  txt($("lcG"),f(g.toplam));txt($("lcGd"),g.bu_tur!=null?`birikimli · bu tur +${f(g.bu_tur)} günlük grafik`:`${f(g.gunluk)} günlük · ${f(g.s1)} 1S · ${f(g.s4)} 4S`);txt($("lcO"),f(L.ornek));txt($("lcGun"),`${L.ornek_yeni!=null?"bu tur +"+f(L.ornek_yeni)+" yeni · ":""}${L.gun||"—"} işlem günü · taban %${Math.round((L.taban||0)*100)}`);
  txt($("lcF"),f(L.ozellik_toplam));txt($("lcY"),`bu tur +${f(L.yeni)} yeni formasyon · ${f((L.ozellikler||[]).length)} izleniyor`);txt($("lcK"),f(s.kullaniliyor));txt($("lcPu"),`test ${f(s.test)} · elendi ${f(s.elendi)}`);
