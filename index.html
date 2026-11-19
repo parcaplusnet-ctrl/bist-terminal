@@ -168,6 +168,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .bub{transform-box:fill-box;transform-origin:center;animation:bgir .9s cubic-bezier(.2,.9,.3,1.3) both,bdans 4.5s ease-in-out infinite alternate}
 @keyframes bgir{from{transform:scale(0)}}@keyframes bdans{0%{transform:translate(0,0)}50%{transform:translate(1.5px,-2px)}100%{transform:translate(-1.5px,1.5px)}}
 @media (max-width:760px){.scene{height:180px}.scene .cx{display:none}.rrg2{grid-template-columns:1fr}}
+.hrkBH{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 0}.hrkBH h3{margin:0;font-size:13px}.hrkBH .btn{flex:none;min-width:116px;text-align:center}
 .tw.kay{max-height:320px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .tw.kay th{position:sticky;top:0;z-index:1}
 #lcBul{max-height:130px;overflow:auto}#learn{border-bottom:1px solid var(--line)}
@@ -358,9 +359,9 @@ details.ad[open] summary::after{transform:rotate(90deg)}
    <p class="note" style="border-top:0" id="hrkNot">—</p>
    <div class="split" style="padding:12px 16px"><div class="tw"><table id="hrkU"></table></div><div class="tw"><table id="hrkD"></table></div></div>
    <p class="note" id="hrkOrt">—</p>
-   <h3 style="padding:10px 16px 0;margin:0;font-size:13px">Çalışan sistemler · her gün aynı yöntemle puanlanır</h3>
+   <div class="hrkBH"><h3>Çalışan sistemler · her gün aynı yöntemle puanlanır</h3><button class="btn" type="button" data-hg="hrkS" title="Bu tablonun tüm satırlarını görsel olarak kopyala">Görsel kopyala</button></div>
    <div class="tw kay" tabindex="0" aria-label="Çalışan sistemler tablosu"><table id="hrkS"></table></div>
-   <h3 style="padding:10px 16px 0;margin:0;font-size:13px">Örüntüler · kanıt kapılarından geçenler önerilir, onayla seçime girer</h3>
+   <div class="hrkBH"><h3>Örüntüler · kanıt kapılarından geçenler önerilir, onayla seçime girer</h3><button class="btn" type="button" data-hg="hrkT" title="Bu tablonun tüm satırlarını görsel olarak kopyala">Görsel kopyala</button></div>
    <div class="tw kay" tabindex="0" aria-label="Örüntü tablosu, kaydırılabilir"><table id="hrkT"></table></div>
    <div class="note" id="hrkKural">—</div>
   </section>
@@ -1092,6 +1093,53 @@ async function gunKopyala(){if(!D)return;let cv;try{cv=gunGorsel()}catch(e){cons
  try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"gunun_ozeti_"+String(((D.kasa||{}).ozet||{}).tarih||"").slice(0,5)+".png",data:blob});gunMsg("Kaydedildi ✓");return}}catch(e){if(e&&e.code==="declined"){return}}
  kartOnizle(cv)}
 $("gunC").addEventListener("click",gunKopyala);
+/* hareket laboratuvarı tabloları: tüm satırlar ve ayrıntılar tek görsel olarak panoya kopyalanır */
+function hrkGorsel(id){
+ const T=$(id);if(!T||!T.rows.length)throw new Error("tablo boş");
+ const MONO='"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace',SANS='"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif';
+ const W=1600,S=2,PAD=40,IW=W-PAD*2,C={bg:"#080d16",fg:"#e7edf4",mut:"#8e9bab",dim:"#5f6c7c",line:"#1c2636",up:"#33c48a",dn:"#f05f6b",au:"#d9a441"};
+ const mc=document.createElement("canvas").getContext("2d");
+ const wrap=(t,mw,font)=>{mc.font=font;const w=String(t).split(/\s+/),L=[];let c="";for(const q of w){const n=c?c+" "+q:q;if(mc.measureText(n).width>mw&&c){L.push(c);c=q}else c=n}if(c)L.push(c);return L.length?L:[""]};
+ const head=[...T.tHead.rows[0].cells].map(c=>c.textContent),rows=[...T.tBodies[0].rows].map(r=>[...r.cells].map(c=>({t:c.textContent,c:c.className})));
+ const nc=head.length,num=head.map((_,i)=>i>0&&rows.filter(r=>r[i]).every(r=>/^[+\-−]?[\d%]|^—$/.test(r[i].t)));
+ const fH="600 13px "+SANS,fB="400 15px "+SANS,fN="500 15px "+MONO;
+ const w=head.map((h,i)=>{mc.font=fH;let m=mc.measureText(h.toUpperCase()).width+10;if(i>0||nc<3)rows.forEach(r=>{mc.font=num[i]?fN:fB;m=Math.max(m,mc.measureText(r[i].t).width)});return m+24});
+ const rest=w.slice(1).reduce((a,b)=>a+b,0);w[0]=Math.max(260,IW-rest);if(rest+260>IW){const k=(IW-260)/rest;for(let i=1;i<nc;i++)w[i]*=k;w[0]=260}
+ const x0=[];let ax=PAD;w.forEach(q=>{x0.push(ax);ax+=q});
+ const lines=rows.map(r=>wrap(r[0].t,w[0]-24,fB)),rh=lines.map(l=>Math.max(40,l.length*21+18));
+ const txt=a=>String((document.getElementById(a)||{}).textContent||"").trim();
+ const stat=[["Gün",txt("hrkG")+" · "+txt("hrkGd")],["Gözlem",txt("hrkO")+" "+txt("hrkOd")],["Örüntü",txt("hrkP")+" · "+txt("hrkPd")],["Onay bekleyen",txt("hrkB")+" · "+txt("hrkBd")],["Onaylı kural",txt("hrkK")+" · "+txt("hrkKd")],["Dün endeks",txt("hrkE")+" · "+txt("hrkEd")]].filter(s=>s[1].replace(/[—\s·]/g,""));
+ const notes=[txt("hrkNot"),txt("hrkKural")].filter(Boolean);
+ const nl=notes.map(n=>wrap(n,IW,"400 14px "+SANS));
+ const ttl=(T.closest(".sec")||document).querySelector('[data-hg="'+id+'"]').previousElementSibling.textContent;
+ const HH=PAD+34+26+stat.length*0+ (stat.length?Math.ceil(stat.length/2)*26+14:0)+44;
+ const NH=nl.reduce((a,l)=>a+l.length*20+8,0);
+ const H=HH+rh.reduce((a,b)=>a+b,0)+16+NH+70;
+ const cv=document.createElement("canvas");cv.width=W*S;cv.height=H*S;const x=cv.getContext("2d");x.scale(S,S);x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+ const Tx=(t,px,py,f,c,al)=>{x.font=f;x.fillStyle=c;x.textAlign=al||"left";x.textBaseline="alphabetic";x.fillText(t,px,py)};
+ let y=PAD+20;Tx("Hareket laboratuvarı · "+ttl,PAD,y,"700 24px "+SANS,C.fg);
+ y+=26;Tx("güncelleme "+(txt("hrkTag").replace(/^güncelleme\s*/,"")||"—"),PAD,y,"400 14px "+SANS,C.mut);
+ if(stat.length){y+=26;stat.forEach((s,i)=>{const cx=PAD+(i%2)*IW/2,cy=y+Math.floor(i/2)*26;Tx(s[0]+":",cx,cy,"600 14px "+SANS,C.mut);mc.font="600 14px "+SANS;Tx(s[1],cx+mc.measureText(s[0]+": ").width+6,cy,"400 14px "+SANS,C.fg)});y+=Math.floor((stat.length-1)/2)*26+14}
+ y+=18;x.fillStyle="#0e1623";x.fillRect(PAD,y,IW,36);
+ head.forEach((h,i)=>Tx(h.toUpperCase(),num[i]?x0[i]+w[i]-12:x0[i]+12,y+23,fH,C.mut,num[i]?"right":"left"));y+=36;
+ rows.forEach((r,ri)=>{const h=rh[ri];if(ri%2){x.fillStyle="rgba(255,255,255,.025)";x.fillRect(PAD,y,IW,h)}
+  x.fillStyle=C.line;x.fillRect(PAD,y+h-1,IW,1);
+  const ty=y+h/2+5-(lines[ri].length-1)*10.5;lines[ri].forEach((l,li)=>Tx(l,x0[0]+12,ty+li*21,fB,C.fg));
+  for(let i=1;i<nc;i++){const c=r[i],col=/\bup\b/.test(c.c)?C.up:/\bdn\b/.test(c.c)?C.dn:C.fg;Tx(c.t,num[i]?x0[i]+w[i]-12:x0[i]+12,y+h/2+5,num[i]?fN:fB,col,num[i]?"right":"left")}
+  y+=h});
+ y+=24;nl.forEach(l=>{l.forEach((z,i)=>{Tx(z,PAD,y,"400 14px "+SANS,C.mut);y+=20});y+=8});
+ x.fillStyle="rgba(255,255,255,.08)";x.fillRect(PAD,H-PAD-6,IW,1);
+ Tx("Geçmiş sonuçlar gelecekteki getiriyi garanti etmez · Veriler 15 dk gecikmelidir · Yatırım tavsiyesi değildir.",PAD,H-PAD+14,"400 13px "+SANS,C.dim);
+ Tx("Borsa Tarama Terminali",W-PAD,H-PAD+14,"700 14px "+SANS,C.au,"right");
+ return cv}
+async function hrkKopyala(b){const id=b.dataset.hg,ad=b.textContent;const m=s=>{b.textContent=s;clearTimeout(b._t);b._t=setTimeout(()=>b.textContent="Görsel kopyala",2200)};
+ let cv;try{try{await document.fonts.ready}catch(e){}cv=hrkGorsel(id)}catch(e){console.error(e);m("Üretilemedi");return}
+ const blob=await new Promise(r=>cv.toBlob(r,"image/png"));if(!blob){kartOnizle(cv);return}
+ try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);m("Kopyalandı ✓");return}catch(e){}
+ try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"hareket_lab_"+(id==="hrkS"?"sistemler":"oruntuler")+".png",data:blob});m("Kaydedildi ✓");return}}catch(e){if(e&&e.code==="declined"){return}}
+ kartOnizle(cv)}
+document.querySelectorAll("[data-hg]").forEach(b=>b.addEventListener("click",()=>hrkKopyala(b)));
+
 $("modX").addEventListener("click",modKapat);$("mod").addEventListener("click",e=>{if(e.target===$("mod"))modKapat()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("mod").hidden)modKapat();if(e.key==="/"&&document.activeElement&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&$("tour").hidden){e.preventDefault();$("srchI").focus()}});
 /* tablolardaki hisse kodlarına tıklayınca detay aç */
