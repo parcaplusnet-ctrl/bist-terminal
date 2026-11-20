@@ -1167,7 +1167,7 @@
    ]
   }
  },
- "guncelleme": "20.11 13:20",
+ "guncelleme": "20.11 14:22",
  "gun_sayisi": 3,
  "nedenler": {
   "ISVEA": {
@@ -2040,6 +2040,56 @@
    {
     "ts": 1772737093,
     "baslik": "RALYH Ral Yatırım Holding konsolide bilanço 2025 Yıllık net karı 2,317,482,860 TL (Önceki: 1,706,476,057 TL net kar)"
+   }
+  ],
+  "2026-11-20|EMKEL": [
+   {
+    "ts": 1794283213,
+    "baslik": "SPK, 17 şirkete 30.09.2026 tarihli finansal raporlarının KAP'a bildirimi ile ilgili olarak ek süre verdi"
+   },
+   {
+    "ts": 1794196754,
+    "baslik": "EMEK Elektrik: Şirketimiz gecikmiş maaşları ödemiş olup, üretim devam etmektedir"
+   },
+   {
+    "ts": 1787153446,
+    "baslik": "EMKEL Emek Elektrik Endüstrisi konsolide bilanço 2026 6 aylık net zararı 172,852,717 TL (Önceki: 8,272,436 TL net kar)"
+   },
+   {
+    "ts": 1779422375,
+    "baslik": "Borsa İstanbul , BIST KOBİ Sanayi Endeksi Dönemsel Endeks değişikliklerini açıkladı"
+   },
+   {
+    "ts": 1774497612,
+    "baslik": "VBTS kapsamında EMKEL.E, FONET.E ve MSGYO.E payları seans başından 24 Nisan seans sonuna kadar açığa satışa ve kredili işlemlere konu edilem"
+   },
+   {
+    "ts": 1771350452,
+    "baslik": "EMKEL Emek Elektrik Endüstrisi konsolide bilanço 2025 Yıllık net zararı 56,667,893 TL (Önceki: 14,784,201 TL net zarar)"
+   },
+   {
+    "ts": 1768484729,
+    "baslik": "KAP: EMKEL  [ ] EMEK ELEKTRİK ENDÜSTRİSİ A.Ş.  Kredi Derecelendirmesi"
+   },
+   {
+    "ts": 1768479983,
+    "baslik": "KAP: JCRAV  [EMKEL ] JCR AVRASYA DERECELENDİRME A.Ş.  Kredi Derecelendirmesi"
+   },
+   {
+    "ts": 1768398853,
+    "baslik": "KAP:   [EMKEL ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1767844837,
+    "baslik": "VBTS kapsamında BIGTK.E ve EMKEL.E payları seans başından 6 Şubat seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1767799911,
+    "baslik": "KAP:   [BIGTK EMKEL ] BORSA İSTANBUL A.Ş.  BISTECH Pay Piyasası Alım Satım Sistemi Duyurusu"
+   },
+   {
+    "ts": 1762833824,
+    "baslik": "VBTS kapsamında ADESE.E ve EMKEL.E payları seans başından 10 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
    }
   ]
  }
