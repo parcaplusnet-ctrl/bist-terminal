@@ -1248,18 +1248,18 @@ for _k in (4, 5, 7, 8): _ek(f"gun_{_k}_ustu_yukselis", f"Gün içi +%{_k} üstü
 for _k in (2, 3, 4): _ek(f"atr_{_k}_{_k+1}_bandi", f"Günlük ortalama oynaklık (ATR) %{_k}-%{_k+1} bandında", (lambda k: lambda X: X["atr"][X["i"]] and k / 100 <= X["atr"][X["i"]] / X["c"] < (k + 1) / 100)(_k))
 for _k in (2, 3, 5): _ek(f"{_k}_gun_ust_uste_artis", f"Üst üste {_k} gün yükselen kapanış", (lambda k: lambda X: all(X["C"][X["i"]-j] > X["C"][X["i"]-j-1] for j in range(k)))(_k))
 
-def _oz_gunluk(kod):
-    """Yahoo günlük mumlar (2 yıl): (t, a, h, l, c, v) listesi."""
+def _oz_gunluk(kod, rng="2y"):
+    """Yahoo günlük mumlar (varsayılan 2 yıl; özellik laboratuvarının tek seferlik geriye dönük sayımı 5y): (t, a, h, l, c, v) listesi."""
     for host in ("query1", "query2"):
         try:
-            j = http(f"https://{host}.finance.yahoo.com/v8/finance/chart/{kod}.IS?range=2y&interval=1d", deneme=2, bekle=1.5)
+            j = http(f"https://{host}.finance.yahoo.com/v8/finance/chart/{kod}.IS?range={rng}&interval=1d", deneme=2, bekle=1.5)
             r = j["chart"]["result"][0]; q = r["indicators"]["quote"][0]
             M = [(t, o, h, l, c, v or 0) for t, o, h, l, c, v in zip(r["timestamp"], q["open"], q["high"], q["low"], q["close"], q["volume"]) if None not in (o, h, l, c)]
             if len(M) > 160: return M
         except Exception: continue
     return None
 
-def _gunluk_hepsi(kodlar, yol="gunluk_onbellek.pkl", dk=45):
+def _gunluk_hepsi(kodlar, yol="gunluk_onbellek.pkl", dk=45, rng="2y"):
     """Günlük grafik önbelleği: aynı çalışmada (egit, adaylar, ozlab) 600 hissenin grafiği bir kez indirilir."""
     import pickle
     from concurrent.futures import ThreadPoolExecutor
@@ -1268,7 +1268,7 @@ def _gunluk_hepsi(kodlar, yol="gunluk_onbellek.pkl", dk=45):
             C = pickle.load(open(yol, "rb"))
             if all(k in C for k in kodlar): return {k: C[k] for k in kodlar if C.get(k)}
     except Exception: pass
-    with ThreadPoolExecutor(max_workers=12) as ex: R = list(ex.map(_oz_gunluk, kodlar))
+    with ThreadPoolExecutor(max_workers=12) as ex: R = list(ex.map(lambda k: _oz_gunluk(k, rng), kodlar))
     C = {k: M for k, M in zip(kodlar, R) if M}
     try: pickle.dump(C, open(yol, "wb"))
     except Exception: pass
@@ -1287,7 +1287,7 @@ def _wilder(x, n):
     for i in range(n, len(x)): o[i] = (o[i - 1] * (n - 1) + x[i]) / n
     return o
 
-def _oz_ozellikler(M, extra=(), canli=False):
+def _oz_ozellikler(M, extra=(), canli=False, bas=None):
     """Her gün için özellik kümesi ve +%5 / stop sonucu. Döner: [(gün_idx, tarih, {özellik: bool}, sonuc)]  sonuc: 'h' hedef, 's' stop, 'n' ikisi de değil."""
     n = len(M); O = [m[1] for m in M]; Hh = [m[2] for m in M]; L = [m[3] for m in M]; C = [m[4] for m in M]; V = [m[5] for m in M]
     tr = [max(Hh[i] - L[i], abs(Hh[i] - C[i - 1]), abs(L[i] - C[i - 1])) if i else Hh[i] - L[i] for i in range(n)]
@@ -1322,7 +1322,10 @@ def _oz_ozellikler(M, extra=(), canli=False):
         w = C[k - 19:k + 1]; m = sum(w) / 20; s20[k] = m; sd20[k] = (sum((x - m) ** 2 for x in w) / 20) ** .5
     rng = [Hh[k] - L[k] for k in range(n)]
     out = []
-    for i in (range(n - 1, n) if canli else range(130, n - 2)):
+    i0 = 130
+    if bas and not canli:   # yalnızca bu tarihten (dahil değil) sonraki günler: birikimli laboratuvar hisse başına kendi son gününü izler
+        while i0 < n - 2 and time.strftime("%Y-%m-%d", time.gmtime(M[i0][0])) <= bas: i0 += 1
+    for i in (range(n - 1, n) if canli else range(i0, n - 2)):
         c, pc = C[i], C[i - 1]; chg = c / pc - 1
         av20 = sum(V[i - 20:i]) / 20 if i >= 20 else 0
         bw = []
@@ -1397,7 +1400,7 @@ def _agac_tahmin(model, rec):
     return t
 
 def cmd_ozlab(a):
-    """Özellik laboratuvarı (birikimli): tüm BIST hisselerinin 2 yıllık günlük grafiğinde her özelliğin +%5 (2 işlem günü) / stop oranını ölçer.
+    """Özellik laboratuvarı (birikimli): tüm BIST hisselerinin günlük grafiğinde (ilk sayım 5 yıl, sonra her tur son 2 yıl; yalnızca her hissenin yeni günleri eklenir) her özelliğin +%5 (2 işlem günü) / stop oranını ölçer.
     Her grafik taramasından sonra otomatik çalışır (adaylar komutu çağırır). Sayaçlar (grafik, örnek, özellik) her turda ÜSTÜNE EKLENİR; her turda 3 yeni formasyon denenir.
     Aynı gün-hisse örneği ikinci kez sayılmaz (özellik başına işlenen son gün tutulur); yeni eklenen özellik tüm geçmiş üzerinde bir kez geriye dönük ölçülür."""
     from concurrent.futures import ThreadPoolExecutor
@@ -1425,30 +1428,45 @@ def cmd_ozlab(a):
         if ad not in eski:
             eski[ad] = {"ad": ad, "aciklama": OZ_EKSTRA[ad][0], "durum": "test", "yeni": True, "_n": 0, "_h": 0, "_s": 0, "_son": None}
             yeni_eklenen.append(ad); B["yeni_formasyon"].append(ad)
-    ok = list(_gunluk_hepsi(kodlar).items())
-    if len(ok) < 50:
-        print(f"ÖZLAB: yalnızca {len(ok)} grafik alınabildi, önceki sonuçlar korundu"); return
+    # 20.11 DÜZELTME: eskiden tek bir genel "son gün" izlenirdi; iki hisse bir gün ilerideyse diğer ~600 hissenin yeni günü sayılmıyor, örnek günde +2 artıyordu.
+    # Artık her hisse için ayrı son gün (B["son_hisse"]) tutulur. Sürüm 2'ye geçişte sayaçlar 5 yıllık geçmişle bir kez sıfırdan sayılır.
+    geri = B.get("surum") != 2
+    rng = "5y" if geri else "2y"
+    ok = list(_gunluk_hepsi(kodlar, yol=("gunluk5y_onbellek.pkl" if geri else "gunluk_onbellek.pkl"), rng=rng).items())
+    if len(ok) < 50 or (geri and len(ok) < .8 * len(kodlar)):
+        print(f"ÖZLAB: yalnızca {len(ok)} grafik alınabildi ({rng}), önceki sonuçlar korundu"); return
+    if geri:
+        B.update({"N": 0, "H": 0, "S": 0, "son": None, "ornek": 0, "gun": 0, "surum": 2, "son_hisse": {}})
+        for o in eski.values(): o["_n"] = o["_h"] = o["_s"] = 0; o["_son"] = None
+    wm = B.setdefault("son_hisse", {}); onceki_son = B.get("son")
     ekstra = [ad for ad in eski if ad in OZ_EKSTRA]
-    tum = []; adv = {}
+    adv = {}
     for k, M in ok:
-        for i, tarih, F, so, chg in _oz_ozellikler(M, ekstra):
-            tum.append((tarih, F, so, chg)); adv.setdefault(tarih, [0, 0]); adv[tarih][0] += chg > 0; adv[tarih][1] += 1
-    gunler = set(); yeniN = 0
-    for tarih, F, so, chg in tum:
-        a_, t_ = adv[tarih]; oran = a_ / t_ if t_ else .5
-        F["zayif_piyasa"] = oran < .35; F["guclu_piyasa"] = oran > .6
-        gunler.add(tarih)
-        if B["son"] is None or tarih > B["son"]:
-            B["N"] += 1; B["H"] += so == "h"; B["S"] += so == "s"; yeniN += 1
-        for ad, v in F.items():
-            o = eski.get(ad)
-            if o is None or not v: continue
-            if o.get("_son") is None or tarih > o["_son"]:
-                o["_n"] += 1; o["_h"] += so == "h"; o["_s"] += so == "s"
-    son_gun = max(gunler)
+        for j in range(1, len(M)):
+            d_ = time.strftime("%Y-%m-%d", time.gmtime(M[j][0])); x_ = adv.setdefault(d_, [0, 0]); x_[0] += M[j][4] > M[j - 1][4]; x_[1] += 1
+    gunler = set(); yeniN = 0; yeni_wm = {}; Fk = set()
+    for k, M in ok:
+        w = None if geri else wm.get(k)
+        mx = w
+        for i, tarih, F, so, chg in _oz_ozellikler(M, ekstra, bas=(None if (geri or yeni_eklenen) else w)):
+            a_, t_ = adv[tarih]; oran = a_ / t_ if t_ else .5
+            F["zayif_piyasa"] = oran < .35; F["guclu_piyasa"] = oran > .6
+            if not Fk: Fk = set(F)
+            gunler.add(tarih); yeni = w is None or tarih > w
+            if yeni: B["N"] += 1; B["H"] += so == "h"; B["S"] += so == "s"; yeniN += 1
+            for ad, v in F.items():
+                o = eski.get(ad)
+                if o is None or not v: continue
+                if o.get("_son") is None or yeni:
+                    o["_n"] += 1; o["_h"] += so == "h"; o["_s"] += so == "s"
+            if mx is None or tarih > mx: mx = tarih
+        if mx: yeni_wm[k] = mx
+    wm.update(yeni_wm)
+    son_gun = max(gunler) if gunler else onceki_son
     for ad, o in eski.items():
-        if ad in {f for f in (tum[0][1] if tum else {})}: o["_son"] = son_gun; o["_olculdu"] = True
-    B["son"] = son_gun
+        if ad in Fk: o["_son"] = son_gun; o["_olculdu"] = True
+    B["gun"] = (B.get("gun") or 0) + len({d for d in gunler if onceki_son is None or d > onceki_son})
+    if son_gun: B["son"] = son_gun
     taban = B["H"] / B["N"] if B["N"] else 0
     yeni_liste = []
     for ad, o in eski.items():
@@ -1473,9 +1491,10 @@ def cmd_ozlab(a):
     if ilk: bul.append("En güçlü sinyaller (n≥300): " + ", ".join(f"{o['aciklama']} (+%5 oranı %{round(o['oran']*100)}, taban %{round(taban*100)})" for k, o in ilk) + ".")
     if aday: bul.append("Ağırlığa aday (fark ≥ +10 puan, n≥300; geçiş için 3 farklı günde aynı yön gerekir): " + ", ".join(aday) + ".")
     if yeni_liste: bul.append("Durumu değişen: " + ", ".join(yeni_liste) + ".")
-    bul.append(f"{len(ok)} hissenin günlük grafiği tarandı; toplamlar önceki turların üstüne eklenir (aynı gün-hisse örneği ikinci kez sayılmaz).")
+    if geri: bul.append(f"Sayım düzeltildi: geçmiş 2 yıldan 5 yıla çıkarıldı ve sayaçlar bir kez sıfırdan sayıldı ({B['N']} örnek, {B['gun']} işlem günü). Eski sayaç iki hisse bir gün ilerideyse diğer hisselerin yeni gününü saymıyordu (günde +2 örnek).")
+    bul.append(f"{len(ok)} hissenin günlük grafiği tarandı; toplamlar önceki turların üstüne eklenir (her hisse için kendi son günü izlenir, aynı gün-hisse örneği ikinci kez sayılmaz).")
     LO["tur"] = {"tur": no, "zaman": sn.strftime("%d.%m %H:%M"), "at": sn.isoformat(), "sure_sn": int(time.time() - t0),
-                 "grafik": {"toplam": B["grafik"], "bu_tur": len(ok)}, "ornek": B["ornek"], "ornek_yeni": yeniN, "gun": len(gunler), "taban": round(taban, 3),
+                 "grafik": {"toplam": B["grafik"], "bu_tur": len(ok)}, "ornek": B["ornek"], "ornek_yeni": yeniN, "gun": B.get("gun"), "pencere": rng if geri else "2y", "taban": round(taban, 3),
                  "ozellik_toplam": B["ozellik"], "yeni": len(yeni_eklenen), "sayac": sayac, "bulgular": bul}
     if isinstance(LO.get("model"), dict): LO["model"]["ornek"] = B["ornek"]; LO["model"]["egitim"] = simdi().strftime("%d.%m %H:%M")   # her taramada güncellenen laboratuvar eğitim zamanı (terminalde "eğitim ..." etiketi)
     json.dump(V, open(a.veri, "w"), ensure_ascii=False)
