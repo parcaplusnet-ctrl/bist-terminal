@@ -1167,7 +1167,7 @@
    ]
   }
  },
- "guncelleme": "20.11 15:24",
+ "guncelleme": "20.11 16:27",
  "gun_sayisi": 3,
  "nedenler": {
   "ISVEA": {
@@ -2090,6 +2090,56 @@
    {
     "ts": 1762833824,
     "baslik": "VBTS kapsamında ADESE.E ve EMKEL.E payları seans başından 10 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   }
+  ],
+  "2026-11-20|MOBTL": [
+   {
+    "ts": 1794887965,
+    "baslik": "Mobiltel, Realme markalı ürünlerin Türkiye'de satışı, pazarlanması ve dağıtımına ilişkin Distribütörlük Sözleşmesi imzalandı"
+   },
+   {
+    "ts": 1794455988,
+    "baslik": "Mobiltel'in Türk Telekom ve grup şirketleri ile distribütörlük ilişkisi sona erecek"
+   },
+   {
+    "ts": 1793983637,
+    "baslik": "MOBTL Mobiltel İletişim Hizmetleri Sanayi ve Tic. konsolide bilanço 2026 9 aylık net karı 87,613,229 TL (Önceki: 35,368,912 TL net kar)"
+   },
+   {
+    "ts": 1791269580,
+    "baslik": "Toplantı Notu -MOBTL (PhillipCapital)"
+   },
+   {
+    "ts": 1786980615,
+    "baslik": "MOBTL Mobiltel İletişim Hizmetleri Sanayi ve Tic. konsolide bilanço 2026 6 aylık net karı 72,691,885 TL (Önceki: 12,024,113 TL net kar)"
+   },
+   {
+    "ts": 1774938246,
+    "baslik": "Bilanço analizi - MOBTL(Pusula Yatırım)"
+   },
+   {
+    "ts": 1774885766,
+    "baslik": "MOBTL Mobiltel İletişim Hizmetleri Sanayi ve Tic. konsolide bilanço 2025 Yıllık net karı 664,750,239 TL (Önceki: 172,168,460 TL net kar)"
+   },
+   {
+    "ts": 1773287973,
+    "baslik": "Toplam 24 şirkete 31.12.2025 tarihli finansal raporların KAP'a bildirimi ile ilgili olarak ek süre verildi"
+   },
+   {
+    "ts": 1769756694,
+    "baslik": "KAP:   [MOBTL ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1767168438,
+    "baslik": "KAP:   [AKSUE ALGYO AVOD CEMZY DOKTA DUNYH ERCB GARFA GENTS HATSN ISKPL MOBTL MOGAN RAYSG SELVA TCKRC TGSAS VERUS YGGYO ] BORSA İSTANBUL A.Ş"
+   },
+   {
+    "ts": 1762838197,
+    "baslik": "Bilanço analizi - MOBTL (Marbaş Menkul Değerler )"
+   },
+   {
+    "ts": 1762833727,
+    "baslik": "MOBTL Mobiltel İletişim Hizmetleri Sanayi ve Tic. konsolide bilanço 2025 9 aylık net karı 27,263,059 TL (Önceki: 115,259,615 TL net zarar)"
    }
   ]
  }
