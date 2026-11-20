@@ -10,5 +10,11 @@
   "tarih": "19.11",
   "bulgu": "Özellik laboratuvarı: tur 7, 372 özellik ölçüldü, 16 tanesi kullanılıyor (hem geçmişte hem son 60 günde tabanı geçiyor); en iyi kombinasyon: genis_alim + atr %8+ (+%5 oranı %39, taban %21). Durum değişikliği yok.",
   "degisim": "3 yeni özellik önerildi: hacim_kurudu_patladi (oran %23, fark +2,6, test), ema50_destek_donus (oran %21, fark +0,7, test), bosluk_guclu_kapanis (oran %25, fark +4,3, test)"
+ },
+ {
+  "no": 3,
+  "tarih": "20.11",
+  "bulgu": "Özellik laboratuvarı: tur 8, 425 özellik ölçüldü, 7 tanesi kullanılıyor (dün 16 idi; 1869 grafik). En iyi kombinasyon: genis_alim + atr %8+ + gün +%5/+%9,5 (+%5 oranı %42, taban %23, 573 örnek, yeni). Bugün hiçbir hisse kullanılan özelliği taşımadı (lab puanı 0 hisse).",
+  "degisim": "3 yeni özellik önerildi: sikisma_yesil_mum (oran %26, fark +3,1, test), cekic_dip_yakin (oran %19, fark -4,8, elendi), rsi_dip_donus_guclu (oran %25, fark +2,2, ileri test +13,2, test)"
  }
 ]

@@ -82,5 +82,47 @@
    "ornek": 6575,
    "durum": "test"
   }
+ },
+ {
+  "id": "sikisma_yesil_mum",
+  "aciklama": "Bollinger bantları 6 ayın en dar seviyesine yakınken +%2 üstü yeşil mum",
+  "kod": "ek(\"sikisma_yesil_mum\", \"Bollinger bantları 6 ayın en dar seviyesine yakınken +%2 üstü yeşil mum\", lambda d: (d.bbw_min120 == 1) & (d.govde >= 0.02))",
+  "tarih": "20.11",
+  "ilk_olcum": {
+   "oran": 0.2643,
+   "stop": 0.3923,
+   "fark": 0.0313,
+   "getiri_fark": 0.152,
+   "ornek": 2804,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "cekic_dip_yakin",
+  "aciklama": "Uzun alt fitilli mum (aralığın yarısından fazlası) ve fiyat 20 günlük dibe %5 içinde",
+  "kod": "ek(\"cekic_dip_yakin\", \"Uzun alt fitilli mum (aralığın yarısından fazlası) ve fiyat 20 günlük dibe %5 içinde\", lambda d: (d.alt_fitil >= 0.5) & (d.dist_dip20 <= 0.05))",
+  "tarih": "20.11",
+  "ilk_olcum": {
+   "oran": 0.185,
+   "stop": 0.3095,
+   "fark": -0.048,
+   "getiri_fark": 0.004,
+   "ornek": 21577,
+   "durum": "elendi"
+  }
+ },
+ {
+  "id": "rsi_dip_donus_guclu",
+  "aciklama": "RSI 40 altındayken 3+ puan yükselip günü aralığın üst %40'ında kapattı",
+  "kod": "ek(\"rsi_dip_donus_guclu\", \"RSI 40 altındayken 3+ puan yükselip günü aralığın üst %40'ında kapattı\", lambda d: (d.rsi < 40) & (d.rsi_d >= 3) & (d.clpos >= 0.6))",
+  "tarih": "20.11",
+  "ilk_olcum": {
+   "oran": 0.2545,
+   "stop": 0.3675,
+   "fark": 0.0215,
+   "getiri_fark": 0.177,
+   "ornek": 11743,
+   "durum": "test"
+  }
  }
 ]
