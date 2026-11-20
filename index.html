@@ -1358,11 +1358,22 @@ const st2=document.createElement("style");
   const my=124;g.textAlign="left";g.font="700 23px "+F;sp(6);g.fillStyle=gold(96,400);g.fillText("BIST YÜKSELİŞ RADARI",96,my+14);
   g.textAlign="right";g.fillStyle=MUT;g.font="500 23px "+F;sp(1);g.fillText(new Date().toLocaleDateString("tr-TR",{timeZone:"Europe/Istanbul",day:"2-digit",month:"long",year:"numeric"}),W-96,my+14);
   let hl=g.createLinearGradient(90,0,W-90,0);hl.addColorStop(0,"rgba(201,169,106,0)");hl.addColorStop(.5,"rgba(201,169,106,.6)");hl.addColorStop(1,"rgba(201,169,106,0)");g.fillStyle=hl;g.fillRect(90,my+48,W-180,1.5);
-  g.textAlign="center";g.fillStyle=MUT;g.font="600 21px "+F;sp(9);g.fillText("PİYASA DUYGUSU",W/2,250);
-  g.fillStyle="#fff";g.font="800 112px "+F;sp(-1);g.fillText(kor?"Korku artıyor":"Güven artıyor",W/2,362);
-  g.fillStyle=AC;g.fillRect(W/2-44,392,88,5);
-  g.fillStyle=ACS;g.font="500 29px "+F;sp(0);g.fillText(kor?"VIX yükseldi; piyasada risk iştahı zayıflıyor.":"VIX geriledi; piyasada risk iştahı güçleniyor.",W/2,452);
-  const cx=W/2,cy=884,R=290,TH=44,r=R-TH,mid=R-TH/2,lo=10,hi=40,ang=v=>Math.PI+Math.PI*(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo);
+  
+  {const bx0=110,bx1=W-110,bmid=318,amp=104,N=kor?64:90;let sd=Math.round(vx*100)%997+7;const rnd=()=>{sd=(sd*9301+49297)%233280;return sd/233280};
+   g.save();g.beginPath();g.rect(bx0-30,bmid-amp-30,bx1-bx0+60,amp*2+60);g.clip();
+   const bg=g.createRadialGradient(W/2,bmid,10,W/2,bmid,520);bg.addColorStop(0,kor?"rgba(238,85,96,.16)":"rgba(52,211,153,.14)");bg.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=bg;g.fillRect(0,bmid-amp-40,W,amp*2+80);
+   g.strokeStyle="rgba(255,255,255,.07)";g.lineWidth=1;for(let k=-2;k<=2;k++){g.beginPath();g.moveTo(bx0,bmid+k*amp/2);g.lineTo(bx1,bmid+k*amp/2);g.stroke()}
+   const P=[];for(let i=0;i<=N;i++){const t=i/N,x=bx0+t*(bx1-bx0);let y;
+    if(kor){y=bmid+amp*.5-t*amp*.85+(rnd()-.5)*2*amp*(.18+.62*t)*(i%2?1:.5)}
+    else{y=bmid-amp*.5+t*amp*.85+Math.sin(t*15)*amp*.16*(1-t*.6)+Math.sin(t*6)*amp*.13}
+    P.push([x,Math.max(bmid-amp,Math.min(bmid+amp,y))])}
+   const path=()=>{g.beginPath();g.moveTo(P[0][0],P[0][1]);if(kor){for(let i=1;i<P.length;i++)g.lineTo(P[i][0],P[i][1])}else{for(let i=1;i<P.length-1;i++){const mx=(P[i][0]+P[i+1][0])/2,my=(P[i][1]+P[i+1][1])/2;g.quadraticCurveTo(P[i][0],P[i][1],mx,my)}g.lineTo(P[N][0],P[N][1])}};
+   path();g.lineTo(bx1,bmid+amp);g.lineTo(bx0,bmid+amp);g.closePath();const fg=g.createLinearGradient(0,bmid-amp,0,bmid+amp);fg.addColorStop(0,kor?"rgba(238,85,96,.34)":"rgba(52,211,153,.30)");fg.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=fg;g.fill();
+   g.save();g.shadowColor=AC;g.shadowBlur=26;path();g.lineWidth=kor?3.5:5;g.lineJoin=kor?"miter":"round";g.lineCap="round";g.strokeStyle=AC;g.stroke();g.restore();
+   const L=P[N];g.save();g.shadowColor=AC;g.shadowBlur=30;g.fillStyle="#fff";g.beginPath();g.arc(L[0],L[1],9,0,7);g.fill();g.restore();g.beginPath();g.arc(L[0],L[1],17,0,7);g.lineWidth=2;g.strokeStyle=AC;g.stroke();
+   g.restore()}
+
+  const cx=W/2,cy=878,R=332,TH=44,r=R-TH,mid=R-TH/2,lo=10,hi=40,ang=v=>Math.PI+Math.PI*(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo);
   const lerp=(a,b,t)=>a+(b-a)*t,hx=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)),col=v=>{const c=[[10,"#34d399"],[25,"#e8b04a"],[40,"#ee5560"]];let i=v<25?0:1;const t=(Math.min(40,Math.max(10,v))-c[i][0])/(c[i+1][0]-c[i][0]),A=hx(c[i][1]),B=hx(c[i+1][1]);return "rgb("+A.map((x,k)=>Math.round(lerp(x,B[k],t))).join(",")+")"};
   g.beginPath();g.arc(cx,cy,R+10,Math.PI,2*Math.PI);g.arc(cx,cy,r-10,2*Math.PI,Math.PI,true);g.closePath();g.fillStyle="rgba(255,255,255,.035)";g.fill();
   const step=.25,cur=Math.min(hi,Math.max(lo,vx));
