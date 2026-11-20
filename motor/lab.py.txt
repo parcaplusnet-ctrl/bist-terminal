@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """BIST Yükseliş Radarı - Sürekli Özellik Laboratuvarı. Sürüm 1.1 · 11.11
-Her turda tüm BIST hisselerinin grafiklerini (Günlük 2 yıl, 1 Saat ve 4 Saat son ~3 ay) indirir,
+Her turda tüm BIST hisselerinin grafiklerini (Günlük 5 yıl, 1 Saat ve 4 Saat son ~3 ay) indirir,
 yüzlerce özelliği ve her turda yeni kombinasyonları ölçer:
   hedef: kapanıştan sonraki 2 işlem gününde +%5, önce -%3 görmeden (aynı gün ikisi de olursa stop sayılır).
 Her özellik için: örnek, +%5 oranı, stop oranı, taban farkı (puan) ve son 60 işlem gününde ileri test farkı.
@@ -16,6 +16,7 @@ import numpy as np, pandas as pd
 IST = dt.timezone(dt.timedelta(hours=3))
 UA = "Mozilla/5.0 (X11; Linux x86_64)"
 TEST_GUN = 60
+GECMIS = os.environ.get("LAB_GECMIS", "5y")   # günlük geçmiş penceresi (21.11: 2y yerine 5y; pencere kayar, 2y'de örnek sayısı sabit kalıyordu)
 
 # ------------------------------------------------------------------ veri
 def curl(url, deneme=4):
@@ -224,8 +225,8 @@ def main():
     K["tur"] = K.get("tur", 0) + 1; tur = K["tur"]
     sek = evren(); kods = sorted(sek)
     if a.sinir: kods = kods[:a.sinir]
-    G = indir(kods, "1d", "2y"); S1 = indir(list(G), "60m", "3mo")
-    xu = yahoo("XU100.IS", "1d", "2y")
+    G = indir(kods, "1d", GECMIS); S1 = indir(list(G), "60m", "3mo")
+    xu = yahoo("XU100.IS", "1d", GECMIS)
     parcalar = []
     for k, df in G.items():
         f = gostergeler(df); f["kod"] = k; f["sektor"] = sek.get(k, "Bilinmiyor"); f.index = f.index.normalize().tz_localize(None)
@@ -260,6 +261,7 @@ def main():
         for c in tm.columns:
             if c != "kod": D.loc[~son, c] = np.nan
     D = D.replace([np.inf, -np.inf], np.nan)
+    fc = [c for c in D.columns if D[c].dtype == np.float64]; D[fc] = D[fc].astype(np.float32)   # bellek: 5y için yarıya
     alinamaz = int(((D.alinamaz > 0) & D.etiket.notna()).sum())
     E = D[D.etiket.notna() & (D.alinamaz < 1)]; y = E.etiket.values; test = (E.tarih >= test_bas).values
     taban = float((y == 1).mean()); taban_stop = float((y == -1).mean()); taban_getiri = 5 * taban - 3 * taban_stop; taban_test = float((y[test] == 1).mean()) if test.any() else None
@@ -390,7 +392,7 @@ def main():
     if kul: bul.append(f"Şu an {len(kul)} özellik hem geçmişte hem son {TEST_GUN} günde tabanı geçiyor; bugün {len(puan)} hisse en az birini taşıyor.")
     out = {"durum": "bitti", "tur": tur, "zaman": zaman, "at": simdi.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "sure_sn": round(time.time() - t0),
            "grafik": {"gunluk": len(G), "s1": s1n, "s4": s1n, "toplam": len(G) + 2 * s1n, "hisse": len(kods)},
-           "mum": int(sum(len(x) for x in G.values()) + sum(len(x) for x in S1.values())), "ornek": int(len(E)), "alinamaz_disarida": alinamaz, "gun": int(len(gunler)),
+           "mum": int(sum(len(x) for x in G.values()) + sum(len(x) for x in S1.values())), "ornek": int(len(E)), "alinamaz_disarida": alinamaz, "gun": int(len(gunler)), "pencere": GECMIS,
            "taban": round(taban, 4), "taban_stop": round(taban_stop, 4), "taban_getiri": round(taban_getiri, 3), "taban_test": round(taban_test, 4) if taban_test is not None else None, "test_gun": TEST_GUN,
            "ozellik_toplam": len(K["ozellik"]), "bu_tur_olculen": len(olculen), "yeni": len(yeni_ids), "sayac": sayac,
            "kombinasyon_denenen": len(denenen), "puanli_hisse": len(puan), "son_gun": str(pd.Timestamp(son_gun).date()),

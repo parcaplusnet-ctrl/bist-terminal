@@ -341,7 +341,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   <section class="sec"><div class="sh"><h2>Özellik laboratuvarı · hangi sinyal +%5 getiriyor</h2><p id="ozTag">—</p></div>
    <div class="kasa">
     <div class="k"><small>Test edilen grafik</small><b id="lcG">—</b><em id="lcGd">—</em></div>
-    <div class="k"><small>Örnek</small><b id="lcO">—</b><em id="lcGun">—</em></div>
+    <div class="k"><small id="lcOL">Örnek</small><b id="lcO">—</b><em id="lcGun">—</em></div>
     <div class="k"><small>Ölçülen özellik</small><b id="lcF">—</b><em id="lcY">—</em></div>
     <div class="k"><small>Kullanılıyor</small><b id="lcK" class="up">—</b><em id="lcPu">—</em></div>
     <div class="k"><small>Model ilk 10 · ileri test</small><b id="ozM10">—</b><em id="ozTab">—</em></div>
@@ -677,7 +677,7 @@ function labSec(){const O=(D&&D.lab_ozellik)||{},T=O.tur;let X=T?Object.assign({
  if(X)labCanli(X)}
 function lcNext(){const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));for(let d=0;d<8;d++){const x=new Date(n);x.setDate(n.getDate()+d);const wd=x.getDay();if(wd===0||wd===6)continue;const q=new Date(x);q.setHours(21,41,0,0);if(q>n)return(d===0?"bugün ":d===1?"yarın ":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"][wd]+" ")+"21:41"}return"—"}
 function labCanli(L){if(!L)return;const f=v=>Number(v||0).toLocaleString("tr-TR"),g=L.grafik||{},s=L.sayac||{};
- txt($("lcG"),f(g.toplam));txt($("lcGd"),g.bu_tur!=null?`birikimli · bu tur +${f(g.bu_tur)} günlük grafik`:`${f(g.gunluk)} günlük · ${f(g.s1)} 1S · ${f(g.s4)} 4S`);txt($("lcO"),f(L.ornek));txt($("lcGun"),`${L.ornek_yeni!=null?"bu tur +"+f(L.ornek_yeni)+" yeni · ":""}${L.gun||"—"} işlem günü · taban %${Math.round((L.taban||0)*100)}`);
+ txt($("lcG"),f(g.toplam));txt($("lcGd"),g.bu_tur!=null?`birikimli · bu tur +${f(g.bu_tur)} günlük grafik`:`${f(g.gunluk)} günlük · ${f(g.s1)} 1S · ${f(g.s4)} 4S`);txt($("lcO"),f(L.ornek));txt($("lcOL"),"Örnek · son "+({"2y":"2 yıl","5y":"5 yıl"}[L.pencere]||"2 yıl")+" (kayan pencere)");txt($("lcGun"),`${L.ornek_yeni!=null?"bu tur +"+f(L.ornek_yeni)+" yeni · ":""}${L.gun||"—"} işlem günü · taban %${Math.round((L.taban||0)*100)}`);
  txt($("lcF"),f(L.ozellik_toplam));txt($("lcY"),`bu tur +${f(L.yeni)} yeni formasyon · ${f((L.ozellikler||[]).length)} izleniyor`);txt($("lcK"),f(s.kullaniliyor));txt($("lcPu"),`test ${f(s.test)} · elendi ${f(s.elendi)}`);
  const fresh=L.at&&(Date.now()-Date.parse(L.at))<20*60*1000,run=L.durum==="calisiyor"&&fresh;txt($("lcT"),"#"+(L.tur||"—"));txt($("lcZ"),run?"çalışıyor":`${L.zaman||"—"}${L.sure_sn?" · "+L.sure_sn+" sn":""}`);
  const lsa=L.zaman?(Date.now()-tsDM(L.zaman)+3*36e5)/36e5:999,eski=!run&&lsa>=24;
