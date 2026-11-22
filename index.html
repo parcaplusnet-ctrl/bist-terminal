@@ -653,10 +653,10 @@ function hrkLab(H){const sek=$("hrkSek");if(!sek)return;if(!H){sek.hidden=true;r
  txt($("hrkG"),`${H.gun_sayisi||0}/${(H.kurallar||{}).min_gun||6}`);txt($("hrkGd"),(H.gun_sayisi||0)<((H.kurallar||{}).min_gun||6)?"kanıt kapıları için gün birikiyor":"kanıt kapıları açık");
  txt($("hrkO"),(H.gozlem||0).toLocaleString("tr-TR"));txt($("hrkOd"),"hisse-gün (sabah -> gün sonu)");
  txt($("hrkP"),o.toplam!=null?o.toplam:"—");txt($("hrkPd"),`${o.ileri_test_bekleyen||0} ileri test bekliyor · ${o.elenen||0} elendi`);
- txt($("hrkB"),o.onay_bekleyen!=null?o.onay_bekleyen:"—");txt($("hrkBd"),"ileri testi geçti, onayınızı bekliyor");
- txt($("hrkK"),(H.onayli||[]).length);txt($("hrkKd"),(H.onayli||[]).length?"seçimde uygulanıyor":"seçime etkisi yok");
+ txt($("hrkB"),o.onay_bekleyen!=null?o.onay_bekleyen:"—");txt($("hrkBd"),"ileri testi geçti; otonom kapılar (10 gün, 3 ardışık gün) bekleniyor");
+ txt($("hrkK"),(H.onayli||[]).length);txt($("hrkKd"),(H.onayli||[]).length?`seçimde uygulanıyor · ${(H.onayli||[]).filter(x=>x.onay_turu==="otonom").length} otonom onay`:"seçime etkisi yok");
  if(d){txt($("hrkE"),f2(d.endeks)+"%");$("hrkE").className=cls(d.endeks);txt($("hrkEd"),`${d.gun} · yükselen ${d.yukselen_sayi} · düşen ${d.dusen_sayi}`)}
- txt($("hrkNot"),(o.durum||"")+". "+((H.kurallar||{}).not||""));
+ txt($("hrkNot"),(o.durum||"")+". "+((H.kurallar||{}).not||"")+(((H.otonom||{}).karar_gunlugu||[]).length?" Son otonom kararlar: "+(H.otonom.karar_gunlugu).slice(-3).map(x=>`${x.zaman} ${x.karar} - ${x.aciklama}`).join("; ")+".":""));
  const satir=a=>a.map(x=>[x.kod,(x.sektor||"").replace(/ Services| Industries/,""),{t:f1(x.rel),c:cls(x.rel)},f1(x.sabah_degisim),x.rv!=null?x.rv+"x":"—",x.puan!=null?x.puan:"—",x.neden||"—"]);
  const bas=["Hisse","Sektör","Endekse göre","Sabah %","Hacim","Puan","Neden (haber)"];
  tbl("hrkU",["En çok yükselenler (endekse göre)"].concat(bas.slice(1)),d?satir(d.yukselenler):[]);tbl("hrkD",["En çok düşenler (endekse göre)"].concat(bas.slice(1)),d?satir(d.dusenler):[]);

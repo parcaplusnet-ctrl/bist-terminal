@@ -7,7 +7,7 @@ Ne yapar:
      tek özellik ve çift özellik örüntüleri için kanıt üretir.
   3) Kanıt kapıları (laboratuvar disipliniyle aynı): keşif günlerinde örnek, istatistik anlamlılık (z>=3), gün tutarlılığı, ARDINDAN
      ileri test (son günler keşifte kullanılmaz). Asgari 6 gün. Kanıtı yetmeyen örüntü "aday" bile olmaz.
-  4) İleri testi geçen örüntü yalnızca ÖNERİLİR ("Onay bekliyor"). Seçime girmesi için kullanıcı onayı gerekir; onaylananlar rules.json
+  4) İleri testi geçen örüntü yalnızca ÖNERİLİR ("Onay bekliyor"). Seçime girmesi için onay gerekir (22.11: kullanıcı onay yetkisini Claude'a devretti, bkz. OTONOM ONAY); onaylananlar rules.json
      hareket_kurallari listesindedir ve radar.py adaylar adımında uygulanır (bonus: yalnız sıralama; eleme: aday dışı).
   5) Çalışan sistemleri (radar puanı, hacim, uygun işareti, onaylı kurallar) her gün aynı yöntemle puanlar; başarı oranları sürekli ölçülür.
 Çıktılar: veri.json -> hareket_lab (sayfa okur), lab/hareket.json (kalıcı kayıt, durum geçmişi).
@@ -396,6 +396,7 @@ def main():
     ap.add_argument("--rules", default="rules.json")
     ap.add_argument("--neden", default="hareket_neden.json")
     ap.add_argument("--bugun", default=None)
+    ap.add_argument("--otonom", action="store_true", help="22.11 kullanıcı kararı: kapıları geçen örüntüyü Claude kendisi onaylar/geri alır (yalnız gece görevi kullanır)")
     a = ap.parse_args()
     simdi = simdi_ist()
     bugun = a.bugun or simdi.strftime("%Y-%m-%d")
@@ -516,8 +517,11 @@ def main():
             return any(x in F for x in s["any"])
         gunluk = []
         tum = []
+        canli_ids = []; canli_gun = 0
+        og = (onayli.get(s["id"][6:]) or {}).get("onay_gun") if s["id"].startswith("kural:") else None
         for g in gun_adlari:
             ids = [i for i in idx_all if O[i]["gun"] == g and eslesir(O[i]["f"])]
+            if og and g > og: canli_ids += ids; canli_gun += bool(ids)
             m = olc(ids, O)
             if m:
                 gunluk.append({"gun": g, "n": m["n"], "ort_rel": round(m["ort"], 2), "yuk": round(m["yuk"], 3), "dus": round(m["dus"], 3),
@@ -530,6 +534,8 @@ def main():
                                     "yuk": round(mm["yuk"], 3), "dus": round(mm["dus"], 3), "taban_ort": round(top["ort"], 2),
                                     "taban_yuk": round(top["yuk"], 3), "taban_dus": round(top["dus"], 3), "fark_ort": round(mm["ort"] - top["ort"], 2),
                                     "gunluk": gunluk[-10:], "yon": s.get("yon")})
+            mc = olc(canli_ids, O) if canli_ids else None
+            if og and mc: HL["sistemler"][-1]["canli"] = {"n": mc["n"], "gun": canli_gun, "ort_rel": round(mc["ort"], 2), "taban_ort": round(top["ort"], 2)}
     # kasa seçimlerinin gerçek sonuçları (kalite kapısı)
     H = [h for h in V.get("history", []) if h.get("sonuc") in ("Başarılı", "Stop", "Takip Süresi Doldu")]
     if H:
@@ -574,7 +580,47 @@ def main():
                  "gozlem": len(O_son), "yukselenler": [ozet(o) for o in O_son[::-1][:12]], "dusenler": [ozet(o) for o in O_son[:12]],
                  "yukselen_ortak": ortak(yuk_l), "dusen_ortak": ortak(dus_l),
                  "uyari": "Tek günlük gözlem kanıt değildir; örüntü tablosundaki kapılardan geçmeden seçime etkisi yoktur."}
-    HL["onayli"] = [{"id": k, "aciklama": v.get("aciklama"), "yon": v.get("yon"), "onay": v.get("onay_tarihi")} for k, v in onayli.items()]
+    # ---- OTONOM ONAY (22.11, kullanıcı kararı): "çalışma ihtimali kuvvetli her bulguyu sen dene, onayı sen ver ya da verme" ----
+    # Yalnız --otonom ile (gece görevi). Kapılar bilerek sıkıdır: çok sayıda örüntü aynı anda sınandığı ve günler birbirine bağlı olduğu için yanlış pozitif riski vardır.
+    # Etki sınırlı: bonus yalnız sıralama (ağırlık 0,05), eleme yalnız adayı dışarıda bırakır; kalite kapısı eşiği ve öğrenme aşaması kuralı değişmez. Her karar günlüğe yazılır, canlı performans bozulursa geri alınır.
+    OTO = {"min_gun": 10, "seri": 3, "min_n": 60, "z": 4.0, "tutarlilik": 0.75, "azami_aktif": 2, "geri_al_n": 30, "geri_al_gun": 8}
+    kg = kayit.setdefault("karar_gunlugu", []); seri = kayit.setdefault("oto_seri", {}); degisti = False
+    if a.otonom:
+        bekleyen = {pid: (feats, r) for pid, feats, r, d in liste if d == "Onay bekliyor"}
+        for pid in list(seri):
+            if pid not in bekleyen: del seri[pid]
+        for pid in bekleyen:
+            e = seri.setdefault(pid, {"gun": None, "sayi": 0})
+            if e["gun"] != bugun: e["gun"] = bugun; e["sayi"] += 1
+        # geri alma: canlı (onaydan sonraki günler) performans kuralın yönünün tersiyse
+        for kid, k in list(onayli.items()):
+            if k.get("onay") != "otonom": continue
+            sis_ = next((x for x in HL["sistemler"] if x["id"] == "kural:" + kid), None)
+            c = (sis_ or {}).get("canli")
+            if c and c["n"] >= OTO["geri_al_n"] and c["gun"] >= OTO["geri_al_gun"]:
+                kotu = (c["ort_rel"] <= c["taban_ort"]) if k["yon"] == "bonus" else (c["ort_rel"] >= c["taban_ort"])
+                if kotu:
+                    rules["hareket_kurallari"] = [x for x in rules.get("hareket_kurallari", []) if x["id"] != kid]; del onayli[kid]; degisti = True
+                    kayit.setdefault("oto_yasak", {})[kid] = zaman   # geri alınan örüntü aynı çalışmada ya da sonra yeniden onaylanmaz (yeni kanıt için kayıt silinmeli)
+                    kg.append({"zaman": zaman, "karar": "geri alındı", "id": kid, "aciklama": k.get("aciklama"), "gerekce": f"canlı {c['gun']} günde n={c['n']}: ort {c['ort_rel']:+.2f} vs taban {c['taban_ort']:+.2f}, beklenen yönün tersi"})
+        aktif = sum(1 for k in onayli.values() if k.get("onay") == "otonom")
+        for pid, (feats, r) in sorted(bekleyen.items(), key=lambda kv: -kv[1][1]["z"]):
+            if aktif >= OTO["azami_aktif"] or pid in onayli or pid in (kayit.get("oto_yasak") or {}): continue
+            if ng < OTO["min_gun"] or r["n"] < OTO["min_n"] or r["z"] < OTO["z"] or r.get("tutarlilik", 0) < OTO["tutarlilik"] or seri[pid]["sayi"] < OTO["seri"]: continue
+            yon = "bonus" if r["yon"] > 0 else "eleme"
+            if any(set(k["ozellik"]) <= set(feats) or set(feats) <= set(k["ozellik"]) for k in onayli.values()): continue   # iç içe/aynı örüntü ikinci kez onaylanmaz
+            kural = {"id": pid, "aciklama": aciklama(feats), "ozellik": feats, "yon": yon, "agirlik": 0.05, "onay": "otonom", "onay_tarihi": zaman, "onay_gun": bugun,
+                     "gerekce": {"gun": ng, "n": r["n"], "z": round(r["z"], 1), "tutarlilik": round(r["tutarlilik"], 2), "fark_ort": round(r["fark_ort"], 2),
+                                 "ileri_n": r.get("n_ileri"), "ileri_fark_ort": round(r["ileri_fark_ort"], 2) if r.get("ileri_fark_ort") is not None else None, "seri": seri[pid]["sayi"]}}
+            rules.setdefault("hareket_kurallari", []).append(kural); onayli[pid] = kural; aktif += 1; degisti = True
+            kg.append({"zaman": zaman, "karar": "onaylandı", "id": pid, "aciklama": kural["aciklama"], "yon": yon, "gerekce": kural["gerekce"]})
+        if degisti:
+            json.dump(rules, open(a.rules, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        kayit["karar_gunlugu"] = kg[-60:]
+    HL["otonom"] = {"acik": bool(a.otonom) or bool(kayit.get("oto_son")), "kapilar": OTO, "seri_bekleyen": {pid: e["sayi"] for pid, e in seri.items()},
+                    "karar_gunlugu": kayit["karar_gunlugu"][-10:], "degisti": degisti}
+    if a.otonom: kayit["oto_son"] = zaman
+    HL["onayli"] = [{"id": k, "aciklama": v.get("aciklama"), "yon": v.get("yon"), "onay": v.get("onay_tarihi"), "onay_turu": v.get("onay") or "kullanıcı"} for k, v in onayli.items()]
     V["hareket_lab"] = HL
     json.dump(V, open(a.veri, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     kayit["guncelleme"] = zaman
