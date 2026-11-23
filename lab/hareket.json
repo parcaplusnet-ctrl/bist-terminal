@@ -1486,7 +1486,7 @@
    ]
   }
  },
- "guncelleme": "20.11 21:46",
+ "guncelleme": "23.11 10:23",
  "gun_sayisi": 4,
  "nedenler": {
   "BURVA": {
@@ -2461,5 +2461,7 @@
     "baslik": "MOBTL Mobiltel İletişim Hizmetleri Sanayi ve Tic. konsolide bilanço 2025 9 aylık net karı 27,263,059 TL (Önceki: 115,259,615 TL net zarar)"
    }
   ]
- }
+ },
+ "karar_gunlugu": [],
+ "oto_seri": {}
 }
