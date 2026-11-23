@@ -2102,7 +2102,7 @@
    ]
   }
  },
- "guncelleme": "23.11 18:22",
+ "guncelleme": "23.11 21:47",
  "gun_sayisi": 5,
  "nedenler": {
   "BURVA": {
@@ -2118,8 +2118,8 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "IHEVA": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 9 aylık net zarar 176 mn TL (önceki 74,5 mn) - haber eski, bugüne bağlanamadı"
   },
   "TRHOL": {
    "tarih": "2026-11-20",
@@ -2138,7 +2138,7 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "IHYAY": {
-   "tarih": "2026-11-20",
+   "tarih": "2026-11-23",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "TKNKA": {
@@ -2146,8 +2146,8 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "ISVEA": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 09.11 SPK Trive Yatırım faaliyetini durdurdu (dolaylı, zayıf); 9 aylık kâr 54,7 mn TL ile artmış"
   },
   "FZLGY": {
    "tarih": "2026-11-20",
@@ -2158,7 +2158,7 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "PRZMA": {
-   "tarih": "2026-11-20",
+   "tarih": "2026-11-23",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "ODINE": {
@@ -2184,6 +2184,70 @@
   "CGCAM": {
    "tarih": "2026-11-20",
    "neden": "haber yok: teknik ya da spekülatif hareket (yalnızca COP31 yeşil sanayi haberi)"
+  },
+  "MAGEN": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 16.11 Hez Enerji JES-2 önlisans başvurusu; 9 aylık net kâr 660 mn TL (önceki 410 mn)"
+  },
+  "DOGUB": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 9 aylık net zarar sürüyor (15,9 mn TL; önceki 46,9 mn zarar - zarar daralmış, haber eski)"
+  },
+  "NETAS": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 12.11 yönetim açıklaması büyüme ve 5G/Nubia satışları, 10.11 üçüncü çeyrek büyüme haberi"
+  },
+  "CRFSA": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 19.11 yeni Gurme mağaza açılışı (zayıf, bugüne bağlanamadı)"
+  },
+  "DIRIT": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 9 aylık net zarar 32 mn TL, önceki 183 mn zarardan daralmış (06.11, eski haber)"
+  },
+  "SILVR": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 9 aylık net zarar 46 mn TL, önceki 213 mn zarardan daralmış (28.10, eski haber)"
+  },
+  "NETGL": {
+   "tarih": "2026-11-23",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "CWENE": {
+   "tarih": "2026-11-23",
+   "neden": "olumlu: 23.11 ABD bağlı ortaklığı güneş paneli satış sözleşmesi, 11.11 2027 için 688 mn USD satış öngörüsü"
+  },
+  "BIGEN": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 20.11 VBTS kapsamında açığa satış ve kredili işlem yasağı (18 Aralık'a kadar)"
+  },
+  "MOBTL": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 12.11 Türk Telekom distribütörlüğü sona erecek (17.11 Realme sözleşmesi dengeliyor)"
+  },
+  "TEHOL": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 23.11 VBTS kapsamında açığa satış ve kredili işlem yasağı"
+  },
+  "MANAS": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 19.11 VBTS kapsamında açığa satış ve kredili işlem yasağı; 9 aylık zarar 625 mn TL"
+  },
+  "GRTHO": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 16.11 SPK işlem yasağı ve suç duyurusu kararları; 9 aylık net zarar 391 mn TL"
+  },
+  "BRMEN": {
+   "tarih": "2026-11-23",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "CITAS": {
+   "tarih": "2026-11-23",
+   "neden": "haber yok: teknik ya da spekülatif hareket (12.11 pay geri alımı haberi eski)"
+  },
+  "ESCAR": {
+   "tarih": "2026-11-23",
+   "neden": "olumsuz: 04.11 ikinci el araç satış şubelerinin kapatılması"
   }
  },
  "surpriz_haber": {
@@ -3429,5 +3493,6 @@
   ]
  },
  "karar_gunlugu": [],
- "oto_seri": {}
+ "oto_seri": {},
+ "oto_son": "23.11 21:47"
 }
