@@ -1484,10 +1484,626 @@
      "gun_sayisi": 4
     }
    ]
+  },
+  "1 ay=≥+%25|günlük trend=aşağı": {
+   "aciklama": "1 ay=≥+%25 ve günlük trend=aşağı",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|modül Hacim=+": {
+   "aciklama": "1 ay=≥+%25 ve modül Hacim=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|modül Dip=0": {
+   "aciklama": "1 ay=≥+%25 ve modül Dip=0",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "modül Hacim=+|piyasa değeri=1,5-10 mlr": {
+   "aciklama": "modül Hacim=+ ve piyasa değeri=1,5-10 mlr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "1 ay=≥+%25 ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|RSI G=55-65": {
+   "aciklama": "1 ay=≥+%25 ve RSI G=55-65",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|teknik 4S=Al": {
+   "aciklama": "1 ay=≥+%25 ve teknik 4S=Al",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "RSI G=30-45|hafta=≥+%10": {
+   "aciklama": "RSI G=30-45 ve hafta=≥+%10",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=+%3/+%4,7": {
+   "aciklama": "gün=+%3/+%4,7",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "likidite (günlük ciro)=≥100 mn|piyasa değeri=1,5-10 mlr": {
+   "aciklama": "likidite (günlük ciro)=≥100 mn ve piyasa değeri=1,5-10 mlr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|3P kriter=8-10": {
+   "aciklama": "1 ay=≥+%25 ve 3P kriter=8-10",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye %5-15|1 ay=≥+%25": {
+   "aciklama": "1 ay zirve=zirveye %5-15 ve 1 ay=≥+%25",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "RSI G=55-65|günlük trend=aşağı": {
+   "aciklama": "RSI G=55-65 ve günlük trend=aşağı",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "RSI G=55-65|hacim=1,5-3x": {
+   "aciklama": "RSI G=55-65 ve hacim=1,5-3x",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|teknik 1S=Al": {
+   "aciklama": "1 ay=≥+%25 ve teknik 1S=Al",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|günlük trend=aşağı": {
+   "aciklama": "1 ay=+%10/+%25 ve günlük trend=aşağı",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|piyasa değeri=1,5-10 mlr": {
+   "aciklama": "1 ay=+%10/+%25 ve piyasa değeri=1,5-10 mlr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "RSI G=55-65|hacim=0,8-1,5x": {
+   "aciklama": "RSI G=55-65 ve hacim=0,8-1,5x",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|RSI 1S=50-70": {
+   "aciklama": "1 ay=≥+%25 ve RSI 1S=50-70",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|modül Hacim=0": {
+   "aciklama": "gün=<-%3 ve modül Hacim=0",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=≥+%25|modül RSI-MACD=+": {
+   "aciklama": "1 ay=≥+%25 ve modül RSI-MACD=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye <%5|1 ay=≥+%25": {
+   "aciklama": "1 ay zirve=zirveye <%5 ve 1 ay=≥+%25",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|hafta=<-%5": {
+   "aciklama": "gün=<-%3 ve hafta=<-%5",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|gün=<-%3": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve gün=<-%3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|modül Trend=0": {
+   "aciklama": "gün=<-%3 ve modül Trend=0",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|puan=<3": {
+   "aciklama": "gün=<-%3 ve puan=<3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye <%5|hacim=1,5-3x": {
+   "aciklama": "1 ay zirve=zirveye <%5 ve hacim=1,5-3x",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|modül RSI-MACD=+": {
+   "aciklama": "1 ay=+%10/+%25 ve modül RSI-MACD=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "3P kriter=0-3|gün=<-%3": {
+   "aciklama": "3P kriter=0-3 ve gün=<-%3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "3P kriter=11-12|puan=3-5": {
+   "aciklama": "3P kriter=11-12 ve puan=3-5",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|teknik G=Sat": {
+   "aciklama": "1 ay=+%10/+%25 ve teknik G=Sat",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|puan=<3": {
+   "aciklama": "1 ay=+%10/+%25 ve puan=<3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|teknik 4S=Güçlü Sat": {
+   "aciklama": "gün=<-%3 ve teknik 4S=Güçlü Sat",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|teknik 4S=Sat": {
+   "aciklama": "1 ay=+%10/+%25 ve teknik 4S=Sat",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "3P kriter=8-10|modül Hacim=+": {
+   "aciklama": "3P kriter=8-10 ve modül Hacim=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "3P kriter=11-12|hacim=0,8-1,5x": {
+   "aciklama": "3P kriter=11-12 ve hacim=0,8-1,5x",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|3P kriter=0-3": {
+   "aciklama": "1 ay=+%10/+%25 ve 3P kriter=0-3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "hacim=1,5-3x|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "hacim=1,5-3x ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "hacim=0,8-1,5x|teknik 4S=Nötr": {
+   "aciklama": "hacim=0,8-1,5x ve teknik 4S=Nötr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|gün=-%3/-%1": {
+   "aciklama": "1 ay=+%10/+%25 ve gün=-%3/-%1",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "RSI 1S=<30|gün=<-%3": {
+   "aciklama": "RSI 1S=<30 ve gün=<-%3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "likidite (günlük ciro)=≥100 mn|teknik G=Nötr": {
+   "aciklama": "likidite (günlük ciro)=≥100 mn ve teknik G=Nötr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|hacim=1,5-3x": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve hacim=1,5-3x",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "piyasa değeri=<1,5 mlr|puan=3-5": {
+   "aciklama": "piyasa değeri=<1,5 mlr ve puan=3-5",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|likidite (günlük ciro)=50-100 mn": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve likidite (günlük ciro)=50-100 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|likidite (günlük ciro)=≥100 mn": {
+   "aciklama": "1 ay=+%10/+%25 ve likidite (günlük ciro)=≥100 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye >%15|modül RSI-MACD=+": {
+   "aciklama": "1 ay zirve=zirveye >%15 ve modül RSI-MACD=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=+%10/+%25|teknik 1S=Sat": {
+   "aciklama": "1 ay=+%10/+%25 ve teknik 1S=Sat",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|piyasa değeri=<1,5 mlr": {
+   "aciklama": "gün=<-%3 ve piyasa değeri=<1,5 mlr",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "hafta=+%5/+%10|modül Hacim=+": {
+   "aciklama": "hafta=+%5/+%10 ve modül Hacim=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay=<-%10|gün=<-%3": {
+   "aciklama": "1 ay=<-%10 ve gün=<-%3",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "1 ay zirve=zirveye <%5|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "1 ay zirve=zirveye <%5 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|modül RSI-MACD=+": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve modül RSI-MACD=+",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=-%3/-%1|likidite (günlük ciro)=<5 mn": {
+   "aciklama": "gün=-%3/-%1 ve likidite (günlük ciro)=<5 mn",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "gün=<-%3|teknik 4S=Sat": {
+   "aciklama": "gün=<-%3 ve teknik 4S=Sat",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
+  },
+  "likidite (günlük ciro)=<5 mn|puan=3-5": {
+   "aciklama": "likidite (günlük ciro)=<5 mn ve puan=3-5",
+   "ilk_gorulme": "23.11 18:22",
+   "durum_gecmisi": [
+    {
+     "zaman": "23.11 18:22",
+     "durum": "Veri biriktiriliyor",
+     "gun_sayisi": 5
+    }
+   ]
   }
  },
- "guncelleme": "23.11 17:25",
- "gun_sayisi": 4,
+ "guncelleme": "23.11 18:22",
+ "gun_sayisi": 5,
  "nedenler": {
   "BURVA": {
    "tarih": "2026-11-20",
@@ -2709,6 +3325,106 @@
    {
     "ts": 1769688835,
     "baslik": "KAP:   [FRIGO ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   }
+  ],
+  "2026-11-23|ARDYZ": [
+   {
+    "ts": 1795155696,
+    "baslik": "• ARD Grup, bir kamu kurumu ile \"Bireysel Siber Güvenlik Hizmeti Alımı İşi\" kapsamında toplam KDV dahil 69.135.000 TL bedelle sözleşme imzal"
+   },
+   {
+    "ts": 1794238273,
+    "baslik": "ARDYZ Ard Grup Bilişim Teknolojileri konsolide bilanço 2026 9 aylık net karı 1,255,589,551 TL (Önceki: 235,170,941 TL net kar)"
+   },
+   {
+    "ts": 1794205201,
+    "baslik": "• Ard Grup, yüksek performanslı bilişim donanımları ve yapay zekâ altyapı sistemlerinin tedarikine yönelik  4.530.240 USD tutarında bir sipa"
+   },
+   {
+    "ts": 1793168736,
+    "baslik": "ARD Grup: Şirketimiz, son kullanıcısı İngiltere'de bulunan bir müşteriden 662.400 USD tutarında sipariş aldı"
+   },
+   {
+    "ts": 1791353873,
+    "baslik": "ARD Grup ile JSC \"Kazakhtelecom\"un Digital Business Division birimi arasında, \"Kazakhstan Secure Smart Booth Platform\" projesinin geliştiril"
+   },
+   {
+    "ts": 1791181381,
+    "baslik": "ARD Grup: Şirketimiz, veri merkezi ve bilgi işlem altyapısında kullanılmak üzere bilişim malzemelerinin tedarikine ilişkin olarak özel bir ş"
+   },
+   {
+    "ts": 1790835390,
+    "baslik": "ARD Grup, Eurasian Bank JSC ile finansal teknolojiler, dijital varlıklar ve yapay zekâ destekli yeni nesil bankacılık çözümleri alanlarında "
+   },
+   {
+    "ts": 1790828357,
+    "baslik": "ARD Grup, Pay Geri Alım Programı başlattı"
+   },
+   {
+    "ts": 1790744440,
+    "baslik": "ARD Grup: Şirketimizin %51 oranında pay sahibi olduğu Oxivo Grup Bilişim paylarımız 80.000.000 TL bedel karşılığında Nextsoft Yazılım'a devr"
+   },
+   {
+    "ts": 1787206562,
+    "baslik": "ARD Grup: Şirketimiz, son kullanıcısı bir kamu kurumu olan proje kapsamında, bilişim altyapısında kullanılmak üzere özel bir şirketten 144.3"
+   },
+   {
+    "ts": 1786950927,
+    "baslik": "Bulls Yatırım: ARDYZ için hedef fiyat 156 TL, tavsiye Endeks Üstü Getiri"
+   },
+   {
+    "ts": 1786948526,
+    "baslik": "Bilanço analizi - ARDYZ  (PhillipCapital)"
+   }
+  ],
+  "2026-11-23|SANFM": [
+   {
+    "ts": 1794247604,
+    "baslik": "SANFM Sanifoam Endüstri ve Tüketim Ürünleri Sanayi Tic. konsolide bilanço 2026 9 aylık net karı 29,526,367 TL (Önceki: 27,068,060 TL net kar"
+   },
+   {
+    "ts": 1786720335,
+    "baslik": "SANFM Sanifoam Endüstri ve Tüketim Ürünleri Sanayi Tic. konsolide bilanço 2026 6 aylık net karı 28,276,928 TL (Önceki: 14,508,552 TL net kar"
+   },
+   {
+    "ts": 1778738607,
+    "baslik": "Sanifoam, Sakarya Hendek 2. OSB'deki mevcut alanın genişletilmesi amacıyla bitişikteki taşınmazın tahsis ve tevhit işlemlerine yönelik resmi"
+   },
+   {
+    "ts": 1778558319,
+    "baslik": "Sanifoam, Sakarya'da şube açacak"
+   },
+   {
+    "ts": 1778553305,
+    "baslik": "SANFM Sanifoam Endüstri ve Tüketim Ürünleri Sanayi Ticaret  konsolide bilanço 2026 3 aylık net karı 5.409.164 TL (Önceki: 23.182.783 TL net "
+   },
+   {
+    "ts": 1776657538,
+    "baslik": "Borsa İstanbul, BIST Temettü ve BIST Temettü 25 endekslerin 1 Mayıs-31 Temmuz 2026 dönemi değişikliklerini açıkladı"
+   },
+   {
+    "ts": 1771946072,
+    "baslik": "SANFM Sanifoam Endüstri ve Tüketim Ürünleri Sanayi Tic. konsolide bilanço 2025 Yıllık net karı 1,801,854 TL (Önceki: 61,787,098 TL net kar)"
+   },
+   {
+    "ts": 1769613279,
+    "baslik": "KAP:   [ALARK ALFAS BARMA BEGYO BLCYT BNTAS BVSAN CASA CELHA CEMAS CEMZY CEOEM CWENE DGNMO DOHOL DSTKF ECOGR ENERY ENPRA ERCB EREGL FADE FEN"
+   },
+   {
+    "ts": 1769526745,
+    "baslik": "KAP: SANFM  [ ] SANİFOAM ENDÜSTRİ VE TÜKETİM ÜRÜNLERİ SANAYİ TİCARET A.Ş.  Özel Durum Açıklaması (Genel)"
+   },
+   {
+    "ts": 1769497742,
+    "baslik": "KAP:   [SANFM ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1766980767,
+    "baslik": "Sanifoam, savunma sanayine yönelik ekipman ve ürünlerin sevkiyatında kullanılan özel ambalaj malzemeleri alanındaki projelerde yer almaya ba"
+   },
+   {
+    "ts": 1766462418,
+    "baslik": "Sanifoam, yeni nesil araç izolasyon malzemelerinin geliştirme çalışmalarını tamamladı"
    }
   ]
  },
