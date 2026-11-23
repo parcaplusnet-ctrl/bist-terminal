@@ -1,22 +1,22 @@
 {
- "guncelleme": "20.11 21:47",
+ "guncelleme": "23.11 21:47",
  "versiyon": "1.0",
  "tanim": "Olay: bir günün kapanışından sonraki 10 işlem günü içinde kapanış en az +%20. Evren: günlük ort. ciro ≥ 5 mn TL, o gün tavan (≥ %9) değil. Gözlem: her hisse-gün (olay içi günler hariç). Kaldıraç = özellik varken olay başlama oranı / tüm gözlemlerde oran. Kapı: ≥ 25 olay, kaldıraç ≥ 1.6, z ≥ 4, iki dönemde de ≥ 1,2, ve yön ayrımı: aynı özellikte -%16 düşüş olayı oranından en az 1,25 kat daha fazla yükseliş (salt oynaklık elenir).",
- "donem": "09.09.2025 - 06.11.2026",
+ "donem": "12.09.2025 - 09.11.2026",
  "hisse": 600,
- "gozlem": 128729,
- "olay": 1649,
- "taban": 0.0128,
- "gun": 293,
+ "gozlem": 127679,
+ "olay": 1619,
+ "taban": 0.0127,
+ "gun": 291,
  "durum": "Sınırlı kanıt",
  "kume": {
-  "gun": "06.11",
-  "pay": 0.88,
-  "n": 72
+  "gun": "09.11",
+  "pay": 0.86,
+  "n": 61
  },
- "kume_not": "Canlı olayların %87'i aynı gün (06.11) başladı: bu bireysel hisse hikayesi değil, piyasa geneli dip sonrası toparlanma / spekülatif dalga. Neden analizinde bu ayrım önemli.",
+ "kume_not": "Canlı olayların %85'i aynı gün (09.11) başladı: bu bireysel hisse hikayesi değil, piyasa geneli dip sonrası toparlanma / spekülatif dalga. Neden analizinde bu ayrım önemli.",
  "yogunluk": {
-  "olay_gunu": 280,
+  "olay_gunu": 277,
   "ilk10_pay": 0.18,
   "en_yogun": [
    {
@@ -41,163 +41,163 @@
    }
   ]
  },
- "taban_dus": 0.0863,
+ "taban_dus": 0.0871,
  "tek": [
   {
    "ozellik": "gün=<-%3",
-   "n": 18070,
-   "olay": 705,
-   "oran": 0.039,
-   "kaldirac": 3.05,
-   "z": 31.3,
-   "kaldirac_dus": 2.29,
+   "n": 17839,
+   "olay": 693,
+   "oran": 0.0388,
+   "kaldirac": 3.06,
+   "z": 31.2,
+   "kaldirac_dus": 2.3,
    "asimetri": 1.33,
-   "kaldirac_ilk": 2.73,
-   "kaldirac_son": 3.12
+   "kaldirac_ilk": 2.7,
+   "kaldirac_son": 3.16
   }
  ],
  "asimetrik": [
   {
    "ozellik": "kapanış konumu (gün)=günün altında",
-   "n": 61296,
-   "olay": 1094,
-   "oran": 0.0178,
+   "n": 60502,
+   "olay": 1067,
+   "oran": 0.0176,
    "kaldirac": 1.39,
-   "z": 11.1,
+   "z": 10.9,
    "kaldirac_dus": 1.0,
    "asimetri": 1.39,
-   "kaldirac_ilk": 1.36,
-   "kaldirac_son": 1.41
+   "kaldirac_ilk": 1.35,
+   "kaldirac_son": 1.42
   },
   {
    "ozellik": "son 5 günde yükselen gün=1",
-   "n": 29894,
-   "olay": 528,
-   "oran": 0.0177,
-   "kaldirac": 1.38,
-   "z": 7.5,
-   "kaldirac_dus": 1.03,
+   "n": 29480,
+   "olay": 519,
+   "oran": 0.0176,
+   "kaldirac": 1.39,
+   "z": 7.6,
+   "kaldirac_dus": 1.04,
    "asimetri": 1.34,
-   "kaldirac_ilk": 1.41,
-   "kaldirac_son": 1.34
+   "kaldirac_ilk": 1.42,
+   "kaldirac_son": 1.35
   },
   {
    "ozellik": "gün=<-%3",
-   "n": 18070,
-   "olay": 705,
-   "oran": 0.039,
-   "kaldirac": 3.05,
-   "z": 31.3,
-   "kaldirac_dus": 2.29,
+   "n": 17839,
+   "olay": 693,
+   "oran": 0.0388,
+   "kaldirac": 3.06,
+   "z": 31.2,
+   "kaldirac_dus": 2.3,
    "asimetri": 1.33,
-   "kaldirac_ilk": 2.73,
-   "kaldirac_son": 3.12
+   "kaldirac_ilk": 2.7,
+   "kaldirac_son": 3.16
   },
   {
    "ozellik": "5g endeks farkı=<-6 puan",
-   "n": 22189,
-   "olay": 676,
-   "oran": 0.0305,
-   "kaldirac": 2.38,
+   "n": 22021,
+   "olay": 668,
+   "oran": 0.0303,
+   "kaldirac": 2.39,
    "z": 23.4,
    "kaldirac_dus": 1.97,
-   "asimetri": 1.21,
-   "kaldirac_ilk": 2.15,
-   "kaldirac_son": 2.5
+   "asimetri": 1.22,
+   "kaldirac_ilk": 2.17,
+   "kaldirac_son": 2.51
   },
   {
    "ozellik": "60 gün=+%30/+%70",
-   "n": 9305,
-   "olay": 181,
-   "oran": 0.0195,
-   "kaldirac": 1.52,
-   "z": 5.7,
-   "kaldirac_dus": 1.26,
+   "n": 9049,
+   "olay": 177,
+   "oran": 0.0196,
+   "kaldirac": 1.54,
+   "z": 5.8,
+   "kaldirac_dus": 1.27,
    "asimetri": 1.21,
-   "kaldirac_ilk": 1.54,
-   "kaldirac_son": 1.57
+   "kaldirac_ilk": 1.57,
+   "kaldirac_son": 1.58
   },
   {
    "ozellik": "5 gün=<-%8",
-   "n": 17204,
-   "olay": 636,
-   "oran": 0.037,
-   "kaldirac": 2.89,
+   "n": 16925,
+   "olay": 625,
+   "oran": 0.0369,
+   "kaldirac": 2.91,
    "z": 28.2,
-   "kaldirac_dus": 2.45,
+   "kaldirac_dus": 2.47,
    "asimetri": 1.18,
-   "kaldirac_ilk": 2.83,
-   "kaldirac_son": 2.81
+   "kaldirac_ilk": 2.82,
+   "kaldirac_son": 2.85
   }
  ],
  "direnc": [
   {
    "ozellik": "10g endeks farkı=+3/+10",
-   "n": 19002,
-   "olay": 149,
-   "oran": 0.0078,
-   "kaldirac": 0.61,
-   "z": -6.1,
-   "kaldirac_dus": 0.92,
-   "asimetri": 0.67,
-   "kaldirac_ilk": 0.69,
-   "kaldirac_son": 0.54
+   "n": 18734,
+   "olay": 140,
+   "oran": 0.0075,
+   "kaldirac": 0.59,
+   "z": -6.4,
+   "kaldirac_dus": 0.93,
+   "asimetri": 0.63,
+   "kaldirac_ilk": 0.66,
+   "kaldirac_son": 0.53
   },
   {
    "ozellik": "10g endeks farkı=-10/-3",
-   "n": 43625,
-   "olay": 494,
-   "oran": 0.0113,
+   "n": 43422,
+   "olay": 486,
+   "oran": 0.0112,
    "kaldirac": 0.88,
    "z": -2.8,
-   "kaldirac_dus": 0.79,
-   "asimetri": 1.12,
+   "kaldirac_dus": 0.78,
+   "asimetri": 1.13,
    "kaldirac_ilk": 0.96,
    "kaldirac_son": 0.82
   },
   {
    "ozellik": "10g endeks farkı=<-10 puan",
-   "n": 18511,
-   "olay": 569,
+   "n": 18494,
+   "olay": 568,
    "oran": 0.0307,
-   "kaldirac": 2.4,
-   "z": 21.7,
-   "kaldirac_dus": 2.22,
-   "asimetri": 1.08,
-   "kaldirac_ilk": 2.07,
-   "kaldirac_son": 2.55
+   "kaldirac": 2.42,
+   "z": 21.9,
+   "kaldirac_dus": 2.2,
+   "asimetri": 1.1,
+   "kaldirac_ilk": 2.08,
+   "kaldirac_son": 2.59
   },
   {
    "ozellik": "10g endeks farkı=±3",
-   "n": 42701,
-   "olay": 387,
-   "oran": 0.0091,
-   "kaldirac": 0.71,
+   "n": 42272,
+   "olay": 377,
+   "oran": 0.0089,
+   "kaldirac": 0.7,
    "z": -6.9,
    "kaldirac_dus": 0.7,
-   "asimetri": 1.01,
-   "kaldirac_ilk": 0.77,
-   "kaldirac_son": 0.66
+   "asimetri": 1.0,
+   "kaldirac_ilk": 0.78,
+   "kaldirac_son": 0.64
   },
   {
    "ozellik": "10g endeks farkı=≥+10 puan",
-   "n": 4426,
-   "olay": 44,
-   "oran": 0.0099,
-   "kaldirac": 0.78,
+   "n": 4293,
+   "olay": 42,
+   "oran": 0.0098,
+   "kaldirac": 0.77,
    "z": -1.7,
-   "kaldirac_dus": 1.32,
+   "kaldirac_dus": 1.31,
    "asimetri": 0.59,
-   "kaldirac_ilk": 1.13,
-   "kaldirac_son": 0.5
+   "kaldirac_ilk": 1.15,
+   "kaldirac_son": 0.48
   },
   {
    "ozellik": "5g endeks farkı=+2/+6",
-   "n": 18863,
-   "olay": 140,
+   "n": 18752,
+   "olay": 138,
    "oran": 0.0074,
    "kaldirac": 0.58,
-   "z": -6.6,
+   "z": -6.5,
    "kaldirac_dus": 0.85,
    "asimetri": 0.68,
    "kaldirac_ilk": 0.72,
@@ -205,419 +205,419 @@
   },
   {
    "ozellik": "5g endeks farkı=-6/-2",
-   "n": 36582,
-   "olay": 452,
-   "oran": 0.0124,
+   "n": 36236,
+   "olay": 440,
+   "oran": 0.0121,
    "kaldirac": 0.96,
-   "z": -0.8,
+   "z": -0.9,
    "kaldirac_dus": 0.81,
-   "asimetri": 1.2,
-   "kaldirac_ilk": 1.08,
+   "asimetri": 1.18,
+   "kaldirac_ilk": 1.06,
    "kaldirac_son": 0.87
   },
   {
    "ozellik": "5g endeks farkı=<-6 puan",
-   "n": 22189,
-   "olay": 676,
-   "oran": 0.0305,
-   "kaldirac": 2.38,
+   "n": 22021,
+   "olay": 668,
+   "oran": 0.0303,
+   "kaldirac": 2.39,
    "z": 23.4,
    "kaldirac_dus": 1.97,
-   "asimetri": 1.21,
-   "kaldirac_ilk": 2.15,
-   "kaldirac_son": 2.5
+   "asimetri": 1.22,
+   "kaldirac_ilk": 2.17,
+   "kaldirac_son": 2.51
   },
   {
    "ozellik": "5g endeks farkı=±2",
-   "n": 42434,
-   "olay": 330,
-   "oran": 0.0078,
+   "n": 42039,
+   "olay": 324,
+   "oran": 0.0077,
    "kaldirac": 0.61,
-   "z": -9.2,
+   "z": -9.1,
    "kaldirac_dus": 0.69,
    "asimetri": 0.89,
-   "kaldirac_ilk": 0.61,
-   "kaldirac_son": 0.61
+   "kaldirac_ilk": 0.63,
+   "kaldirac_son": 0.59
   },
   {
    "ozellik": "5g endeks farkı=≥+6 puan",
-   "n": 8197,
-   "olay": 45,
-   "oran": 0.0055,
-   "kaldirac": 0.43,
-   "z": -5.9,
-   "kaldirac_dus": 1.23,
-   "asimetri": 0.35,
-   "kaldirac_ilk": 0.53,
-   "kaldirac_son": 0.35
+   "n": 8167,
+   "olay": 43,
+   "oran": 0.0053,
+   "kaldirac": 0.42,
+   "z": -6.0,
+   "kaldirac_dus": 1.22,
+   "asimetri": 0.34,
+   "kaldirac_ilk": 0.49,
+   "kaldirac_son": 0.36
   },
   {
    "ozellik": "VIX betası (20g)=aynı yönlü",
-   "n": 8405,
-   "olay": 156,
-   "oran": 0.0186,
+   "n": 8338,
+   "olay": 153,
+   "oran": 0.0183,
    "kaldirac": 1.45,
-   "z": 4.7,
-   "kaldirac_dus": 1.99,
+   "z": 4.6,
+   "kaldirac_dus": 1.98,
    "asimetri": 0.73,
-   "kaldirac_ilk": 0.99,
-   "kaldirac_son": 2.16
+   "kaldirac_ilk": 0.96,
+   "kaldirac_son": 2.19
   },
   {
    "ozellik": "VIX betası (20g)=hafif ters",
-   "n": 76817,
-   "olay": 969,
-   "oran": 0.0126,
-   "kaldirac": 0.98,
-   "z": -0.5,
+   "n": 76101,
+   "olay": 955,
+   "oran": 0.0125,
+   "kaldirac": 0.99,
+   "z": -0.3,
    "kaldirac_dus": 0.9,
-   "asimetri": 1.09,
-   "kaldirac_ilk": 1.06,
-   "kaldirac_son": 0.92
+   "asimetri": 1.1,
+   "kaldirac_ilk": 1.08,
+   "kaldirac_son": 0.91
   },
   {
    "ozellik": "VIX betası (20g)=nötr",
-   "n": 41746,
-   "olay": 476,
-   "oran": 0.0114,
-   "kaldirac": 0.89,
-   "z": -2.6,
+   "n": 41495,
+   "olay": 464,
+   "oran": 0.0112,
+   "kaldirac": 0.88,
+   "z": -2.7,
    "kaldirac_dus": 0.89,
-   "asimetri": 1.0,
-   "kaldirac_ilk": 0.89,
-   "kaldirac_son": 0.95
+   "asimetri": 0.99,
+   "kaldirac_ilk": 0.87,
+   "kaldirac_son": 0.94
   },
   {
    "ozellik": "VIX betası (20g)=ters (<-0,3)",
-   "n": 1761,
-   "olay": 48,
-   "oran": 0.0273,
-   "kaldirac": 2.13,
-   "z": 5.4,
+   "n": 1745,
+   "olay": 47,
+   "oran": 0.0269,
+   "kaldirac": 2.12,
+   "z": 5.3,
    "kaldirac_dus": 3.17,
    "asimetri": 0.67,
-   "kaldirac_ilk": 3.41,
-   "kaldirac_son": 1.67
+   "kaldirac_ilk": 3.35,
+   "kaldirac_son": 1.7
   },
   {
    "ozellik": "VIX korelasyonu (20g)=aynı yönlü",
-   "n": 32655,
-   "olay": 394,
-   "oran": 0.0121,
+   "n": 32481,
+   "olay": 387,
+   "oran": 0.0119,
    "kaldirac": 0.94,
    "z": -1.2,
-   "kaldirac_dus": 1.12,
-   "asimetri": 0.84,
-   "kaldirac_ilk": 0.79,
-   "kaldirac_son": 1.28
+   "kaldirac_dus": 1.11,
+   "asimetri": 0.85,
+   "kaldirac_ilk": 0.77,
+   "kaldirac_son": 1.3
   },
   {
    "ozellik": "VIX korelasyonu (20g)=güçlü ters (<-0,4)",
-   "n": 11552,
-   "olay": 161,
-   "oran": 0.0139,
+   "n": 11473,
+   "olay": 158,
+   "oran": 0.0138,
    "kaldirac": 1.09,
-   "z": 1.1,
+   "z": 1.0,
    "kaldirac_dus": 0.82,
-   "asimetri": 1.33,
+   "asimetri": 1.32,
    "kaldirac_ilk": 1.3,
    "kaldirac_son": 0.98
   },
   {
    "ozellik": "VIX korelasyonu (20g)=ilişkisiz",
-   "n": 37981,
-   "olay": 508,
-   "oran": 0.0134,
+   "n": 37671,
+   "olay": 498,
+   "oran": 0.0132,
    "kaldirac": 1.04,
-   "z": 1.0,
+   "z": 0.9,
    "kaldirac_dus": 0.97,
    "asimetri": 1.07,
-   "kaldirac_ilk": 1.07,
-   "kaldirac_son": 1.04
+   "kaldirac_ilk": 1.09,
+   "kaldirac_son": 1.01
   },
   {
    "ozellik": "VIX korelasyonu (20g)=ters",
-   "n": 46541,
-   "olay": 586,
-   "oran": 0.0126,
-   "kaldirac": 0.98,
-   "z": -0.4,
+   "n": 46054,
+   "olay": 576,
+   "oran": 0.0125,
+   "kaldirac": 0.99,
+   "z": -0.3,
    "kaldirac_dus": 0.99,
    "asimetri": 1.0,
    "kaldirac_ilk": 1.13,
-   "kaldirac_son": 0.87
+   "kaldirac_son": 0.88
   },
   {
    "ozellik": "direnç (son 10 gün)=dirençli (≥%75 tuttu)",
-   "n": 22488,
-   "olay": 200,
-   "oran": 0.0089,
-   "kaldirac": 0.69,
-   "z": -5.2,
-   "kaldirac_dus": 0.77,
-   "asimetri": 0.9,
+   "n": 22414,
+   "olay": 194,
+   "oran": 0.0087,
+   "kaldirac": 0.68,
+   "z": -5.4,
+   "kaldirac_dus": 0.76,
+   "asimetri": 0.89,
    "kaldirac_ilk": 0.79,
-   "kaldirac_son": 0.62
+   "kaldirac_son": 0.59
   },
   {
    "ozellik": "direnç (son 10 gün)=düşüş günü az",
    "n": 29642,
    "olay": 323,
    "oran": 0.0109,
-   "kaldirac": 0.85,
-   "z": -2.9,
-   "kaldirac_dus": 0.57,
-   "asimetri": 1.5,
+   "kaldirac": 0.86,
+   "z": -2.7,
+   "kaldirac_dus": 0.56,
+   "asimetri": 1.53,
    "kaldirac_ilk": 1.11,
-   "kaldirac_son": 0.52
+   "kaldirac_son": 0.53
   },
   {
    "ozellik": "direnç (son 10 gün)=karışık",
-   "n": 44194,
-   "olay": 537,
-   "oran": 0.0122,
-   "kaldirac": 0.95,
-   "z": -1.2,
+   "n": 43611,
+   "olay": 521,
+   "oran": 0.0119,
+   "kaldirac": 0.94,
+   "z": -1.4,
    "kaldirac_dus": 0.98,
-   "asimetri": 0.97,
-   "kaldirac_ilk": 0.92,
+   "asimetri": 0.96,
+   "kaldirac_ilk": 0.91,
    "kaldirac_son": 0.96
   },
   {
    "ozellik": "direnç (son 10 gün)=zayıf (<%35 tuttu)",
-   "n": 32405,
-   "olay": 589,
-   "oran": 0.0182,
-   "kaldirac": 1.42,
-   "z": 8.6,
+   "n": 32012,
+   "olay": 581,
+   "oran": 0.0181,
+   "kaldirac": 1.43,
+   "z": 8.7,
    "kaldirac_dus": 1.59,
-   "asimetri": 0.89,
-   "kaldirac_ilk": 1.15,
-   "kaldirac_son": 1.52
+   "asimetri": 0.9,
+   "kaldirac_ilk": 1.18,
+   "kaldirac_son": 1.53
   },
   {
    "ozellik": "direnç hacmi=hacimli (≥1,3x)",
-   "n": 6024,
-   "olay": 69,
-   "oran": 0.0115,
-   "kaldirac": 0.89,
-   "z": -0.9,
-   "kaldirac_dus": 1.0,
-   "asimetri": 0.89,
-   "kaldirac_ilk": 0.88,
-   "kaldirac_son": 0.91
+   "n": 5948,
+   "olay": 64,
+   "oran": 0.0108,
+   "kaldirac": 0.85,
+   "z": -1.3,
+   "kaldirac_dus": 1.01,
+   "asimetri": 0.84,
+   "kaldirac_ilk": 0.86,
+   "kaldirac_son": 0.84
   },
   {
    "ozellik": "direnç hacmi=normal",
-   "n": 14282,
-   "olay": 168,
-   "oran": 0.0118,
-   "kaldirac": 0.92,
-   "z": -1.1,
+   "n": 14070,
+   "olay": 162,
+   "oran": 0.0115,
+   "kaldirac": 0.91,
+   "z": -1.2,
    "kaldirac_dus": 0.85,
-   "asimetri": 1.08,
-   "kaldirac_ilk": 0.94,
-   "kaldirac_son": 0.9
+   "asimetri": 1.07,
+   "kaldirac_ilk": 0.93,
+   "kaldirac_son": 0.89
   },
   {
    "ozellik": "direnç hacmi=sessiz (<0,8x)",
-   "n": 15156,
-   "olay": 115,
-   "oran": 0.0076,
-   "kaldirac": 0.59,
-   "z": -5.7,
-   "kaldirac_dus": 0.76,
-   "asimetri": 0.78,
-   "kaldirac_ilk": 0.8,
-   "kaldirac_son": 0.44
+   "n": 15028,
+   "olay": 111,
+   "oran": 0.0074,
+   "kaldirac": 0.58,
+   "z": -5.8,
+   "kaldirac_dus": 0.75,
+   "asimetri": 0.77,
+   "kaldirac_ilk": 0.79,
+   "kaldirac_son": 0.42
   }
  ],
  "cift": [
   {
    "ozellik": "60 gün=≥+%70 + gün=<-%3",
-   "n": 487,
-   "olay": 33,
-   "oran": 0.0678,
-   "kaldirac": 5.29,
+   "n": 464,
+   "olay": 32,
+   "oran": 0.069,
+   "kaldirac": 5.44,
    "z": 10.8,
-   "kaldirac_ilk": 6.19,
-   "kaldirac_son": 4.43,
-   "kaldirac_dus": 2.74,
-   "asimetri": 1.93
+   "kaldirac_ilk": 6.39,
+   "kaldirac_son": 4.54,
+   "kaldirac_dus": 2.77,
+   "asimetri": 1.96
   },
   {
    "ozellik": "gün=<-%3 + sektör=Commercial Services",
-   "n": 444,
+   "n": 441,
    "olay": 30,
-   "oran": 0.0676,
-   "kaldirac": 5.27,
-   "z": 10.3,
-   "kaldirac_ilk": 4.52,
-   "kaldirac_son": 5.51,
-   "kaldirac_dus": 4.1,
-   "asimetri": 1.29
-  },
-  {
-   "ozellik": "60g zirveye=zirveye >%25 + SMA200=≥%40 üstünde",
-   "n": 855,
-   "olay": 52,
-   "oran": 0.0608,
-   "kaldirac": 4.75,
-   "z": 12.5,
-   "kaldirac_ilk": 4.98,
-   "kaldirac_son": 4.68,
-   "kaldirac_dus": 3.12,
-   "asimetri": 1.52
-  },
-  {
-   "ozellik": "5 gün=<-%8 + gün=<-%3",
-   "n": 8021,
-   "olay": 480,
-   "oran": 0.0598,
-   "kaldirac": 4.67,
-   "z": 37.5,
-   "kaldirac_ilk": 4.57,
-   "kaldirac_son": 4.49,
-   "kaldirac_dus": 3.48,
-   "asimetri": 1.34
-  },
-  {
-   "ozellik": "5g endeks farkı=<-6 puan + gün=<-%3",
-   "n": 7354,
-   "olay": 435,
-   "oran": 0.0592,
-   "kaldirac": 4.62,
-   "z": 35.3,
-   "kaldirac_ilk": 4.13,
-   "kaldirac_son": 4.65,
-   "kaldirac_dus": 3.6,
-   "asimetri": 1.28
-  },
-  {
-   "ozellik": "SMA200=≥%40 üstünde + gün=<-%3",
-   "n": 1479,
-   "olay": 82,
-   "oran": 0.0554,
-   "kaldirac": 4.33,
-   "z": 14.6,
-   "kaldirac_ilk": 4.87,
-   "kaldirac_son": 3.85,
-   "kaldirac_dus": 2.81,
-   "asimetri": 1.54
-  },
-  {
-   "ozellik": "5 gün=<-%8 + SMA200=≥%40 üstünde",
-   "n": 1047,
-   "olay": 57,
-   "oran": 0.0544,
-   "kaldirac": 4.25,
-   "z": 12.0,
-   "kaldirac_ilk": 5.32,
-   "kaldirac_son": 3.18,
-   "kaldirac_dus": 2.9,
-   "asimetri": 1.47
-  },
-  {
-   "ozellik": "60 gün=≥+%70 + oynaklık (20g)=≥%5",
-   "n": 552,
-   "olay": 30,
-   "oran": 0.0543,
-   "kaldirac": 4.24,
-   "z": 8.7,
-   "kaldirac_ilk": 4.53,
-   "kaldirac_son": 4.03,
-   "kaldirac_dus": 3.23,
+   "oran": 0.068,
+   "kaldirac": 5.36,
+   "z": 10.4,
+   "kaldirac_ilk": 4.51,
+   "kaldirac_son": 5.68,
+   "kaldirac_dus": 4.09,
    "asimetri": 1.31
   },
   {
-   "ozellik": "60 gün=+%30/+%70 + 60g zirveye=zirveye >%25",
+   "ozellik": "10g endeks farkı=<-10 puan + gün=<-%3",
+   "n": 5933,
+   "olay": 379,
+   "oran": 0.0639,
+   "kaldirac": 5.04,
+   "z": 35.2,
+   "kaldirac_ilk": 4.5,
+   "kaldirac_son": 5.03,
+   "kaldirac_dus": 4.03,
+   "asimetri": 1.25
+  },
+  {
+   "ozellik": "5 gün=<-%8 + gün=<-%3",
+   "n": 7911,
+   "olay": 474,
+   "oran": 0.0599,
+   "kaldirac": 4.73,
+   "z": 37.5,
+   "kaldirac_ilk": 4.57,
+   "kaldirac_son": 4.57,
+   "kaldirac_dus": 3.49,
+   "asimetri": 1.35
+  },
+  {
+   "ozellik": "60g zirveye=zirveye >%25 + SMA200=≥%40 üstünde",
    "n": 833,
-   "olay": 44,
-   "oran": 0.0528,
-   "kaldirac": 4.12,
-   "z": 10.3,
-   "kaldirac_ilk": 3.56,
-   "kaldirac_son": 5.19,
-   "kaldirac_dus": 1.96,
-   "asimetri": 2.1
+   "olay": 50,
+   "oran": 0.06,
+   "kaldirac": 4.73,
+   "z": 12.2,
+   "kaldirac_ilk": 4.84,
+   "kaldirac_son": 4.81,
+   "kaldirac_dus": 3.16,
+   "asimetri": 1.5
+  },
+  {
+   "ozellik": "5g endeks farkı=<-6 puan + gün=<-%3",
+   "n": 7273,
+   "olay": 429,
+   "oran": 0.059,
+   "kaldirac": 4.65,
+   "z": 35.3,
+   "kaldirac_ilk": 4.13,
+   "kaldirac_son": 4.7,
+   "kaldirac_dus": 3.61,
+   "asimetri": 1.29
+  },
+  {
+   "ozellik": "60 gün=≥+%70 + oynaklık (20g)=≥%5",
+   "n": 533,
+   "olay": 30,
+   "oran": 0.0563,
+   "kaldirac": 4.44,
+   "z": 9.0,
+   "kaldirac_ilk": 4.8,
+   "kaldirac_son": 4.14,
+   "kaldirac_dus": 3.27,
+   "asimetri": 1.36
+  },
+  {
+   "ozellik": "SMA200=≥%40 üstünde + gün=<-%3",
+   "n": 1447,
+   "olay": 79,
+   "oran": 0.0546,
+   "kaldirac": 4.31,
+   "z": 14.3,
+   "kaldirac_ilk": 4.74,
+   "kaldirac_son": 3.93,
+   "kaldirac_dus": 2.81,
+   "asimetri": 1.53
+  },
+  {
+   "ozellik": "5 gün=<-%8 + SMA200=≥%40 üstünde",
+   "n": 1022,
+   "olay": 55,
+   "oran": 0.0538,
+   "kaldirac": 4.24,
+   "z": 11.8,
+   "kaldirac_ilk": 5.28,
+   "kaldirac_son": 3.22,
+   "kaldirac_dus": 2.92,
+   "asimetri": 1.45
+  },
+  {
+   "ozellik": "60 gün=+%30/+%70 + 60g zirveye=zirveye >%25",
+   "n": 816,
+   "olay": 43,
+   "oran": 0.0527,
+   "kaldirac": 4.16,
+   "z": 10.2,
+   "kaldirac_ilk": 3.46,
+   "kaldirac_son": 5.43,
+   "kaldirac_dus": 1.97,
+   "asimetri": 2.11
   },
   {
    "ozellik": "SMA200=≥%40 üstünde + SMA20=<-%4 altı",
-   "n": 1566,
-   "olay": 81,
-   "oran": 0.0517,
-   "kaldirac": 4.04,
-   "z": 13.7,
-   "kaldirac_ilk": 4.73,
-   "kaldirac_son": 3.34,
-   "kaldirac_dus": 2.47,
+   "n": 1526,
+   "olay": 79,
+   "oran": 0.0518,
+   "kaldirac": 4.08,
+   "z": 13.6,
+   "kaldirac_ilk": 4.75,
+   "kaldirac_son": 3.41,
+   "kaldirac_dus": 2.51,
    "asimetri": 1.63
   },
   {
    "ozellik": "60 gün=+%30/+%70 + gün=<-%3",
-   "n": 1468,
-   "olay": 75,
-   "oran": 0.0511,
-   "kaldirac": 3.99,
-   "z": 13.0,
-   "kaldirac_ilk": 3.32,
-   "kaldirac_son": 4.87,
-   "kaldirac_dus": 1.88,
-   "asimetri": 2.12
-  },
-  {
-   "ozellik": "endeks 20g=düşüşte (<-%4) + gün=<-%3",
-   "n": 8107,
-   "olay": 409,
-   "oran": 0.0505,
-   "kaldirac": 3.94,
-   "z": 30.1,
-   "kaldirac_ilk": 3.46,
-   "kaldirac_son": 3.83,
-   "kaldirac_dus": 3.1,
-   "asimetri": 1.27
-  },
-  {
-   "ozellik": "gün=<-%3 + oynaklık (20g)=%3,5-5",
-   "n": 5173,
-   "olay": 259,
-   "oran": 0.0501,
-   "kaldirac": 3.91,
-   "z": 23.8,
-   "kaldirac_ilk": 3.72,
-   "kaldirac_son": 3.85,
-   "kaldirac_dus": 2.83,
-   "asimetri": 1.38
-  },
-  {
-   "ozellik": "5 gün=<-%8 + 60 gün=+%30/+%70",
-   "n": 1098,
-   "olay": 54,
-   "oran": 0.0492,
-   "kaldirac": 3.84,
-   "z": 10.7,
-   "kaldirac_ilk": 3.9,
-   "kaldirac_son": 3.89,
-   "kaldirac_dus": 1.86,
+   "n": 1397,
+   "olay": 71,
+   "oran": 0.0508,
+   "kaldirac": 4.01,
+   "z": 12.7,
+   "kaldirac_ilk": 3.28,
+   "kaldirac_son": 4.88,
+   "kaldirac_dus": 1.94,
    "asimetri": 2.07
   },
   {
-   "ozellik": "SMA20=<-%4 altı + gün=<-%3",
-   "n": 12119,
-   "olay": 570,
-   "oran": 0.047,
-   "kaldirac": 3.67,
-   "z": 33.5,
-   "kaldirac_ilk": 3.52,
-   "kaldirac_son": 3.58,
-   "kaldirac_dus": 2.91,
+   "ozellik": "5 gün=<-%8 + 60 gün=+%30/+%70",
+   "n": 1045,
+   "olay": 53,
+   "oran": 0.0507,
+   "kaldirac": 4.0,
+   "z": 11.0,
+   "kaldirac_ilk": 4.11,
+   "kaldirac_son": 3.97,
+   "kaldirac_dus": 1.91,
+   "asimetri": 2.09
+  },
+  {
+   "ozellik": "endeks 20g=düşüşte (<-%4) + gün=<-%3",
+   "n": 7921,
+   "olay": 398,
+   "oran": 0.0502,
+   "kaldirac": 3.96,
+   "z": 29.9,
+   "kaldirac_ilk": 3.31,
+   "kaldirac_son": 3.88,
+   "kaldirac_dus": 3.15,
    "asimetri": 1.26
+  },
+  {
+   "ozellik": "gün=<-%3 + oynaklık (20g)=%3,5-5",
+   "n": 5112,
+   "olay": 253,
+   "oran": 0.0495,
+   "kaldirac": 3.9,
+   "z": 23.5,
+   "kaldirac_ilk": 3.54,
+   "kaldirac_son": 3.93,
+   "kaldirac_dus": 2.84,
+   "asimetri": 1.37
   }
  ],
  "dusuk": [
   {
    "ozellik": "gün=+%3/+%6",
-   "n": 9186,
+   "n": 9191,
    "olay": 29,
    "oran": 0.0032,
    "kaldirac": 0.25,
@@ -629,111 +629,111 @@
   },
   {
    "ozellik": "gün=+%1/+%3",
-   "n": 21892,
+   "n": 21828,
    "olay": 101,
    "oran": 0.0046,
    "kaldirac": 0.36,
-   "z": -10.8,
-   "kaldirac_dus": 0.84,
-   "asimetri": 0.43,
+   "z": -10.6,
+   "kaldirac_dus": 0.83,
+   "asimetri": 0.44,
    "kaldirac_ilk": 0.43,
-   "kaldirac_son": 0.3
+   "kaldirac_son": 0.31
   },
   {
    "ozellik": "son 5 günde yükselen gün=4",
-   "n": 11761,
+   "n": 11849,
    "olay": 54,
    "oran": 0.0046,
    "kaldirac": 0.36,
    "z": -7.9,
-   "kaldirac_dus": 0.93,
+   "kaldirac_dus": 0.92,
    "asimetri": 0.39,
-   "kaldirac_ilk": 0.42,
-   "kaldirac_son": 0.3
+   "kaldirac_ilk": 0.43,
+   "kaldirac_son": 0.29
   },
   {
    "ozellik": "oynaklık (20g)=<%1,5",
-   "n": 12217,
+   "n": 12160,
    "olay": 63,
    "oran": 0.0052,
-   "kaldirac": 0.4,
-   "z": -7.5,
-   "kaldirac_dus": 0.35,
-   "asimetri": 1.16,
+   "kaldirac": 0.41,
+   "z": -7.4,
+   "kaldirac_dus": 0.34,
+   "asimetri": 1.19,
    "kaldirac_ilk": 0.48,
-   "kaldirac_son": 0.33
+   "kaldirac_son": 0.34
   },
   {
    "ozellik": "kapanış konumu (gün)=üstünde",
-   "n": 29402,
+   "n": 29338,
    "olay": 156,
    "oran": 0.0053,
-   "kaldirac": 0.41,
-   "z": -11.4,
+   "kaldirac": 0.42,
+   "z": -11.3,
    "kaldirac_dus": 0.93,
-   "asimetri": 0.44,
-   "kaldirac_ilk": 0.52,
+   "asimetri": 0.45,
+   "kaldirac_ilk": 0.53,
    "kaldirac_son": 0.32
   },
   {
    "ozellik": "5g endeks farkı=≥+6 puan",
-   "n": 8197,
-   "olay": 45,
-   "oran": 0.0055,
-   "kaldirac": 0.43,
-   "z": -5.9,
-   "kaldirac_dus": 1.23,
-   "asimetri": 0.35,
-   "kaldirac_ilk": 0.53,
-   "kaldirac_son": 0.35
+   "n": 8167,
+   "olay": 43,
+   "oran": 0.0053,
+   "kaldirac": 0.42,
+   "z": -6.0,
+   "kaldirac_dus": 1.22,
+   "asimetri": 0.34,
+   "kaldirac_ilk": 0.49,
+   "kaldirac_son": 0.36
   },
   {
    "ozellik": "5 gün=+%3/+%8",
-   "n": 19876,
-   "olay": 116,
-   "oran": 0.0058,
-   "kaldirac": 0.46,
+   "n": 19875,
+   "olay": 114,
+   "oran": 0.0057,
+   "kaldirac": 0.45,
    "z": -8.7,
-   "kaldirac_dus": 0.85,
+   "kaldirac_dus": 0.84,
    "asimetri": 0.54,
-   "kaldirac_ilk": 0.51,
-   "kaldirac_son": 0.41
+   "kaldirac_ilk": 0.53,
+   "kaldirac_son": 0.38
   },
   {
    "ozellik": "RSI14=60-70",
-   "n": 11376,
+   "n": 11313,
    "olay": 76,
    "oran": 0.0067,
-   "kaldirac": 0.52,
-   "z": -5.8,
+   "kaldirac": 0.53,
+   "z": -5.7,
    "kaldirac_dus": 0.87,
-   "asimetri": 0.6,
-   "kaldirac_ilk": 0.45,
-   "kaldirac_son": 0.65
+   "asimetri": 0.61,
+   "kaldirac_ilk": 0.47,
+   "kaldirac_son": 0.64
   },
   {
    "ozellik": "SMA20=≥%4 üstünde",
-   "n": 18970,
+   "n": 18934,
    "olay": 132,
    "oran": 0.007,
-   "kaldirac": 0.54,
-   "z": -7.2,
-   "kaldirac_dus": 0.91,
-   "asimetri": 0.6,
+   "kaldirac": 0.55,
+   "z": -7.0,
+   "kaldirac_dus": 0.9,
+   "asimetri": 0.61,
    "kaldirac_ilk": 0.49,
-   "kaldirac_son": 0.62
+   "kaldirac_son": 0.63
   },
   {
-   "ozellik": "5g endeks farkı=+2/+6",
-   "n": 18863,
-   "olay": 140,
+   "ozellik": "direnç hacmi=sessiz (<0,8x)",
+   "n": 15028,
+   "olay": 111,
    "oran": 0.0074,
    "kaldirac": 0.58,
-   "z": -6.6,
-   "kaldirac_dus": 0.85,
-   "asimetri": 0.68,
-   "kaldirac_ilk": 0.72,
-   "kaldirac_son": 0.46
+   "z": -5.8,
+   "kaldirac_dus": 0.75,
+   "asimetri": 0.77,
+   "kaldirac_ilk": 0.79,
+   "kaldirac_son": 0.42
   }
  ],
  "olaylar": [
@@ -757,105 +757,8 @@
     "Bollinger dar=hayır"
    ],
    "haber": [
+    "23.11 Borsa İstanbul, Gündoğdu Gıda paylarının Yakın İzleme Pazarı'na alınmasına karar verdi",
     "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili "
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "BIGEN",
-   "sektor": "Utilities",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 6.19,
-   "getiri": 158.3,
-   "simdi": 158.3,
-   "ciro_mn": 93.1,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=<0,6x",
-    "aralık sıkışması=genişleme (≥1,15)",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "20.11 VBTS kapsamında KLSYN.E, BIGEN.E ve DSTKF.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili "
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "IEYHO",
-   "sektor": "Process Industries",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 6.06,
-   "getiri": 158.3,
-   "simdi": 158.3,
-   "ciro_mn": 40.2,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=≥2,5x",
-    "aralık sıkışması=genişleme (≥1,15)",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "09.11 IEYHO Işıklar Enerji ve Yapı Holding konsolide bilanço 2026 9 aylık net zararı 644,869,434 TL (Önceki: 530,017,340 TL ne"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "MANAS",
-   "sektor": "Producer Manufacturing",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 2.23,
-   "getiri": 156.5,
-   "simdi": 156.5,
-   "ciro_mn": 189.7,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=<0,6x",
-    "aralık sıkışması=sıkışma (0,6-0,85)",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
-    "10.11 MANAS Manas Enerji Yönetimi Sanayi ve Tic. konsolide bilanço 2026 9 aylık net zararı 624,835,451 TL (Önceki: 274,130,584"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "TEHOL",
-   "sektor": "Finance",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 1.15,
-   "getiri": 153.9,
-   "simdi": 153.9,
-   "ciro_mn": 84.0,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=≥2,5x",
-    "aralık sıkışması=genişleme (≥1,15)",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "10.11 SPK, 17 şirkete 30.09.2026 tarihli finansal raporlarının KAP'a bildirimi ile ilgili olarak ek süre verdi",
-    "09.11 Tera Yatırım Teknoloji Holding'e CEO olarak Tolga Yenice atandı"
    ],
    "haber_kontrol": true
   },
@@ -879,28 +782,150 @@
     "Bollinger dar=hayır"
    ],
    "haber": [
+    "23.11 Borsa İstanbul, Peker GYO paylarının Yakın İzleme Pazarı'na alınmasına karar verdi",
     "20.11 SPK, Tera Portföy Algoritmik Stratejiler Serbest Fon ile Tera Yatırım'ın Peker GYO sermayesindeki paylarına ilişkin duyu",
-    "18.11 VBTS kapsamında PEKGY.E payları seans başından 17 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere konu edile",
-    "17.11 Peker Gayrimenkul, TRDTERVK2618 ISIN kodlu kira sertifikası ödemesini gerçekleştiremedi-KAP"
+    "18.11 VBTS kapsamında PEKGY.E payları seans başından 17 Aralık seans sonuna kadar açığa satışa ve kredili işlemlere konu edile"
    ],
    "haber_kontrol": true
   },
   {
-   "kod": "UFUK",
-   "sektor": "Finance",
-   "baslangic": "06.11",
+   "kod": "BIGEN",
+   "sektor": "Utilities",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 99.95,
-   "getiri": 113.7,
-   "simdi": 73.2,
-   "ciro_mn": 21.6,
+   "baslangic_fiyat": 6.8,
+   "getiri": 135.1,
+   "simdi": 111.8,
+   "ciro_mn": 93.7,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=1-1,5x",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "20.11 VBTS kapsamında KLSYN.E, BIGEN.E ve DSTKF.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili "
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "IEYHO",
+   "sektor": "Process Industries",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 6.66,
+   "getiri": 135.0,
+   "simdi": 111.6,
+   "ciro_mn": 44.4,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "23.11 VBTS kapsamında OZATD.E, IEYHO.E, SEGYO.E, ALKLC.E ve TEHOL.E payları seans başından seans sonuna kadar açığa satışa ve "
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "MANAS",
+   "sektor": "Producer Manufacturing",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 2.45,
+   "getiri": 133.5,
+   "simdi": 110.2,
+   "ciro_mn": 189.8,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=güçlü sıkışma (<0,6)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 VBTS kapsamında ANELE.E, MANAS.E ve GUNDG.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
+    "10.11 MANAS Manas Enerji Yönetimi Sanayi ve Tic. konsolide bilanço 2026 9 aylık net zararı 624,835,451 TL (Önceki: 274,130,584"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "TEHOL",
+   "sektor": "Finance",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 1.26,
+   "getiri": 131.7,
+   "simdi": 108.7,
+   "ciro_mn": 95.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "23.11 VBTS kapsamında OZATD.E, IEYHO.E, SEGYO.E, ALKLC.E ve TEHOL.E payları seans başından seans sonuna kadar açığa satışa ve ",
+    "10.11 SPK, 17 şirkete 30.09.2026 tarihli finansal raporlarının KAP'a bildirimi ile ilgili olarak ek süre verdi"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "IDGYO",
+   "sektor": "Finance",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 1.73,
+   "getiri": 125.4,
+   "simdi": 125.4,
+   "ciro_mn": 2.6,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=40-50",
+    "hacim (1g/20g)=0,6-1x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "23.11 VBTS kapsamında IDGYO.E paylarında seans başından seans sonuna kadar emir paketi tedbiri ile işlem görecek"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "UFUK",
+   "sektor": "Finance",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 109.9,
+   "getiri": 94.4,
+   "simdi": 41.8,
+   "ciro_mn": 18.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
     "aralık sıkışması=genişleme (≥1,15)",
     "Bollinger dar=hayır"
    ],
@@ -910,65 +935,93 @@
   {
    "kod": "ALKLC",
    "sektor": "Consumer Non-Durables",
-   "baslangic": "06.11",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 21.54,
-   "getiri": 111.6,
-   "simdi": 111.6,
-   "ciro_mn": 240.3,
+   "baslangic_fiyat": 23.68,
+   "getiri": 92.5,
+   "simdi": 73.3,
+   "ciro_mn": 241.1,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=1,5-2,5x",
+    "hacim (1g/20g)=<0,6x",
     "aralık sıkışması=normal",
     "Bollinger dar=hayır"
    ],
    "haber": [
+    "23.11 Altınkılıç Gıda, bazı iddialara yönelik açıklama yaptı",
+    "23.11 VBTS kapsamında OZATD.E, IEYHO.E, SEGYO.E, ALKLC.E ve TEHOL.E payları seans başından seans sonuna kadar açığa satışa ve ",
     "09.11 ALKLC Altınkılıç Gıda ve Süt Sanayi Tic. konsolide bilanço 2026 9 aylık net zararı 446,805,868 TL (Önceki: 101,065,243 T"
    ],
    "haber_kontrol": true
   },
   {
-   "kod": "IDGYO",
-   "sektor": "Finance",
-   "baslangic": "06.11",
+   "kod": "LYDYE",
+   "sektor": "Consumer Non-Durables",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 1.71,
-   "getiri": 108.2,
-   "simdi": 108.2,
-   "ciro_mn": 2.6,
+   "baslangic_fiyat": 1538.0,
+   "getiri": 88.7,
+   "simdi": 69.9,
+   "ciro_mn": 49.4,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
-    "RSI14=40-50",
-    "hacim (1g/20g)=<0,6x",
-    "aralık sıkışması=normal",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
     "Bollinger dar=hayır"
    ],
    "haber": [],
    "haber_kontrol": true
   },
   {
-   "kod": "ANELE",
-   "sektor": "Industrial Services",
-   "baslangic": "06.11",
+   "kod": "DSTKF",
+   "sektor": "Finance",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 6.87,
-   "getiri": 94.3,
-   "simdi": 86.2,
-   "ciro_mn": 240.3,
+   "baslangic_fiyat": 72.1,
+   "getiri": 86.8,
+   "simdi": 68.2,
+   "ciro_mn": 68.7,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=1,5-2,5x",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "23.11 Destek Holding AŞ'ye kayyum atandı",
+    "20.11 VBTS kapsamında KLSYN.E, BIGEN.E ve DSTKF.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
+    "09.11 DSTKF Destek Finans Faktoring konsolide bilanço 2026 9 aylık net karı 1,468,459,000 TL (Önceki: 2,583,640,000 TL net kar"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ANELE",
+   "sektor": "Industrial Services",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 7.55,
+   "getiri": 76.8,
+   "simdi": 52.6,
+   "ciro_mn": 189.8,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
     "aralık sıkışması=normal",
     "Bollinger dar=hayır"
    ],
@@ -980,70 +1033,65 @@
    "haber_kontrol": true
   },
   {
-   "kod": "DOGUB",
-   "sektor": "Non-Energy Minerals",
-   "baslangic": "06.11",
+   "kod": "TMPOL",
+   "sektor": "Process Industries",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 25.9,
-   "getiri": 91.8,
-   "simdi": 39.9,
-   "ciro_mn": 11.8,
-   "ozellik": [
-    "20 gün=≥+%30",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=50-60",
-    "hacim (1g/20g)=1,5-2,5x",
-    "aralık sıkışması=genişleme (≥1,15)",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "13.11 DOGUB Doğusan Boru Sanayi ve Tic. solo bilanço 2026 9 aylık net zararı 15,855,179 TL (Önceki: 46,892,269 TL net zarar)"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "DSTKF",
-   "sektor": "Finance",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 70.6,
-   "getiri": 90.8,
-   "simdi": 90.8,
-   "ciro_mn": 58.3,
+   "baslangic_fiyat": 51.55,
+   "getiri": 76.8,
+   "simdi": 33.6,
+   "ciro_mn": 166.1,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=≥2,5x",
+    "hacim (1g/20g)=1,5-2,5x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "BULGS",
+   "sektor": "Finance",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 4.9,
+   "getiri": 76.5,
+   "simdi": 24.5,
+   "ciro_mn": 69.4,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=1-1,5x",
     "aralık sıkışması=genişleme (≥1,15)",
     "Bollinger dar=hayır"
    ],
-   "haber": [
-    "20.11 VBTS kapsamında KLSYN.E, BIGEN.E ve DSTKF.E payları seans başından 18 Aralık seans sonuna kadar açığa satışa ve kredili ",
-    "09.11 DSTKF Destek Finans Faktoring konsolide bilanço 2026 9 aylık net karı 1,468,459,000 TL (Önceki: 2,583,640,000 TL net kar"
-   ],
+   "haber": [],
    "haber_kontrol": true
   },
   {
    "kod": "KTLEV",
    "sektor": "Finance",
-   "baslangic": "06.11",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 4.86,
-   "getiri": 84.4,
-   "simdi": 52.9,
-   "ciro_mn": 2052.0,
+   "baslangic_fiyat": 5.08,
+   "getiri": 76.4,
+   "simdi": 31.7,
+   "ciro_mn": 2123.0,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=1,5-2,5x",
+    "RSI14=30-40",
+    "hacim (1g/20g)=1-1,5x",
     "aralık sıkışması=sıkışma (0,6-0,85)",
     "Bollinger dar=hayır"
    ],
@@ -1055,48 +1103,46 @@
    "haber_kontrol": true
   },
   {
-   "kod": "PASEU",
-   "sektor": "Transportation",
-   "baslangic": "06.11",
+   "kod": "DOGUB",
+   "sektor": "Non-Energy Minerals",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 27.9,
-   "getiri": 72.8,
-   "simdi": 26.0,
-   "ciro_mn": 484.8,
+   "baslangic_fiyat": 28.48,
+   "getiri": 74.4,
+   "simdi": 40.0,
+   "ciro_mn": 12.2,
    "ozellik": [
-    "20 gün=<-%15",
+    "20 gün=≥+%30",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
-    "RSI14=30-40",
-    "hacim (1g/20g)=1,5-2,5x",
-    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "RSI14=60-70",
+    "hacim (1g/20g)=1-1,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
     "Bollinger dar=hayır"
    ],
    "haber": [
-    "19.11 Pasifik Grubu, milletvekili Ümit Özlale'nin bazı yatırım fonlarına ilişkin iddialarını \"asılsız ve mesnetsiz\" olarak nit",
-    "19.11 Pasifik Grubu, medyaya yansıyan bazı iddialara ilişkin açıklama yaptı",
-    "13.11 Pasifik Eurasia, Çinli Xi'an Free Trade Port şirketi ile stratejik iş birliğine yönelik mutabakat zaptı imzaladı-KAP"
+    "13.11 DOGUB Doğusan Boru Sanayi ve Tic. solo bilanço 2026 9 aylık net zararı 15,855,179 TL (Önceki: 46,892,269 TL net zarar)"
    ],
    "haber_kontrol": true
   },
   {
-   "kod": "LYDYE",
-   "sektor": "Consumer Non-Durables",
-   "baslangic": "06.11",
+   "kod": "IHLGM",
+   "sektor": "Finance",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 1708.0,
-   "getiri": 69.9,
-   "simdi": 69.9,
-   "ciro_mn": 45.9,
+   "baslangic_fiyat": 1.02,
+   "getiri": 72.5,
+   "simdi": 72.5,
+   "ciro_mn": 14.7,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=≥2,5x",
-    "aralık sıkışması=genişleme (≥1,15)",
+    "RSI14=40-50",
+    "hacim (1g/20g)=1-1,5x",
+    "aralık sıkışması=normal",
     "Bollinger dar=hayır"
    ],
    "haber": [],
@@ -1105,19 +1151,19 @@
   {
    "kod": "BINBN",
    "sektor": "Commercial Services",
-   "baslangic": "06.11",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 28.58,
-   "getiri": 66.1,
-   "simdi": 37.3,
-   "ciro_mn": 84.6,
+   "baslangic_fiyat": 28.28,
+   "getiri": 67.8,
+   "simdi": 26.0,
+   "ciro_mn": 81.8,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=0,6-1x",
+    "hacim (1g/20g)=<0,6x",
     "aralık sıkışması=normal",
     "Bollinger dar=hayır"
    ],
@@ -1125,157 +1171,37 @@
    "haber_kontrol": true
   },
   {
-   "kod": "ODINE",
-   "sektor": "Technology Services",
-   "baslangic": "06.11",
+   "kod": "LYDHO",
+   "sektor": "Utilities",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 60.1,
-   "getiri": 65.6,
-   "simdi": 25.3,
-   "ciro_mn": 837.1,
+   "baslangic_fiyat": 16.56,
+   "getiri": 67.4,
+   "simdi": 10.0,
+   "ciro_mn": 58.0,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
     "52h aralık=alt %20",
     "SMA50=<-%8 altı",
     "RSI14=<30",
-    "hacim (1g/20g)=1-1,5x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "09.11 ODINE Odine Solutions Teknoloji Tic. ve Sanayi konsolide bilanço 2026 9 aylık net zararı 159,674,191 TL (Önceki: 27,934,"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "OZRDN",
-   "sektor": "Process Industries",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 9.13,
-   "getiri": 65.4,
-   "simdi": 53.3,
-   "ciro_mn": 4.2,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=30-40",
-    "hacim (1g/20g)=0,6-1x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "09.11 OZRDN Özerden Ambalaj Sanayi konsolide bilanço 2026 9 aylık net zararı 30,852,827 TL (Önceki: 57,328,193 TL net zarar)"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "IHLGM",
-   "sektor": "Finance",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 0.98,
-   "getiri": 63.3,
-   "simdi": 63.3,
-   "ciro_mn": 14.8,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=30-40",
-    "hacim (1g/20g)=0,6-1x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "07.11 IHLGM İhlas Gayrimenkul Proje Geliştirme ve Tic. konsolide bilanço 2026 9 aylık net karı 515,039,429 TL (Önceki: 153,720"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "BULGS",
-   "sektor": "Finance",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 5.31,
-   "getiri": 62.9,
-   "simdi": 27.5,
-   "ciro_mn": 74.9,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=1,5-2,5x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "TMPOL",
-   "sektor": "Process Industries",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 57.25,
-   "getiri": 59.2,
-   "simdi": 29.4,
-   "ciro_mn": 157.5,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=<30",
-    "hacim (1g/20g)=≥2,5x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "09.11 SPK Trive Yatırım Menkul Değerler'in faaliyetlerini geçici durdurdu; bazı pay piyasası işlemleri ikle ilgili çok sayıda ",
-    "09.11 SPK tarafından duyurulan geçici lisans iptalleri - 1",
-    "09.11 SPK tarafından getirilen işlem yasakları - 1"
-   ],
-   "haber_kontrol": true
-  },
-  {
-   "kod": "SMART",
-   "sektor": "Technology Services",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 11.54,
-   "getiri": 57.5,
-   "simdi": 46.3,
-   "ciro_mn": 7.6,
-   "ozellik": [
-    "20 gün=<-%15",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=30-40",
     "hacim (1g/20g)=1,5-2,5x",
     "aralık sıkışması=genişleme (≥1,15)",
     "Bollinger dar=hayır"
    ],
    "haber": [
-    "09.11 • SMART Smartiks Yazılım konsolide bilanço 2026 9 aylık net karı 95,941,147 TL (Önceki: 35,081,667 TL net kar)"
+    "09.11 LYDHO Lydia Holding konsolide bilanço 2026 9 aylık net zararı 2,847,049,042 TL (Önceki: 166,253,667 TL net kar)"
    ],
    "haber_kontrol": true
   },
   {
    "kod": "MMCAS",
    "sektor": "Transportation",
-   "baslangic": "06.11",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 11.0,
-   "getiri": 54.7,
-   "simdi": 54.7,
+   "baslangic_fiyat": 10.5,
+   "getiri": 62.1,
+   "simdi": 45.9,
    "ciro_mn": 1.2,
    "ozellik": [
     "20 gün=<-%15",
@@ -1291,14 +1217,112 @@
    "haber_kontrol": true
   },
   {
+   "kod": "OZATD",
+   "sektor": "Producer Manufacturing",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 91.9,
+   "getiri": 57.7,
+   "simdi": 42.0,
+   "ciro_mn": 15.1,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=≥2,5x",
+    "aralık sıkışması=genişleme (≥1,15)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "23.11 VBTS kapsamında OZATD.E, IEYHO.E, SEGYO.E, ALKLC.E ve TEHOL.E payları seans başından seans sonuna kadar açığa satışa ve "
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "PASEU",
+   "sektor": "Transportation",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 30.68,
+   "getiri": 57.2,
+   "simdi": 3.2,
+   "ciro_mn": 452.2,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "19.11 Pasifik Grubu, milletvekili Ümit Özlale'nin bazı yatırım fonlarına ilişkin iddialarını \"asılsız ve mesnetsiz\" olarak nit",
+    "19.11 Pasifik Grubu, medyaya yansıyan bazı iddialara ilişkin açıklama yaptı",
+    "13.11 Pasifik Eurasia, Çinli Xi'an Free Trade Port şirketi ile stratejik iş birliğine yönelik mutabakat zaptı imzaladı-KAP"
+   ],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "ODINE",
+   "sektor": "Technology Services",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 63.8,
+   "getiri": 56.0,
+   "simdi": 12.9,
+   "ciro_mn": 856.9,
+   "ozellik": [
+    "20 gün=<-%15",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=<30",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=normal",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [],
+   "haber_kontrol": true
+  },
+  {
+   "kod": "SELEC",
+   "sektor": "Distribution Services",
+   "baslangic": "09.11",
+   "gun_once": 10,
+   "baslangic_fiyat": 72.5,
+   "getiri": 54.1,
+   "simdi": 25.8,
+   "ciro_mn": 322.6,
+   "ozellik": [
+    "20 gün=-%15/-%5",
+    "60g zirveye=zirveye >%25",
+    "52h aralık=alt %20",
+    "SMA50=<-%8 altı",
+    "RSI14=30-40",
+    "hacim (1g/20g)=<0,6x",
+    "aralık sıkışması=sıkışma (0,6-0,85)",
+    "Bollinger dar=hayır"
+   ],
+   "haber": [
+    "10.11 Ak Yatırım SELEC için 138 TL hedef fiyat belirledi ve NÖTR tavsiyesini korudu. (Önceki hedef fiyat: 138 TL)",
+    "10.11 Bilanço analizi -SELEC (Akbank Ekonomik Araştırmalar ve Ak Yatırım)",
+    "10.11 Bilanço analizi - SELEC (İş Yatırım)"
+   ],
+   "haber_kontrol": true
+  },
+  {
    "kod": "BIGTK",
    "sektor": "Consumer Services",
-   "baslangic": "06.11",
+   "baslangic": "09.11",
    "gun_once": 10,
-   "baslangic_fiyat": 39.14,
-   "getiri": 52.4,
-   "simdi": 30.9,
-   "ciro_mn": 132.5,
+   "baslangic_fiyat": 39.52,
+   "getiri": 50.9,
+   "simdi": 19.3,
+   "ciro_mn": 113.6,
    "ozellik": [
     "20 gün=<-%15",
     "60g zirveye=zirveye >%25",
@@ -1314,250 +1338,194 @@
     "10.11 BIGTK Big Medya Teknoloji konsolide bilanço 2026 9 aylık net karı 36,246,284 TL (Önceki: 29,551,178 TL net zarar)"
    ],
    "haber_kontrol": true
-  },
-  {
-   "kod": "SELEC",
-   "sektor": "Distribution Services",
-   "baslangic": "06.11",
-   "gun_once": 10,
-   "baslangic_fiyat": 73.55,
-   "getiri": 51.9,
-   "simdi": 31.5,
-   "ciro_mn": 336.2,
-   "ozellik": [
-    "20 gün=±%5",
-    "60g zirveye=zirveye >%25",
-    "52h aralık=alt %20",
-    "SMA50=<-%8 altı",
-    "RSI14=30-40",
-    "hacim (1g/20g)=0,6-1x",
-    "aralık sıkışması=normal",
-    "Bollinger dar=hayır"
-   ],
-   "haber": [
-    "10.11 Ak Yatırım SELEC için 138 TL hedef fiyat belirledi ve NÖTR tavsiyesini korudu. (Önceki hedef fiyat: 138 TL)",
-    "10.11 Bilanço analizi -SELEC (Akbank Ekonomik Araştırmalar ve Ak Yatırım)",
-    "10.11 Bilanço analizi - SELEC (İş Yatırım)"
-   ],
-   "haber_kontrol": true
   }
  ],
  "izleme": [
   {
    "kod": "A1CAP",
    "sektor": "Finance",
-   "fiyat": 2.64,
-   "ch": -8.01,
+   "fiyat": 2.56,
+   "ch": -3.03,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "ARDYZ",
-   "sektor": "Technology Services",
-   "fiyat": 45.78,
-   "ch": -5.14,
+   "kod": "ARZUM",
+   "sektor": "Distribution Services",
+   "fiyat": 0.87,
+   "ch": -4.4,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "ARTMS",
-   "sektor": "Retail Trade",
-   "fiyat": 21.74,
-   "ch": -6.45,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
-   ],
-   "skor": 9
-  },
-  {
-   "kod": "CVKMD",
+   "kod": "BRLSM",
    "sektor": "Non-Energy Minerals",
-   "fiyat": 11.22,
-   "ch": -9.95,
+   "fiyat": 7.77,
+   "ch": -5.36,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "DGATE",
-   "sektor": "Distribution Services",
-   "fiyat": 41.68,
-   "ch": -3.16,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
-   ],
-   "skor": 9
-  },
-  {
-   "kod": "HOROZ",
-   "sektor": "Transportation",
-   "fiyat": 33.42,
-   "ch": -4.02,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
-   ],
-   "skor": 9
-  },
-  {
-   "kod": "INDES",
-   "sektor": "Distribution Services",
-   "fiyat": 8.44,
-   "ch": -4.31,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
-   ],
-   "skor": 9
-  },
-  {
-   "kod": "MEYSU",
+   "kod": "DAGI",
    "sektor": "Consumer Non-Durables",
-   "fiyat": 7.02,
-   "ch": -3.97,
+   "fiyat": 5.14,
+   "ch": -6.38,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "NETAS",
-   "sektor": "Technology Services",
-   "fiyat": 47.04,
-   "ch": -4.85,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
-   ],
-   "skor": 9
-  },
-  {
-   "kod": "RAYSG",
+   "kod": "ENDAE",
    "sektor": "Finance",
-   "fiyat": 98.35,
-   "ch": -3.01,
+   "fiyat": 8.46,
+   "ch": -6.73,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "SAFKR",
-   "sektor": "Producer Manufacturing",
-   "fiyat": 11.5,
-   "ch": -4.17,
+   "kod": "GLRYH",
+   "sektor": "Finance",
+   "fiyat": 1.15,
+   "ch": -8.0,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
+   ],
+   "skor": 9
+  },
+  {
+   "kod": "HURGZ",
+   "sektor": "Consumer Services",
+   "fiyat": 3.42,
+   "ch": -3.39,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
+   ],
+   "skor": 9
+  },
+  {
+   "kod": "KGYO",
+   "sektor": "Finance",
+   "fiyat": 6.58,
+   "ch": -9.99,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
+   ],
+   "skor": 9
+  },
+  {
+   "kod": "TURSG",
+   "sektor": "Finance",
+   "fiyat": 2.84,
+   "ch": -3.07,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
    "kod": "USHOL",
    "sektor": "Distribution Services",
-   "fiyat": 49.36,
-   "ch": -4.62,
+   "fiyat": 44.44,
+   "ch": -9.97,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
+   ],
+   "skor": 9
+  },
+  {
+   "kod": "YAYLA",
+   "sektor": "Industrial Services",
+   "fiyat": 9.6,
+   "ch": -4.67,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
    "kod": "ZERGY",
    "sektor": "Finance",
-   "fiyat": 4.42,
-   "ch": -5.35,
+   "fiyat": 4.12,
+   "ch": -6.79,
    "eslesen": [
     "gün=<-%3"
    ],
    "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
     "5 gün=<-%8 + gün=<-%3",
-    "5g endeks farkı=<-6 puan + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5"
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 9
   },
   {
-   "kod": "ADEL",
-   "sektor": "Consumer Durables",
-   "fiyat": 19.42,
-   "ch": -4.52,
-   "eslesen": [
-    "gün=<-%3"
-   ],
-   "cift": [
-    "5 gün=<-%8 + gün=<-%3",
-    "gün=<-%3 + oynaklık (20g)=%3,5-5",
-    "SMA20=<-%4 altı + gün=<-%3"
-   ],
-   "skor": 7
-  },
-  {
-   "kod": "ADGYO",
-   "sektor": "Finance",
-   "fiyat": 46.68,
-   "ch": -4.54,
+   "kod": "A1YEN",
+   "sektor": "Utilities",
+   "fiyat": 1.36,
+   "ch": -3.55,
    "eslesen": [
     "gün=<-%3"
    ],
@@ -1565,6 +1533,36 @@
     "5 gün=<-%8 + gün=<-%3",
     "5g endeks farkı=<-6 puan + gün=<-%3",
     "gün=<-%3 + oynaklık (20g)=%3,5-5"
+   ],
+   "skor": 7
+  },
+  {
+   "kod": "AKSUE",
+   "sektor": "Utilities",
+   "fiyat": 12.25,
+   "ch": -3.31,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
+   ],
+   "skor": 7
+  },
+  {
+   "kod": "ARMGD",
+   "sektor": "Consumer Non-Durables",
+   "fiyat": 98.05,
+   "ch": -9.96,
+   "eslesen": [
+    "gün=<-%3"
+   ],
+   "cift": [
+    "10g endeks farkı=<-10 puan + gün=<-%3",
+    "5 gün=<-%8 + gün=<-%3",
+    "5g endeks farkı=<-6 puan + gün=<-%3"
    ],
    "skor": 7
   }
