@@ -1486,7 +1486,7 @@
    ]
   }
  },
- "guncelleme": "23.11 16:27",
+ "guncelleme": "23.11 17:25",
  "gun_sayisi": 4,
  "nedenler": {
   "BURVA": {
@@ -2659,6 +2659,56 @@
    {
     "ts": 1769665255,
     "baslik": "Bilanço analizi - ISFIN (Pusula Yatırım)"
+   }
+  ],
+  "2026-11-23|FRIGO": [
+   {
+    "ts": 1794241264,
+    "baslik": "FRIGO Frigo-pak Gıda Maddeleri Sanayi ve Tic. konsolide bilanço 2026 9 aylık net zararı 252,188,634 TL (Önceki: 466,351,286 TL net zarar)"
+   },
+   {
+    "ts": 1787074734,
+    "baslik": "FRIGO Frigo-pak Gıda Maddeleri Sanayi ve Tic. konsolide bilanço 2026 6 aylık net zararı 142,478,095 TL (Önceki: 406,744,406 TL net zarar)"
+   },
+   {
+    "ts": 1783310460,
+    "baslik": "Frigo-Pak Gıda, 2023 hesap dönemine ilişkin yürütülen vergi incelemesi sonucunda düzenlenen vergi ve ceza ihbarnamelerine karşı iptal davası"
+   },
+   {
+    "ts": 1782100750,
+    "baslik": "VBTS kapsamında EDATA.E, ENSRI.E, FRIGO.E ve INFO.E payları seans başından 21 Temmuz seans sonuna kadar açığa satışa ve kredili işlemlere ko"
+   },
+   {
+    "ts": 1778212852,
+    "baslik": "SPK, halka açık iki şirketin sermaye artırımına ilişkin pay ihraç belgesini onayladı"
+   },
+   {
+    "ts": 1776052863,
+    "baslik": "VBTS kapsamında FRIGO.E ve MOGAN.E payları seans başından 12 Mayıs seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1775793563,
+    "baslik": "Frigo-Pak Gıda, Geri Alım Programı çerçevesinde alınan paylardan satış gerçekleştirdi"
+   },
+   {
+    "ts": 1775534479,
+    "baslik": "Frigo-Pak Gıda, geri alınan paylardan satış gerçekleştirdi"
+   },
+   {
+    "ts": 1772812092,
+    "baslik": "FRIGO Frigo-pak Gıda Maddeleri Sanayi ve Tic. konsolide bilanço 2025 Yıllık net zararı 296,513,427 TL (Önceki: 140,594,168 TL net kar)"
+   },
+   {
+    "ts": 1771819168,
+    "baslik": "VBTS kapsamında FRIGO.E payları seans başından 19 Mart seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1769756102,
+    "baslik": "KAP:   [FRIGO ] MERKEZİ KAYIT KURULUŞU A.Ş.  Merkezi Kayıt Kuruluşu A.Ş. Duyurusu"
+   },
+   {
+    "ts": 1769688835,
+    "baslik": "KAP:   [FRIGO ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
    }
   ]
  },
