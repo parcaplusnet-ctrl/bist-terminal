@@ -124,5 +124,47 @@
    "ornek": 11743,
    "durum": "test"
   }
+ },
+ {
+  "id": "zayif_gun_guclu_hisse",
+  "aciklama": "Hisselerin %35'inden azı yükselen zayıf günde hisse günü aralığın üst %60'ında kapattı",
+  "kod": "ek(\"zayif_gun_guclu_hisse\", \"Hisselerin %35'inden azı yükselen zayıf günde hisse günü aralığın üst %60'ında kapattı\", lambda d: (d.genislik < 0.35) & (d.clpos >= 0.6), kaynak=\"P\")",
+  "tarih": "23.11",
+  "ilk_olcum": {
+   "oran": 0.2256,
+   "stop": 0.4778,
+   "fark": -0.0073,
+   "getiri_fark": -0.297,
+   "ornek": 31005,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "ema_sikisma_hacimli_yesil",
+  "aciklama": "EMA20 ile EMA50 arası %2'den yakın iken hisse +%2 yükseldi ve hacim 1,5 kat",
+  "kod": "ek(\"ema_sikisma_hacimli_yesil\", \"EMA20 ile EMA50 arası %2'den yakın iken hisse +%2 yükseldi ve hacim 1,5 kat\", lambda d: ((d.ema20 - d.ema50).abs() < 0.02) & (d.ret1 >= 0.02) & (d.rv >= 1.5))",
+  "tarih": "23.11",
+  "ilk_olcum": {
+   "oran": 0.2715,
+   "stop": 0.4375,
+   "fark": 0.0386,
+   "getiri_fark": 0.053,
+   "ornek": 12943,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "lider_sektor_hacimli",
+  "aciklama": "Sektörü son 20 günde en güçlü 3 sektörden ve hisse hacmi ortalamanın 1,5 katı ve üstü",
+  "kod": "ek(\"lider_sektor_hacimli\", \"Sektörü son 20 günde en güçlü 3 sektörden ve hisse hacmi ortalamanın 1,5 katı ve üstü\", lambda d: (d.sek_sira <= 3) & (d.rv >= 1.5), kaynak=\"S\")",
+  "tarih": "23.11",
+  "ilk_olcum": {
+   "oran": 0.2626,
+   "stop": 0.494,
+   "fark": 0.0297,
+   "getiri_fark": -0.161,
+   "ornek": 10257,
+   "durum": "test"
+  }
  }
 ]
