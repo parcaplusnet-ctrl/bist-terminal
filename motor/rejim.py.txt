@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""Gölge kasa ve piyasa rejimi (24.11): mevcut kasaya dokunmadan, yalnızca ölçüm yapar. Çıktı: rejim.json (sayfadaki "Gölge kasa" bölümü okur).
+Üç ölçüm:
+ 1) Rejim etiketi: her işlem günü endeks değişimi ve piyasa genişliğine (yükselen hisse oranı) göre yükseliş / yatay / düşüş.
+ 2) Rastgele seçim tabanı: 5 yıllık günlük mumlarda, likit (günlük ciro >= eşik) her hisse o günün kapanışından alınsaydı 2 işlem gününde
+    +%5 hedef / -%3 stop sonucu rejim bazında ne olurdu (aynı gün ikisi de görünürse stop sayılır: kötümser). Sistemin seçimleri bununla kıyaslanır.
+ 3) Kasa ve endeks: kasanın günlük getirisi endekse karşı, rejim bazında. Filtresiz gölge kasa: radar seçimlerinin tamamı (kalite kapısı ve seans saati
+    olmadan) kasa kurallarıyla (%10 pay, en fazla 10 pozisyon) alınsaydı ne olurdu (gün düzeyinde yeniden oynatma, hedef/stop sonuçları kayıtlardan).
+Kullanım: python3 rejim.py --lab lab.py --veri veri.json --cikti rejim.json"""
+import argparse, importlib.util, json, re, sys, time, datetime as dt
+import numpy as np, pandas as pd
+
+ap = argparse.ArgumentParser(); ap.add_argument("--lab", default="lab.py"); ap.add_argument("--veri", default="veri.json"); ap.add_argument("--cikti", default="rejim.json")
+ap.add_argument("--esik_mn", type=float, default=20.0); ap.add_argument("--sinir", type=int, default=0)
+a = ap.parse_args()
+sp = importlib.util.spec_from_file_location("lab", a.lab); lab = importlib.util.module_from_spec(sp); sys.modules["lab"] = lab; sp.loader.exec_module(lab)
+D = json.load(open(a.veri, encoding="utf-8")); K = D["kasa"]; KOM = K.get("komisyon", 0.001); ORAN = K.get("pozisyon_orani", 0.1)
+HEDEF, STOP = 0.05, 0.03
+t0 = time.time()
+
+# ---------------------------------------------------------------- veri
+kods = sorted(lab.evren())
+if a.sinir: kods = kods[:a.sinir]
+G = lab.indir(kods, "1d", "5y")
+XU = lab.yahoo("XU100.IS", "1d", "5y")
+if XU is None or not len(G):
+    print("REJİM: veri alınamadı"); sys.exit(1)
+print(f"REJİM: {len(G)} hisse, endeks {len(XU)} gün, {int(time.time()-t0)} sn")
+def gun(ix): return pd.DatetimeIndex(ix).tz_localize(None).normalize()
+for k in G: G[k].index = gun(G[k].index); G[k] = G[k][~G[k].index.duplicated(keep="last")]
+XU.index = gun(XU.index); XU = XU[~XU.index.duplicated(keep="last")]
+C = pd.DataFrame({k: v["c"] for k, v in G.items()}).sort_index()
+ret = C.pct_change(fill_method=None)
+genislik = ((ret > 0).sum(axis=1) / ret.notna().sum(axis=1)).reindex(XU.index)
+xr = XU["c"].pct_change() * 100
+
+def rejim_et(r, b):
+    if r != r or b != b: return None
+    if r < 0 and (r <= -0.5 or b < 0.35) and b <= 0.60: return "dusus"
+    if r > 0 and (r >= 0.5 or b > 0.65) and b >= 0.40: return "yukselis"
+    return "yatay"
+REJ = pd.Series({d: rejim_et(xr[d], genislik[d]) for d in XU.index}).dropna()
+
+# ---------------------------------------------------------------- 2) rastgele seçim tabanı
+def taban():
+    sat = {"dusus": [], "yatay": [], "yukselis": []}
+    for k, df in G.items():
+        df = df[df.index.isin(REJ.index)] if False else df
+        o, h, l, c, v = (df[x].values.astype(float) for x in ("o", "h", "l", "c", "v"))
+        n = len(c)
+        if n < 10: continue
+        e = c[:-2]; ok = (c[:-2] * v[:-2] >= a.esik_mn * 1e6) & (e > 0)
+        h1, l1, o1 = h[1:-1], l[1:-1], o[1:-1]; h2, l2, o2, c2 = h[2:], l[2:], o[2:], c[2:]
+        hd, sp_ = e * (1 + HEDEF), e * (1 - STOP)
+        s1 = l1 <= sp_; t1 = h1 >= hd; s2 = l2 <= sp_; t2 = h2 >= hd
+        sonuc = np.where(s1, 2, np.where(t1, 1, np.where(s2, 2, np.where(t2, 1, 0))))   # 1 hedef, 2 stop, 0 süre doldu
+        gap = np.where(s1, np.minimum(sp_, o1), np.where(s2, np.minimum(sp_, o2), 0))
+        getiri = np.where(sonuc == 1, HEDEF, np.where(sonuc == 2, gap / e - 1, c2 / e - 1)) - 2 * KOM
+        r = REJ.reindex(df.index[:-2]).values
+        for g in ("dusus", "yatay", "yukselis"):
+            m = ok & (r == g)
+            if m.any(): sat[g].append(np.column_stack([sonuc[m], getiri[m]]))
+    out = {}
+    for g, L in sat.items():
+        if not L: out[g] = {"n": 0}; continue
+        X = np.vstack(L); n = len(X)
+        out[g] = {"n": int(n), "hedef": round(float((X[:, 0] == 1).mean()) * 100, 1), "stop": round(float((X[:, 0] == 2).mean()) * 100, 1), "ort": round(float(X[:, 1].mean()) * 100, 2)}
+    return out
+TABAN = taban()
+print(f"REJİM: rastgele seçim tabanı {json.dumps(TABAN)} ({int(time.time()-t0)} sn)")
+
+# ---------------------------------------------------------------- tarih yardımcıları (kayıtlarda yıl yok: 2026)
+YIL = 2026
+def dm(s):
+    m = re.match(r"\s*(\d{2})\.(\d{2})", str(s or ""))
+    return pd.Timestamp(YIL, int(m.group(2)), int(m.group(1))) if m else None
+def etiket(d): return d.strftime("%d.%m")
+def reg_of(d): return REJ.get(d)
+
+# ---------------------------------------------------------------- 3a) kasa ve endeks günlük
+gl = K.get("gunluk") or []
+seri = [(dm(x["gun"]), x["kapanis"]) for x in gl if dm(x["gun"]) is not None]
+bas_t = dm(K.get("baslangic_tarih")); base = K.get("baslangic", 100000)
+gunler = []; onceki = base; onceki_t = bas_t
+for d, kv in seri:
+    if d not in XU.index: continue
+    kr = (kv / onceki - 1) * 100
+    gunler_arasi = [x for x in XU.index if onceki_t is not None and onceki_t < x <= d]
+    er = float(((1 + xr.reindex(gunler_arasi) / 100).prod() - 1) * 100) if gunler_arasi else float(xr[d])
+    tek = len(gunler_arasi) <= 1
+    gunler.append({"gun": etiket(d), "endeks": round(er, 2), "genislik": round(float(genislik[d]) * 100) if genislik[d] == genislik[d] else None,
+                   "rejim": reg_of(d) if tek else "karma", "kasa": round(kr, 2), "kapanis": round(kv, 2), "tek": tek})
+    onceki, onceki_t = kv, d
+# gölge kasa (filtresiz) için aşağıda eklenecek
+
+# ---------------------------------------------------------------- 3b) filtresiz gölge kasa: radar seçimlerinin tamamı
+def getiri_kayit(h, kasada):
+    if kasada is not None: return kasada["kar_yuzde"]
+    s = h.get("sonuc")
+    if s == "Başarılı": return HEDEF - 2 * KOM
+    if s == "Stop":
+        sc = h.get("stop_cikis"); g = h.get("giris")
+        if isinstance(sc, (int, float)) and g: return sc / g - 1 - 2 * KOM
+        sy = h.get("stop_yuzde"); return (sy if isinstance(sy, (int, float)) else -STOP) - 2 * KOM
+    d = h.get("degisim"); return (d if isinstance(d, (int, float)) else 0.0) - 2 * KOM
+def kapanis_gunu(h, kasada):
+    if kasada is not None and kasada.get("kapanis"): return dm(kasada["kapanis"])
+    for f in ("hedef_tarih", "stop_tarih"):
+        if h.get(f): return dm(h[f])
+    return dm(h.get("bitis")) or dm(h.get("kontrol"))
+kmap = {(p["kod"], p["tarama"]): p for p in K.get("kapanan", [])}
+kmap.update({(p["kod"], p["tarama"]): p for p in K.get("acik", []) if p.get("kapanis")})
+HIST = [h for h in D.get("history", []) if h.get("sonuc") not in (None, "Bekliyor") and not h.get("iptal")]
+def sirala_anahtar(h):
+    d = dm(h["tarama"]); return d
+basla = bas_t
+olaylar = []; secimler = []
+for h in HIST:
+    d0 = dm(h["tarama"]);
+    if d0 is None: continue
+    kz = kmap.get((h["kod"], h["tarama"]))
+    d1 = kapanis_gunu(h, kz)
+    if d1 is None or d1 < d0: d1 = d0
+    secimler.append({"kod": h["kod"], "giris_gun": d0, "cikis_gun": d1, "getiri": getiri_kayit(h, kz), "sonuc": h["sonuc"], "kasada": kz is not None, "tarama": h["tarama"]})
+# gölge: kasa başlangıcından (11.11 19:00) sonraki seçimler
+def tarama_ts(s):
+    m = re.match(r"\s*(\d{2})\.(\d{2})\s+(\d{2}):(\d{2})", str(s)); return dt.datetime(YIL, int(m.group(2)), int(m.group(1)), int(m.group(3)), int(m.group(4))) if m else None
+def bas_ts():
+    s = K.get("baslangic_tarih") or "11.11 19:00"; return tarama_ts(s)
+BT = bas_ts()
+G_SEC = [s for s in secimler if tarama_ts(s["tarama"]) and tarama_ts(s["tarama"]) >= BT]
+G_SEC.sort(key=lambda s: tarama_ts(s["tarama"]))
+nakit = float(base); acik = []; gtoplam = {}; gdeger = float(base); gislem = 0; gkazan = 0
+gun_listesi = sorted({s["giris_gun"] for s in G_SEC} | {s["cikis_gun"] for s in G_SEC} | set(XU.index[XU.index >= pd.Timestamp(BT.date())]))
+for d in gun_listesi:
+    # önce o gün kapananları bozdur, sonra yeni girişleri aç (gün düzeyi: aynı gün giriş çıkış mümkün)
+    for s in [s for s in G_SEC if s["giris_gun"] == d]:
+        deg = nakit + sum(p["tutar"] for p in acik)
+        if len(acik) >= 10: continue
+        tutar = min(deg * ORAN, nakit)
+        if tutar <= 0: continue
+        nakit -= tutar; acik.append({"tutar": tutar, "s": s}); s["alindi"] = True
+    for p in [p for p in acik if p["s"]["cikis_gun"] <= d]:
+        acik.remove(p); nakit += p["tutar"] * (1 + p["s"]["getiri"]); gislem += 1; gkazan += 1 if p["s"]["getiri"] > 0 else 0
+    gtoplam[d] = nakit + sum(p["tutar"] for p in acik)
+G_SON = gtoplam[max(gtoplam)] if gtoplam else base
+alinan = [s for s in G_SEC if s.get("alindi")]
+# günlere işle
+onc = float(base)
+for g in gunler:
+    d = pd.Timestamp(YIL, int(g["gun"][3:5]), int(g["gun"][:2]))
+    v = None
+    for dd in sorted(gtoplam):
+        if dd <= d: v = gtoplam[dd]
+    if v is not None:
+        g["golge"] = round((v / onc - 1) * 100, 2); g["golge_kapanis"] = round(v, 2); onc = v
+
+# ---------------------------------------------------------------- 3c) rejim bazında özet
+def ozet_rejim(r):
+    L = [g for g in gunler if g["rejim"] == r and g["tek"]]
+    n = len(L)
+    if not n: return {"gun": 0}
+    return {"gun": n, "endeks": round(float(np.mean([g["endeks"] for g in L])), 2), "kasa": round(float(np.mean([g["kasa"] for g in L])), 2),
+            "fark": round(float(np.mean([g["kasa"] - g["endeks"] for g in L])), 2),
+            "golge": round(float(np.mean([g["golge"] for g in L if "golge" in g])), 2) if any("golge" in g for g in L) else None}
+def secim_rejim(L, r):
+    X = [s for s in L if reg_of(s["giris_gun"]) == r]
+    if not X: return {"n": 0}
+    b = sum(1 for s in X if s["sonuc"] == "Başarılı"); st = sum(1 for s in X if s["sonuc"] == "Stop")
+    return {"n": len(X), "hedef": round(b / len(X) * 100, 1), "stop": round(st / len(X) * 100, 1), "ort": round(float(np.mean([s["getiri"] for s in X])) * 100, 2)}
+kasa_sec = [s for s in secimler if s["kasada"]]
+R = {}
+for r in ("dusus", "yatay", "yukselis"):
+    R[r] = {"endeks_kasa": ozet_rejim(r), "taban": TABAN.get(r), "kasa_islem": secim_rejim(kasa_sec, r), "tum_secim": secim_rejim(secimler, r),
+            "gun_5y": int((REJ == r).sum())}
+tek = [g for g in gunler]
+dusus_g = [g for g in gunler if g["rejim"] == "dusus"]
+bugun = XU.index[-1]
+OZ = {"dönem_gun": len(gunler), "kasa_toplam": round((onceki / base - 1) * 100, 2),
+      "endeks_toplam": round(float(((XU["c"].iloc[-1] / XU["c"].asof(pd.Timestamp(bas_t.year, bas_t.month, bas_t.day))) - 1) * 100), 2) if bas_t is not None else None,
+      "golge_toplam": round((G_SON / base - 1) * 100, 2), "golge_islem": gislem, "golge_kazanan": gkazan, "golge_alinan": len(alinan), "golge_secim": len(G_SEC),
+      "dusus_gun": len(dusus_g), "dusus_endeks_toplam": round(float(((1 + pd.Series([g["endeks"] for g in dusus_g]) / 100).prod() - 1) * 100), 2) if dusus_g else None,
+      "dusus_kasa_toplam": round(float(((1 + pd.Series([g["kasa"] for g in dusus_g]) / 100).prod() - 1) * 100), 2) if dusus_g else None}
+cikti = {"surum": "1.0", "zaman": time.strftime("%d.%m %H:%M", time.gmtime(time.time() + 10800)),
+         "kural": {"yukselis": "endeks >= +%0,5 veya yükselen oranı > %65 (en az %40)", "dusus": "endeks <= -%0,5 veya yükselen oranı < %35 (en çok %60)", "yatay": "diğer günler",
+                   "taban": f"2 işlem günü, +%5 hedef, -%3 stop, günlük ciro >= {a.esik_mn:g} mn ₺, komisyon dahil; aynı gün ikisi de görünürse stop"},
+         "bugun": {"gun": etiket(bugun), "endeks": round(float(xr.iloc[-1]), 2), "genislik": round(float(genislik.iloc[-1]) * 100), "rejim": REJ.get(bugun)},
+         "gunler": gunler, "rejim": R, "ozet": OZ, "taban_gun": {g: int((REJ == g).sum()) for g in ("dusus", "yatay", "yukselis")}}
+json.dump(cikti, open(a.cikti, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+print(f"REJİM: yazıldı {a.cikti}; bugün {cikti['bugun']}; özet {json.dumps(OZ, ensure_ascii=False)} ({int(time.time()-t0)} sn)")

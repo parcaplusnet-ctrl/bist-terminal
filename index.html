@@ -217,6 +217,9 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
 .tcard .btn.pri{background:var(--acc);border-color:var(--acc);color:#07121c;font-weight:600}
 .foot{text-align:center;font-size:12px;color:var(--dim)}
 
+.kasa.gk{grid-template-columns:repeat(5,minmax(0,1fr))}.gkT .num{white-space:nowrap}.gkS{display:block;font:500 11px var(--sans);color:var(--mut,#8896a6);margin-top:3px}
+@media (max-width:1100px){.kasa.gk{grid-template-columns:repeat(3,minmax(0,1fr))}.kasa.gk .k:last-child{grid-column:span 2}}
+@media (max-width:760px){.kasa.gk{grid-template-columns:repeat(2,minmax(0,1fr))}.kasa.gk .k:last-child{grid-column:1/-1;border-right:0}}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.kpis .k:nth-child(4n){border-right:0}.kpis .k:nth-child(-n+4){border-bottom:1px solid var(--line)}
  .kasa{grid-template-columns:repeat(3,minmax(0,1fr))}.kasa .k:nth-child(-n+3){border-bottom:1px solid var(--line)}.kasa .k:nth-child(3n){border-right:0}
  .det{grid-template-columns:1fr 1fr;padding-left:16px}.scan{grid-template-columns:1fr}}
@@ -283,6 +286,22 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Kapanan işlemler</h2><p id="ksHT">—</p></div>
   <div class="tw kay ksKW" tabindex="0" aria-label="Kapanan işlemler, kaydırılabilir"><table id="ksH"></table></div>
   <div class="note">Her yeni seçime kasanın %10'u yatırılır, en fazla 10 pozisyon. Alım yalnızca seans saatlerinde (10:00 - 18:00) yapılır, 18:00 sonrası taramadan portföye hisse alınmaz. Hedefte (+%5) ya da stopta satılır, komisyon dahildir.</div>
+ </section>
+
+ <section class="sec" id="gkC">
+  <div class="sh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p></div>
+  <div class="kasa gk">
+   <div class="k"><small>Son işlem günü rejimi</small><b id="gkRj">—</b><em id="gkRjL">—</em></div>
+   <div class="k"><small>Kasa · başlangıçtan beri</small><b id="gkKs">—</b><em id="gkKsL">—</em></div>
+   <div class="k"><small>Kasa - endeks farkı</small><b id="gkFk">—</b><em>puan, aynı dönemde</em></div>
+   <div class="k"><small>Düşüş günlerinde</small><b id="gkDs">—</b><em id="gkDsL">—</em></div>
+   <div class="k"><small>Filtresiz gölge kasa</small><b id="gkGl">—</b><em id="gkGlL">—</em></div>
+  </div>
+  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Rejime göre sonuçlar</h2><p id="gkRT">—</p></div>
+  <div class="tw gkT"><table id="gkR"></table></div>
+  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Günlük seyir</h2><p id="gkGT">—</p></div>
+  <div class="tw gkT"><table id="gkG"></table></div>
+  <div class="note" id="gkN">Gölge kasa mevcut kasayı etkilemez, yalnızca ölçer. Her işlem günü endeks değişimine ve yükselen hisse oranına göre yükseliş, yatay ya da düşüş olarak etiketlenir. Rastgele seçim tabanı, son 5 yılda likit her hissenin o günün kapanışından alınıp 2 işlem günü tutulmasının sonucudur (+%5 hedef, -%3 stop, komisyon dahil; aynı gün ikisi de görünürse stop sayılır). Sistemin seçimleri bu tabanla kıyaslanır. Filtresiz gölge kasa, radar seçimlerinin tamamını (kalite kapısı ve seans saati olmadan) kasa kurallarıyla yeniden oynatır. Örnek sayısı azken sonuç çıkarılmaz; yatay ve yükseliş günleri biriktikçe tablo dolar.</div>
  </section>
 
  <section class="kpis" aria-label="Özet">
@@ -730,7 +749,7 @@ function render(){tvApply();ogrAsama();sagAsama();const H=D.history||[],st=D.son
  if(!liveOn)txt($("sess"),`${st.tarama||D.guncelleme||"—"} · ${st.oturum||""} · ${st.taranan||"?"} hisse`);txt($("nxt"),nextScan());
  {const Y=D.yurtdisi||{},LB=window.LABS=window.LABS||{};LB.bist=open.length;LB.abd=(Y.history||[]).filter(r=>r.sonuc==="Bekliyor").length;LB.kri=((D.kripto||{}).hisseler||[]).length;LB.isabet=done.length?bas/done.length:null;LB.next=nextScan();if(pz&&pz.xu100!=null)LB.xu=pz.xu100;if(!liveOn)LB.top=(D.picks||[])[0]||null;LB.live=liveOn}
  txt($("fyT"),(TVET||FY_ET||st.tarama||D.guncelleme||"—")+" · 15 dk gecikmeli"+(TVET?" · sürekli":""));
- takip();kes10();kasa();sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);glgSek(D.golge);srpSek((D.hareket_lab||{}).surpriz);bykSek(D.buyuk_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
+ takip();kes10();kasa();try{gk()}catch(e){console.error(e)}sonuclar();izleme();abd(D.yurtdisi);kripto(D.kripto);ozLab(D.lab_ozellik);hrkLab(D.hareket_lab);glgSek(D.golge);srpSek((D.hareket_lab||{}).surpriz);bykSek(D.buyuk_lab);labSec();sektor(D.sektor_lab);endeks(D.lab_bist);ogren();srchFill();try{window.xuYaz&&window.xuYaz()}catch(e){}}
 
 /* eski kural (06.11): son günü olmayan 'Başarısız' kayıtlar bugünkü kurala göre gösterilir */
 function eskiDuzelt(D){(D.history||[]).forEach(r=>{if(r.sonuc!=="Başarısız"||r.bitis)return;r.eski_kural=1;if(r.max_degisim!=null&&r.max_degisim>=0.05){r.sonuc="Başarılı";r.hedef_tarih=r.hedef_tarih||r.kontrol}else if(r.degisim!=null&&r.degisim<=-0.03){r.sonuc="Stop";r.stop_tarih=r.stop_tarih||r.kontrol}else r.sonuc="Erken kapandı"})}
@@ -774,6 +793,31 @@ async function tvCek(){const k=tvKodlar();if(!k.length)return;try{const r=await 
 function tvDongu(){tvCek().finally(()=>{const t=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Istanbul"})),g=t.getDay(),dk=t.getHours()*60+t.getMinutes(),acik=g>=1&&g<=5&&dk>=595&&dk<=1090;setTimeout(tvDongu,TVERR>0?Math.min(30000,5000*TVERR):document.hidden?30000:acik?1000:300000)})}
 /* GitHub Pages: TradingView canlı fiyat döngüsü açık (BIST 15 dk gecikmeli) */
 tvDongu();
+
+
+/* gölge kasa ve rejim (rejim.json: motor/rejim.py üretir, gece görevi yeniler) */
+let RJ=null;
+const gP=(v,d)=>v==null||isNaN(v)?"—":(v>=0?"+":"")+Number(v).toFixed(d==null?1:d).replace(".",",")+"%";
+const gRj={dusus:["Düşüş","bad"],yatay:["Yatay","warn"],yukselis:["Yükseliş","ok"],karma:["Karma","warn"]};
+function gk(){const sec=$("gkC");if(!sec)return;if(!RJ||!RJ.ozet){txt($("gkT"),"ölçüm bekleniyor");return}
+ const O=RJ.ozet,B=RJ.bugun||{},R=RJ.rejim||{};txt($("gkT"),`ölçüm · kasayı etkilemez · güncelleme ${RJ.zaman||"—"}`);
+ {const b=$("gkRj");b.textContent="";const r=gRj[B.rejim];if(r)b.append(el("span","ch "+r[1],r[0]));else b.textContent="—";txt($("gkRjL"),B.gun?`${B.gun} · endeks ${gP(B.endeks,2)} · %${B.genislik} yükselen`:"—")}
+ txt($("gkKs"),gP(O.kasa_toplam));$("gkKs").className=cls(O.kasa_toplam);txt($("gkKsL"),`endeks ${gP(O.endeks_toplam)} · ${O.dönem_gun} işlem günü`);
+ const fk=O.endeks_toplam!=null?O.kasa_toplam-O.endeks_toplam:null;txt($("gkFk"),fk==null?"—":(fk>=0?"+":"")+fk.toFixed(1).replace(".",","));$("gkFk").className=cls(fk);
+ txt($("gkDs"),gP(O.dusus_kasa_toplam));$("gkDs").className=cls(O.dusus_kasa_toplam);txt($("gkDsL"),O.dusus_gun?`endeks ${gP(O.dusus_endeks_toplam)} · ${O.dusus_gun} düşüş günü`:"düşüş günü yok");
+ txt($("gkGl"),gP(O.golge_toplam));$("gkGl").className=cls(O.golge_toplam);txt($("gkGlL"),`tüm radar seçimleri · ${O.golge_alinan} işlem`);
+ const N=RJ.taban_gun||{};txt($("gkRT"),`kasa dönemi ${O.dönem_gun} gün · taban 5 yıl (${(N.dusus||0)+(N.yatay||0)+(N.yukselis||0)} gün)`);
+ table($("gkR"),["Rejim",["Gün","r"],["Endeks ort.","r"],["Kasa ort.","r"],["Fark","r"],["Sistem işlemleri","r"],["Rastgele seçim tabanı","r"]],["dusus","yatay","yukselis"].map(k=>r=>{const x=R[k]||{},e=x.endeks_kasa||{},sc=x.kasa_islem||{},tb=x.taban||{};
+  cell(r,el("span","ch "+gRj[k][1],gRj[k][0]));
+  cell(r,e.gun?String(e.gun):"veri yok","num"+(e.gun?"":" mut"));
+  cell(r,e.gun?gP(e.endeks,2):"—","num "+(e.gun?cls(e.endeks):"mut"));cell(r,e.gun?gP(e.kasa,2):"—","num "+(e.gun?cls(e.kasa):"mut"));cell(r,e.gun?gP(e.fark,2):"—","num "+(e.gun?cls(e.fark):"mut"));
+  cell(r,sc.n?`${sc.n} işlem · hedef %${String(sc.hedef).replace(".",",")} · stop %${String(sc.stop).replace(".",",")}${sc.n<10?" · az örnek":""}`:"veri yok","num"+(sc.n?"":" mut"));
+  cell(r,tb.n?`hedef %${String(tb.hedef).replace(".",",")} · stop %${String(tb.stop).replace(".",",")} · ort. ${gP(tb.ort,2)}`:"—","num"+(tb.n?"":" mut"))}),"Veri yok.");
+ const G=(RJ.gunler||[]).slice().reverse().slice(0,12);txt($("gkGT"),`son ${G.length} gün`);
+ table($("gkG"),["Gün",["Rejim","l"],["Endeks","r"],["Yükselen hisse","r"],["Kasa","r"],["Filtresiz gölge","r"]],G.map(g=>r=>{const rj=gRj[g.rejim]||["—","warn"];cell(r,g.tek===false?"12 - "+g.gun:g.gun);cell(r,el("span","ch "+rj[1],rj[0]),"l");
+  cell(r,gP(g.endeks,2),"num "+cls(g.endeks));cell(r,g.genislik!=null?"%"+g.genislik:"—","num");cell(r,gP(g.kasa,2),"num "+cls(g.kasa));cell(r,g.golge!=null?gP(g.golge,2):"—","num "+(g.golge!=null?cls(g.golge):"mut"))}),"Veri yok.")}
+function gkYukle(){fetch("rejim.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j){RJ=j;gk()}}).catch(()=>{})}
+gkYukle();setInterval(gkYukle,600000);
 
 /* canlı tarama (canli/durum) */
 let SP=[];function onLive(d){LIVE=d;const was=liveOn;liveOn=d&&d.durum==="taraniyor"&&d.at&&(Date.now()-Date.parse(d.at))<30*60*1000;
