@@ -2707,7 +2707,7 @@
    ]
   }
  },
- "guncelleme": "24.11 18:21",
+ "guncelleme": "24.11 21:47",
  "gun_sayisi": 6,
  "nedenler": {
   "BURVA": {
@@ -2715,7 +2715,7 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "CATES": {
-   "tarih": "2026-11-20",
+   "tarih": "2026-11-24",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "RALYH": {
@@ -2771,7 +2771,7 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "DUNYH": {
-   "tarih": "2026-11-20",
+   "tarih": "2026-11-24",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "SONME": {
@@ -2787,8 +2787,8 @@
    "neden": "olumsuz: 19.11 SPK suç duyurusu kararı sonrası şirket açıklaması, yönetim ve ortaklar kararda yer almıyor dedi"
   },
   "CGCAM": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket (yalnızca COP31 yeşil sanayi haberi)"
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "MAGEN": {
    "tarih": "2026-11-23",
@@ -2799,8 +2799,8 @@
    "neden": "olumsuz: 9 aylık net zarar sürüyor (15,9 mn TL; önceki 46,9 mn zarar - zarar daralmış, haber eski)"
   },
   "NETAS": {
-   "tarih": "2026-11-23",
-   "neden": "olumlu: 12.11 yönetim açıklaması büyüme ve 5G/Nubia satışları, 10.11 üçüncü çeyrek büyüme haberi"
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "CRFSA": {
    "tarih": "2026-11-23",
@@ -2853,6 +2853,70 @@
   "ESCAR": {
    "tarih": "2026-11-23",
    "neden": "olumsuz: 04.11 ikinci el araç satış şubelerinin kapatılması"
+  },
+  "LYDHO": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "BRKO": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "SKYLP": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "SELEC": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "DENGE": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "SKTAS": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ERCB": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "AKENR": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "MERKO": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "KENT": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "MCARD": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ARMGD": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "KLNMA": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "HEDEF": {
+   "tarih": "2026-11-24",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "IHLGM": {
+   "tarih": "2026-11-24",
+   "neden": "olumsuz: 24.11 VBTS kapsamında IHLGM payı 23 Aralık'a kadar açığa satışa ve kredili işleme kapatıldı (tedbir haberi)"
+  },
+  "ARDYZ": {
+   "tarih": "2026-11-24",
+   "neden": "olumlu: 24.11 ARD Grup yapay zekâ destekli güvenlik cihazları ile toplu taşıma dijital dönüşüm projesi işi duyurusu (20.11 siber güvenlik sözleşmesi de var)"
   }
  },
  "surpriz_haber": {
@@ -4612,6 +4676,123 @@
   ]
  },
  "karar_gunlugu": [],
- "oto_seri": {},
- "oto_son": "23.11 21:47"
+ "oto_seri": {
+  "hafta=≥+%10|modül Trend=+": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|modül Hacim=+": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|modül Dip=0": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "modül Hacim=+|teknik 4S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|teknik 4S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|likidite (günlük ciro)=≥100 mn": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|teknik 1S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "modül Hacim=+|modül RSI-MACD=+": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "modül Hacim=+|teknik 1S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "gün=<-%3": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay=≥+%25|teknik G=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "gün=<-%3|hafta=<-%5": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye >%15|gün=<-%3": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "gün=<-%3|modül Trend=0": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=≥100 mn|teknik 4S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "gün=<-%3|puan=<3": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "3P kriter=0-3|gün=<-%3": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye %5-15|RSI G=55-65": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=≥100 mn|teknik 1S=Al": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "modül Dip=+|modül Hacim=+": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "RSI 1S=50-70|modül Hacim=+": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye %5-15|hacim=0,8-1,5x": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=<5 mn|piyasa değeri=<1,5 mlr": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye >%15|likidite (günlük ciro)=<5 mn": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye >%15|piyasa değeri=<1,5 mlr": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "3P kriter=8-10|modül Dip=0": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "sektör=Technology Services": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  },
+  "hafta=<-%5|likidite (günlük ciro)=<5 mn": {
+   "gun": "2026-11-24",
+   "sayi": 1
+  }
+ },
+ "oto_son": "24.11 21:47"
 }
