@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Hisse grafik verisi (24.11): sayfadaki hisse penceresindeki mum grafiği için Yahoo mumlarını hisse başına bir JSON dosyasına yazar.
+TradingView gömme grafiği BIST sembollerini göstermediği için (Sembol sadece TradingView'de bulunabilir) grafik sayfada çizilir; Yahoo tarayıcıdan CORS ile okunamadığı için
+veri burada üretilir ve ayrı dala (claude/grafik-veri, her seferinde tek commit, tarih birikmez) yayınlanır.
+Kullanım: python3 grafik.py --lab lab.py --cikti grafik_cikti
+Dosya: <KOD>.json = {k, z (üretim zamanı), g: günlük 5y, s1: 1 saatlik 6 ay, s4: 4 saatlik (1S mumlarından gün içi 4'lü gruplar)}; mum = [epoch_sn, a, y, d, k, hacim]. liste.json = kodlar.
+Haftalık ve aylık mumlar sayfada günlükten türetilir."""
+import argparse, importlib.util, json, os, sys, time, concurrent.futures as cf
+ap = argparse.ArgumentParser(); ap.add_argument("--lab", default="lab.py"); ap.add_argument("--cikti", default="grafik_cikti"); ap.add_argument("--sinir", type=int, default=0)
+a = ap.parse_args()
+sp = importlib.util.spec_from_file_location("lab", a.lab); lab = importlib.util.module_from_spec(sp); sys.modules["lab"] = lab; sp.loader.exec_module(lab)
+os.makedirs(a.cikti, exist_ok=True)
+kods = sorted(lab.evren())
+if a.sinir: kods = kods[:a.sinir]
+t0 = time.time()
+G = lab.indir(kods, "1d", "5y"); S1 = lab.indir(list(G), "60m", "6mo")
+print(f"GRAFİK: günlük {len(G)}, 1 saatlik {len(S1)} hisse, {int(time.time()-t0)} sn")
+
+def paket(df, ond=2):
+    return [[int(ts.timestamp()), round(float(r.o), ond), round(float(r.h), ond), round(float(r.l), ond), round(float(r.c), ond), int(r.v or 0)]
+            for ts, r in df.dropna(subset=["o", "h", "l", "c"]).iterrows()]
+
+def dortlu(rows):
+    """1S mumlarını gün içinde 4'erli gruplar (10-13, 14-17...): 4 saatlik yaklaşık mum."""
+    out = []; gun = {}
+    for r in rows: gun.setdefault((r[0] + 10800) // 86400, []).append(r)
+    for g in sorted(gun):
+        L = gun[g]
+        for i in range(0, len(L), 4):
+            c = L[i:i + 4]
+            out.append([c[0][0], c[0][1], max(x[2] for x in c), min(x[3] for x in c), c[-1][4], sum(x[5] for x in c)])
+    return out
+
+z = time.strftime("%d.%m %H:%M", time.gmtime(time.time() + 10800)); n = 0
+for k in sorted(G):
+    s1 = paket(S1[k]) if k in S1 else []
+    d = {"k": k, "z": z, "g": paket(G[k]), "s1": s1, "s4": dortlu(s1)}
+    json.dump(d, open(os.path.join(a.cikti, k + ".json"), "w"), separators=(",", ":")); n += 1
+json.dump({"z": z, "kodlar": sorted(G)}, open(os.path.join(a.cikti, "liste.json"), "w"), separators=(",", ":"))
+print(f"GRAFİK: {n} dosya yazıldı -> {a.cikti} ({int(time.time()-t0)} sn)")

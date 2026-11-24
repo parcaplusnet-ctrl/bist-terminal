@@ -189,6 +189,15 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
 .srch button{cursor:pointer;background:var(--acc-bg);border:1px solid var(--acc);color:var(--acc);border-radius:999px;padding:5px 14px;font:600 12.5px var(--sans)}
 .srch button:hover{background:var(--acc);color:#07121c}
 .mod{position:fixed;inset:0;z-index:60;background:rgba(5,9,14,.74);display:flex;justify-content:center;align-items:flex-start;padding:4vh 12px;overflow:auto}
+.gp{padding:12px 16px 14px;border-bottom:1px solid var(--line)}
+.gpb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.gpt{cursor:pointer;background:transparent;border:1px solid var(--line2);border-radius:8px;min-width:76px;height:30px;padding:0 10px;font:600 12px var(--mono);color:var(--mut);text-align:center}
+.gpt:hover{color:var(--fg);border-color:var(--mut)}.gpt.on{color:var(--acc);border-color:var(--acc);background:rgba(108,182,240,.08)}
+.gpz{margin-left:auto;font-size:11px;color:var(--mut);text-align:right}.gpz a{color:var(--mut);text-decoration:underline}
+.gpc{position:relative;height:440px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.gpl{position:absolute;left:10px;top:8px;z-index:3;font:500 12px var(--mono);color:var(--mut);pointer-events:none;display:flex;gap:10px;flex-wrap:wrap}
+.gpm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--mut);font-size:13px}
+@media(max-width:640px){.gpc{height:320px}.gpz{margin-left:0;width:100%;text-align:left}.gpt{flex:1;min-width:0}}
 .modc{position:relative;width:min(1040px,100%);background:var(--panel);border:1px solid var(--line2);border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
 .modc .x{position:absolute;right:14px;top:14px;z-index:2}.modc .x.c{right:104px;color:var(--acc);border-color:var(--acc)}
 .mh{padding:18px 200px 14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
@@ -892,6 +901,60 @@ function sonucChip(r){if(r.sonuc==="Bekliyor"){const d=durumOf(r);return el("spa
 function sonucZaman(r){if(r.sonuc==="Başarılı")return r.hedef_tarih||r.kontrol||"—";if(r.sonuc==="Stop")return r.stop_tarih||r.kontrol||"—";if(r.sonuc==="Kâr korundu")return(r.kar_koruma||{}).zaman||r.kontrol||"—";if(r.sonuc==="Bekliyor")return"son gün "+(r.bitis||"—");return r.bitis||r.kontrol||"—"}
 function mSec(B,baslik,alt){const w=el("section","msec"),h=el("div","sh");h.append(el("h2",null,baslik));h.firstChild.style.fontSize="14px";if(alt)h.append(el("p",null,alt));w.appendChild(h);B.appendChild(w);return w}
 function mTab(w,heads,rows,emp){const t=document.createElement("table"),d=el("div","tw");d.appendChild(t);w.appendChild(d);table(t,heads,rows,emp);return t}
+
+/* hisse grafiği (24.11): mum verisi claude grafik-veri dalından (Yahoo, gün içinde ve gece yenilenir), çizim lightweight-charts (Apache 2.0, lib/) */
+const GRF_URL="https://raw.githubusercontent.com/parcaplusnet-ctrl/bist-terminal/grafik-veri/";
+const GRF_P=[["1 saat","s1",150],["4 saat","s4",120],["Günlük","g",130],["Haftalık","w",104],["Aylık","m",60]];
+let GRF_SEC="g",GRF_CH=null,GRF_ON={},GRF_LIB=null;
+function grfLib(){if(window.LightweightCharts)return Promise.resolve();return GRF_LIB||(GRF_LIB=new Promise((ok,no)=>{const s=document.createElement("script");s.src="lib/lightweight-charts.standalone.production.js";s.onload=ok;s.onerror=()=>{GRF_LIB=null;no()};document.head.appendChild(s)}))}
+const grfGun=t=>new Date((t+10800)*1000).toISOString().slice(0,10);
+function grfTopla(rows,tur){const out=[];let cur=null,key=null;for(const r of rows){const d=new Date((r[0]+10800)*1000);let k;if(tur==="w"){const g=(d.getUTCDay()+6)%7;k=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-g)).toISOString().slice(0,10)}else k=d.toISOString().slice(0,7)+"-01";
+ if(k!==key){key=k;cur=[r[0],r[1],r[2],r[3],r[4],r[5],k];out.push(cur)}else{cur[2]=Math.max(cur[2],r[2]);cur[3]=Math.min(cur[3],r[3]);cur[4]=r[4];cur[5]+=r[5]}}return out}
+function grfEma(rows,n){const k=2/(n+1);let e=null;return rows.map(r=>{e=e===null?r.close:e+k*(r.close-e);return{time:r.time,value:e}}).slice(n-1)}
+async function grfCanli(kod){try{const r=await fetch("https://scanner.tradingview.com/turkey/scan",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({symbols:{tickers:["BIST:"+kod]},columns:["open","high","low","close","volume"]})});const j=await r.json();const v=(j.data||[])[0];return v?v.d:null}catch(e){return null}}
+function grfSeri(D0,sec,canli){let rows=sec==="w"||sec==="m"?grfTopla(D0.g,sec):D0[sec]||[];rows=rows.filter(r=>r[4]>0);
+ const bugun=grfGun(Date.now()/1000);const zm=r=>sec==="g"?grfGun(r[0]):(sec==="w"||sec==="m")?r[6]:r[0]+10800;
+ let m=rows.map(r=>({time:zm(r),open:r[1],high:r[2],low:r[3],close:r[4],volume:r[5]}));
+ if(canli&&canli[3]>0){const[o,h,l,c,v]=canli,L=m[m.length-1],gunKapsar=sec==="g"||sec==="w"||sec==="m";
+  if(L){const lg=sec==="g"?L.time:(sec==="w"||sec==="m")?null:grfGun(L.time-10800);
+   if(sec==="g"){if(L.time===bugun){L.open=o;L.high=h;L.low=l;L.close=c;L.volume=v}else if(L.time<bugun)m.push({time:bugun,open:o,high:h,low:l,close:c,volume:v})}
+   else if(sec==="w"||sec==="m"){if(bugun>=L.time){L.high=Math.max(L.high,h);L.low=Math.min(L.low,l);L.close=c}}
+   else if(lg===bugun){L.high=Math.max(L.high,c);L.low=Math.min(L.low,c);L.close=c}}}
+ return m}
+function grafikPanel(kod){
+ const P=el("div","gp"),bar=el("div","gpb"),kap=el("div","gpc"),lg=el("div","gpl"),msg=el("div","gpm","Grafik yükleniyor…");
+ const yd=new Set([...((D.yurtdisi||{}).history||[]),...((D.yurtdisi||{}).picks||[]),...((D.yurtdisi||{}).izleme||[]),...((D.kripto||{}).hisseler||[])].map(r=>UC(r.kod)));
+ const yabanci=yd.has(kod),btns={},zt=el("span","gpz");
+ GRF_P.forEach(([ad,id])=>{const b=el("button","gpt"+(id===GRF_SEC?" on":""),ad);b.type="button";b.onclick=()=>{GRF_SEC=id;Object.values(btns).forEach(x=>x.classList.remove("on"));b.classList.add("on");ciz()};btns[id]=b;bar.append(b)});
+ bar.append(zt);kap.append(lg,msg);P.append(bar,kap);
+ let VERI=null,CANLI=null;const tv=a=>{const s=el("a",null,"TradingView'de aç");s.href="https://tr.tradingview.com/chart/?symbol="+encodeURIComponent((yabanci?"":"BIST:")+kod);s.target="_blank";s.rel="noopener";return s};
+ function hata(t){if(GRF_CH){try{GRF_CH.remove()}catch(e){}GRF_CH=null}kap.querySelectorAll("canvas,.tv-lightweight-charts").forEach(x=>x.remove());msg.hidden=false;msg.textContent=t;zt.textContent="";zt.append(tv())}
+ function ciz(){if(!VERI)return;const sec=GRF_SEC,seri=grfSeri(VERI,sec,CANLI);
+  if(!seri.length)return hata("Bu periyot için mum verisi yok.");
+  if(GRF_CH){try{GRF_CH.remove()}catch(e){}GRF_CH=null}msg.hidden=true;lg.textContent="";
+  const cs=getComputedStyle(document.documentElement),mut=cs.getPropertyValue("--mut").trim()||"#8e9bab",line=cs.getPropertyValue("--line").trim()||"#1b2633",up=cs.getPropertyValue("--up").trim()||"#34d399",dn=cs.getPropertyValue("--dn").trim()||"#f2687a",ac=cs.getPropertyValue("--acc").trim()||"#6cb6f0";
+  const intr=sec==="s1"||sec==="s4";
+  const ch=LightweightCharts.createChart(kap,{width:kap.clientWidth,height:kap.clientHeight,layout:{background:{type:"solid",color:"transparent"},textColor:mut,fontFamily:"IBM Plex Mono,ui-monospace,Menlo,Consolas,monospace",fontSize:11},
+   grid:{vertLines:{color:"rgba(142,155,171,.07)"},horzLines:{color:"rgba(142,155,171,.07)"}},rightPriceScale:{borderColor:line,scaleMargins:{top:.06,bottom:.24}},
+   timeScale:{borderColor:line,timeVisible:intr,secondsVisible:false,rightOffset:4,barSpacing:intr?7:8},crosshair:{mode:0},localization:{locale:"tr-TR",priceFormatter:x=>x.toFixed(2).replace(".",",")}});
+  GRF_CH=ch;
+  const cd=ch.addCandlestickSeries({upColor:up,downColor:dn,borderUpColor:up,borderDownColor:dn,wickUpColor:up,wickDownColor:dn,priceLineColor:mut});cd.setData(seri.map(({time,open,high,low,close})=>({time,open,high,low,close})));
+  const vo=ch.addHistogramSeries({priceFormat:{type:"volume"},priceScaleId:"",lastValueVisible:false,priceLineVisible:false});vo.priceScale().applyOptions({scaleMargins:{top:.8,bottom:0}});
+  vo.setData(seri.map(r=>({time:r.time,value:r.volume,color:r.close>=r.open?"rgba(52,211,153,.35)":"rgba(242,104,122,.35)"})));
+  const e20=ch.addLineSeries({color:ac,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false}),e50=ch.addLineSeries({color:"#e8b04a",lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
+  e20.setData(grfEma(seri,20));e50.setData(grfEma(seri,50));
+  const fm=x=>x==null?"—":x.toFixed(2).replace(".",","),L=seri[seri.length-1];
+  const yaz=(b,prev)=>{lg.textContent="";const d=b||L,pr=prev,c=d.close>=d.open?"up":"dn";const ek=(t,cl)=>{const s=el("span",cl||null,t);lg.append(s);return s};
+   ek(`A ${fm(d.open)}`);ek(`Y ${fm(d.high)}`);ek(`D ${fm(d.low)}`);ek(`K ${fm(d.close)}`,c);if(pr)ek(`${(d.close/pr-1)>=0?"+":""}${((d.close/pr-1)*100).toFixed(2).replace(".",",")}%`,d.close>=pr?"up":"dn");ek("EMA20",null).style.color=ac;ek("EMA50",null).style.color="#e8b04a"};
+  const idx=new Map(seri.map((r,i)=>[r.time,i]));yaz(L,seri.length>1?seri[seri.length-2].close:null);
+  ch.subscribeCrosshairMove(p=>{if(!p||!p.time||!idx.has(p.time)){yaz(L,seri.length>1?seri[seri.length-2].close:null);return}const i=idx.get(p.time);yaz(seri[i],i>0?seri[i-1].close:null)});
+  const n=(GRF_P.find(x=>x[1]===sec)||[0,0,120])[2];ch.timeScale().setVisibleLogicalRange({from:Math.max(0,seri.length-n),to:seri.length+4});
+  zt.textContent=`Yahoo mumları · veri ${VERI.z}${CANLI?" · son fiyat canlı (15 dk gecikmeli)":""} · `;zt.append(tv())}
+ const ro=new ResizeObserver(()=>{if(GRF_CH&&kap.clientWidth)GRF_CH.applyOptions({width:kap.clientWidth,height:kap.clientHeight})});ro.observe(kap);
+ (async()=>{try{await grfLib()}catch(e){return hata("Grafik kütüphanesi yüklenemedi.")}
+  try{const r=await fetch(GRF_URL+encodeURIComponent(kod)+".json");if(!r.ok)throw 0;VERI=await r.json()}catch(e){return hata(yabanci?"Bu hisse için grafik verisi yok (yalnızca BIST hisseleri).":"Bu hisse için grafik verisi bulunamadı.")}
+  if(SKOD!==kod)return;CANLI=yabanci?null:await grfCanli(kod);if(SKOD!==kod)return;ciz()})();
+ return P}
 function hisse(kod){SKOD=kod;const B=$("modB");B.innerHTML="";
  const H=(D.history||[]).filter(r=>UC(r.kod)===kod).sort((a,b)=>tsDM(b.tarama)-tsDM(a.tarama)||0);
  const K=D.kasa||{},A=(K.acik||[]).filter(p=>UC(p.kod)===kod),C=(K.kapanan||[]).filter(p=>UC(p.kod)===kod).reverse(),AT=(K.son_hareket||[]).filter(h=>UC(h.kod)===kod&&h.islem==="atlandı");
@@ -899,7 +962,7 @@ function hisse(kod){SKOD=kod;const B=$("modB");B.innerHTML="";
  const info=P[0]||I[0]||{};
  const hd=el("div","mh");hd.append(el("h2",null,kod));const ac=H.find(r=>r.sonuc==="Bekliyor");
  if(ac)hd.append(sonucChip(ac));else if(H[0])hd.append(sonucChip(H[0]));if(A.length)hd.append(el("span","ch new","Portföyde"));
- hd.append(el("p",null,[info.ad,info.sektor].filter(Boolean).join(" · ")));B.appendChild(hd);
+ hd.append(el("p",null,[info.ad,info.sektor].filter(Boolean).join(" · ")));B.appendChild(hd);try{B.appendChild(grafikPanel(kod))}catch(e){console.error(e)}
  if(!H.length&&!A.length&&!C.length&&!P.length&&!I.length&&!E.length){
   B.appendChild(el("div","mnote",`${kod} için kayıt bulunamadı. Hisse henüz seçilmemiş ya da izleme listesine girmemiş olabilir.`));
   const q=kodlar().filter(k=>k.startsWith(kod.slice(0,2))||k.includes(kod)).slice(0,12);if(q.length){B.appendChild(el("div","mnote","Benzer kodlar:"));const l=el("div","mlist");q.forEach(k=>{const b=el("button",null,k);b.type="button";b.onclick=()=>hisse(k);l.appendChild(b)});B.appendChild(l)}return}
