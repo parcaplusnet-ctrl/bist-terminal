@@ -220,6 +220,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
 .kasa.gk{grid-template-columns:repeat(5,minmax(0,1fr))}.gkT .num{white-space:nowrap}.gkS{display:block;font:500 11px var(--sans);color:var(--mut,#8896a6);margin-top:3px}
 @media (max-width:1100px){.kasa.gk{grid-template-columns:repeat(3,minmax(0,1fr))}.kasa.gk .k:last-child{grid-column:span 2}}
 @media (max-width:760px){.kasa.gk{grid-template-columns:repeat(2,minmax(0,1fr))}.kasa.gk .k:last-child{grid-column:1/-1;border-right:0}}
+.sh.gkh{position:relative;padding-right:58px}.sh.gkh .vxc{top:10px;right:14px;width:32px;height:32px}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.kpis .k:nth-child(4n){border-right:0}.kpis .k:nth-child(-n+4){border-bottom:1px solid var(--line)}
  .kasa{grid-template-columns:repeat(3,minmax(0,1fr))}.kasa .k:nth-child(-n+3){border-bottom:1px solid var(--line)}.kasa .k:nth-child(3n){border-right:0}
  .det{grid-template-columns:1fr 1fr;padding-left:16px}.scan{grid-template-columns:1fr}}
@@ -451,7 +452,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   
    </div>
    <div id="l-dis" role="tabpanel" hidden><div class="sh"><h2>Dış etkenler</h2><p>gün · hafta · ay</p></div><div class="tw"><table id="sMk"></table></div></div>
-   <div id="l-gk" role="tabpanel" hidden>  <div class="sh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p></div>
+   <div id="l-gk" role="tabpanel" hidden>  <div class="sh gkh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p><button type="button" id="gkC" class="vxc" title="Gölge kasayı görsel olarak kopyala" aria-label="Gölge kasa görselini kopyala"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></div>
   <div class="kasa gk">
    <div class="k"><small>Son işlem günü rejimi</small><b id="gkRj">—</b><em id="gkRjL">—</em></div>
    <div class="k"><small>Kasa · başlangıçtan beri</small><b id="gkKs">—</b><em id="gkKsL">—</em></div>
@@ -819,6 +820,71 @@ function gk(){const sec=$("l-gk");if(!sec)return;if(!RJ||!RJ.ozet){txt($("gkT"),
  const G=(RJ.gunler||[]).slice().reverse().slice(0,12);txt($("gkGT"),`son ${G.length} gün`);
  table($("gkG"),["Gün",["Rejim","l"],["Endeks","r"],["Yükselen hisse","r"],["Kasa","r"],["Filtresiz gölge","r"]],G.map(g=>r=>{const rj=gRj[g.rejim]||["—","warn"];cell(r,g.tek===false?"12 - "+g.gun:g.gun);cell(r,el("span","ch "+rj[1],rj[0]),"l");
   cell(r,gP(g.endeks,2),"num "+cls(g.endeks));cell(r,g.genislik!=null?"%"+g.genislik:"—","num");cell(r,gP(g.kasa,2),"num "+cls(g.kasa));cell(r,g.golge!=null?gP(g.golge,2):"—","num "+(g.golge!=null?cls(g.golge):"mut"))}),"Veri yok.")}
+/* gölge kasa görseli (premium kurumsal kart, panoya kopyalanır) */
+function gkGorsel(R,base){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");const F="Inter,Segoe UI,Arial,sans-serif";
+ const MUT="#8d9bb0",UP="#34d399",DN="#ee5560",GD="#d6b978",AM="#e8b04a";
+ const sp=v=>{try{g.letterSpacing=v+"px"}catch(e){}},f=(v,d)=>Number(v).toFixed(d).replace(".",","),sg=(v,d)=>(v>=0?"+":"-")+f(Math.abs(v),d==null?1:d);
+ const gold=(x0,x1)=>{const q=g.createLinearGradient(x0,0,x1,0);q.addColorStop(0,"#8f7440");q.addColorStop(.35,"#f1dfb0");q.addColorStop(.6,"#c9a96a");q.addColorStop(1,"#8f7440");return q};
+ let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#060a12");gr.addColorStop(.55,"#0b1423");gr.addColorStop(1,"#070c16");g.fillStyle=gr;g.fillRect(0,0,W,H);
+ g.save();g.strokeStyle="rgba(255,255,255,.028)";g.lineWidth=1;for(let i=-H;i<W;i+=26){g.beginPath();g.moveTo(i,0);g.lineTo(i+H,H);g.stroke()}g.restore();
+ let gl=g.createRadialGradient(W/2,640,30,W/2,640,700);gl.addColorStop(0,"rgba(214,185,120,.07)");gl.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gl;g.fillRect(0,0,W,H);
+ gl=g.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.8);gl.addColorStop(0,"rgba(0,0,0,0)");gl.addColorStop(1,"rgba(0,0,0,.55)");g.fillStyle=gl;g.fillRect(0,0,W,H);
+ g.lineWidth=1.5;g.strokeStyle=gold(40,W-40);g.strokeRect(40,40,W-80,H-80);g.strokeStyle="rgba(201,169,106,.16)";g.lineWidth=1;g.strokeRect(54,54,W-108,H-108);
+ g.strokeStyle="#e3c887";g.lineWidth=3;const cl=46;[[40,40,1,1],[W-40,40,-1,1],[40,H-40,1,-1],[W-40,H-40,-1,-1]].forEach(([x,y,dx,dy])=>{g.beginPath();g.moveTo(x,y+dy*cl);g.lineTo(x,y);g.lineTo(x+dx*cl,y);g.stroke()});
+ const hl=g.createLinearGradient(90,0,W-90,0);hl.addColorStop(0,"rgba(201,169,106,0)");hl.addColorStop(.5,"rgba(201,169,106,.6)");hl.addColorStop(1,"rgba(201,169,106,0)");
+ const my=112;g.textAlign="left";g.font="700 22px "+F;sp(6);g.fillStyle=gold(96,400);g.fillText("BIST YÜKSELİŞ RADARI",96,my+14);
+ g.textAlign="right";g.fillStyle=MUT;g.font="500 22px "+F;sp(1);g.fillText(new Date().toLocaleDateString("tr-TR",{timeZone:"Europe/Istanbul",day:"2-digit",month:"long",year:"numeric"}),W-96,my+14);
+ g.fillStyle=hl;g.fillRect(90,my+44,W-180,1.5);
+ const O=R.ozet,G=R.gunler||[];
+ g.textAlign="center";g.fillStyle="#fff";g.font="800 76px "+F;sp(8);g.fillText("GÖLGE KASA",W/2,252);
+ g.fillStyle=gold(W/2-260,W/2+260);g.font="700 22px "+F;sp(9);g.fillText("SERMAYE KORUMA ÖLÇÜMÜ",W/2,300);
+ g.fillStyle=MUT;g.font="500 21px "+F;sp(1);g.fillText("11.11 başlangıç  ·  "+(G.length?G[G.length-1].gun:"")+"  ·  "+O["dönem_gun"]+" işlem günü",W/2,340);
+ /* üst üç kart */
+ const gap=28,bw=(W-192-2*gap)/3,by=366,bh=142;
+ function kart(x,y,w,h,ac){let q=g.createLinearGradient(x,y,x,y+h);q.addColorStop(0,"rgba(255,255,255,.075)");q.addColorStop(1,"rgba(255,255,255,.02)");g.fillStyle=q;g.fillRect(x,y,w,h);
+  q=g.createLinearGradient(x,y,x+w,y+h);q.addColorStop(0,"rgba(214,185,120,.7)");q.addColorStop(.5,"rgba(214,185,120,.12)");q.addColorStop(1,"rgba(214,185,120,.45)");g.strokeStyle=q;g.lineWidth=1.5;g.strokeRect(x+.75,y+.75,w-1.5,h-1.5);g.fillStyle=ac;g.fillRect(x,y,w,5)}
+ function hero(i,lbl,val,suf,ac){const x=96+i*(bw+gap);kart(x,by,bw,bh,ac);g.textAlign="center";g.fillStyle=MUT;g.font="600 19px "+F;sp(4);g.fillText(lbl,x+bw/2,by+42);
+  g.fillStyle=ac;g.font="800 60px "+F;sp(-1);g.fillText(val,x+bw/2,by+100);if(suf){g.fillStyle=MUT;g.font="600 16px "+F;sp(3);g.fillText(suf,x+bw/2,by+126)}}
+ const kt=O.kasa_toplam,et=O.endeks_toplam,fk=kt-et;
+ hero(0,"KASA",sg(kt)+"%","BAŞLANGIÇTAN BERİ",kt>=0?UP:DN);hero(1,"BIST 100",sg(et)+"%","AYNI DÖNEM",et>=0?UP:DN);hero(2,"FARK",sg(fk),"PUAN",GD);
+ /* çizgi grafik: kasa, endeks, filtresiz gölge (kümülatif) */
+ const base0=base||100000,cx0=96,cx1=W-96,cy0=530,cy1=806,pl=70,pr=34,pt=24,pb=50,ix0=cx0+pl,ix1=cx1-pr,iy0=cy0+pt,iy1=cy1-pb;
+ kart(cx0,cy0,cx1-cx0,cy1-cy0,GD);
+ const S=[{n:"KASA",c:UP,v:[0]},{n:"BIST 100",c:DN,v:[0]},{n:"FİLTRESİZ GÖLGE",c:AM,v:[0],d:true}];let ec=1,gv=0;
+ G.forEach(d=>{S[0].v.push((d.kapanis/base0-1)*100);ec*=1+d.endeks/100;S[1].v.push((ec-1)*100);if(d.golge_kapanis!=null)gv=(d.golge_kapanis/base0-1)*100;S[2].v.push(gv)});
+ const all=[].concat(...S.map(s=>s.v));let lo=Math.min(...all,0),hi=Math.max(...all,0);const pad=(hi-lo)*.12||1;lo-=pad;hi+=pad;
+ const step=[1,2,2.5,5,10].find(s=>(hi-lo)/s<=6)||10,gy=y=>iy1-(y-lo)/(hi-lo)*(iy1-iy0),n=G.length,gx=i=>ix0+i/n*(ix1-ix0);
+ g.textAlign="right";g.font="500 17px "+F;sp(0);for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step){const y=gy(v);g.strokeStyle=Math.abs(v)<1e-9?"rgba(214,185,120,.55)":"rgba(255,255,255,.07)";g.lineWidth=Math.abs(v)<1e-9?1.5:1;if(Math.abs(v)<1e-9)g.setLineDash([6,6]);g.beginPath();g.moveTo(ix0,y);g.lineTo(ix1,y);g.stroke();g.setLineDash([]);g.fillStyle=MUT;g.fillText((Math.abs(v)<1e-9?"0":sg(v,0))+"%",ix0-14,y+6)}
+ g.textAlign="center";g.fillStyle=MUT;g.font="500 17px "+F;const xl=["11.11"].concat(G.map(d=>d.gun));xl.forEach((t,i)=>{if(n<=9||i%2===0||i===n)g.fillText(t,gx(i),iy1+34)});
+ {const v=S[0].v;g.beginPath();v.forEach((y,i)=>i?g.lineTo(gx(i),gy(y)):g.moveTo(gx(i),gy(y)));g.lineTo(gx(n),gy(Math.max(lo,0)));g.lineTo(gx(0),gy(Math.max(lo,0)));g.closePath();const fg=g.createLinearGradient(0,iy0,0,iy1);fg.addColorStop(0,"rgba(52,211,153,.22)");fg.addColorStop(1,"rgba(52,211,153,0)");g.fillStyle=fg;g.fill()}
+ [S[2],S[1],S[0]].forEach(s=>{g.save();g.shadowColor=s.c;g.shadowBlur=s.d?0:16;g.beginPath();s.v.forEach((y,i)=>i?g.lineTo(gx(i),gy(y)):g.moveTo(gx(i),gy(y)));g.lineWidth=s.d?3:4.5;g.lineJoin="round";g.lineCap="round";g.strokeStyle=s.c;if(s.d)g.setLineDash([10,8]);g.stroke();g.restore();
+  const L=s.v[n];g.save();g.shadowColor=s.c;g.shadowBlur=14;g.fillStyle="#fff";g.beginPath();g.arc(gx(n),gy(L),7,0,7);g.fill();g.restore();g.beginPath();g.arc(gx(n),gy(L),13,0,7);g.lineWidth=2;g.strokeStyle=s.c;g.stroke()});
+ /* gösterge: üç eşit sütun */
+ {const ly=cy1+34,lw=(cx1-cx0)/3;S.forEach((s,i)=>{const x=cx0+i*lw+lw/2;g.textAlign="center";g.fillStyle=s.c;g.font="800 30px "+F;sp(0);g.fillText(sg(s.v[n])+"%",x,ly+8);g.fillStyle=MUT;g.font="600 15px "+F;sp(3);g.fillText(s.n,x,ly+36)})}
+ /* düşüş günlerinde koruma: iki çubuk */
+ const sy=cy1+96,sh=112;kart(96,sy,W-192,sh,DN);
+ g.textAlign="left";g.fillStyle=MUT;g.font="600 18px "+F;sp(4);g.fillText("DÜŞÜŞ GÜNLERİNDE ("+O.dusus_gun+" GÜN)",96+32,sy+38);
+ {const mx=Math.max(Math.abs(O.dusus_endeks_toplam),Math.abs(O.dusus_kasa_toplam),1),bx0=96+250,bx1=W-96-150,rows=[["BIST 100",O.dusus_endeks_toplam,DN],["KASA",O.dusus_kasa_toplam,UP]];
+  rows.forEach((r,i)=>{const y=sy+56+i*27,w=(bx1-bx0)*Math.abs(r[1])/mx;g.textAlign="left";g.fillStyle=MUT;g.font="600 16px "+F;sp(3);g.fillText(r[0],96+32,y+13);g.fillStyle="rgba(255,255,255,.06)";g.fillRect(bx0,y,bx1-bx0,16);const q=g.createLinearGradient(bx0,0,bx0+w,0);q.addColorStop(0,r[2]+"55");q.addColorStop(1,r[2]);g.fillStyle=q;g.fillRect(bx0,y,w,16);g.textAlign="right";g.fillStyle=r[2];g.font="800 24px "+F;sp(0);g.fillText(sg(r[1])+"%",W-96-28,y+15)})}
+ /* rejim kartları: üç eşit sütun */
+ const ry=sy+sh+26,rh=1224-ry,rw=bw;
+ [["dusus","DÜŞÜŞ",DN],["yatay","YATAY",AM],["yukselis","YÜKSELİŞ",UP]].forEach((z,i)=>{const x=96+i*(rw+gap),e=(R.rejim[z[0]]||{}).endeks_kasa||{},sc=(R.rejim[z[0]]||{}).kasa_islem||{};kart(x,ry,rw,rh,z[2]);
+  g.textAlign="center";g.fillStyle=z[2];g.font="700 20px "+F;sp(5);g.fillText(z[1],x+rw/2,ry+42);
+  if(e.gun){g.fillStyle="#fff";g.font="800 64px "+F;sp(0);g.fillText(String(e.gun),x+rw/2,ry+102);g.fillStyle=MUT;g.font="600 15px "+F;sp(4);g.fillText("GÜN",x+rw/2,ry+126);
+   g.font="600 18px "+F;sp(0);g.fillStyle=e.kasa>=0?UP:DN;g.fillText("Kasa "+sg(e.kasa,2)+"%",x+rw/2,ry+rh-40);g.fillStyle=MUT;g.fillText("BIST "+sg(e.endeks,2)+"%",x+rw/2,ry+rh-16)}
+  else{g.fillStyle="rgba(255,255,255,.35)";g.font="700 28px "+F;sp(2);g.fillText("VERİ YOK",x+rw/2,ry+rh/2+8);g.fillStyle="rgba(141,155,176,.6)";g.font="600 14px "+F;sp(3);g.fillText("GÜN BİRİKİYOR",x+rw/2,ry+rh/2+38)}});
+ g.fillStyle=hl;g.fillRect(90,1262,W-180,1);
+ g.textAlign="center";g.fillStyle="rgba(141,155,176,.85)";g.font="500 18px "+F;sp(1);g.fillText("Gerçek kasayı etkilemez, yalnızca ölçer. Yatırım tavsiyesi değildir.  ·  "+(R.zaman||""),W/2,1296);
+ sp(0);return cv}
+async function gkKopyala(){const b=document.getElementById("gkC");const bil=c=>{b.classList.remove("ok","er");b.classList.add(c);clearTimeout(bil.t);bil.t=setTimeout(()=>b.classList.remove("ok","er"),2000)};
+ if(!RJ||!RJ.ozet){bil("er");b.title="Gölge kasa verisi henüz yok";return}
+ let cv;try{cv=gkGorsel(RJ,(D&&D.kasa&&D.kasa.baslangic)||100000)}catch(e){console.error(e);bil("er");return}
+ try{await document.fonts.ready}catch(e){}
+ const blob=await new Promise(r=>cv.toBlob(r,"image/png"));if(!blob){kartOnizle(cv);return}
+ try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);bil("ok");b.title="Kopyalandı";return}catch(e){}
+ try{const dl=await window.claude?.use?.("downloads");if(dl){await dl.save({filename:"golge_kasa.png",data:blob});bil("ok");return}}catch(e){if(e&&e.code==="declined")return}
+ kartOnizle(cv)}
+document.getElementById("gkC").addEventListener("click",gkKopyala);
 function gkYukle(){fetch("rejim.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j){RJ=j;gk()}}).catch(()=>{})}
 gkYukle();setInterval(gkYukle,600000);
 
