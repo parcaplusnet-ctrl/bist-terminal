@@ -2102,7 +2102,7 @@
    ]
   }
  },
- "guncelleme": "24.11 12:20",
+ "guncelleme": "24.11 13:21",
  "gun_sayisi": 5,
  "nedenler": {
   "BURVA": {
@@ -3639,6 +3639,106 @@
    {
     "ts": 1761105576,
     "baslik": "Söktaş Tekstil'in fabrika çatı alanlarında kurulu Söktaş-1 GES ve Söktaş-2 GES projeleri tamamlandı"
+   }
+  ],
+  "2026-11-24|AKSUE": [
+   {
+    "ts": 1794905693,
+    "baslik": "Bilanço analizi-AKSUE (A1 Capital)"
+   },
+   {
+    "ts": 1793182349,
+    "baslik": "AKSUE Aksu Enerji ve Tic. solo bilanço 2026 9 aylık net karı 28,511,081 TL (Önceki: 27,817,173 TL net zarar)"
+   },
+   {
+    "ts": 1787889735,
+    "baslik": "SPK Bülteni diğer başvuru sonuçları-Aksu Enerji ve Ticaret AŞ"
+   },
+   {
+    "ts": 1786115718,
+    "baslik": "AKSUE Aksu Enerji ve Tic. solo bilanço 2026 6 aylık net zararı 39,625,736 TL (Önceki: 9,291,604 TL net kar)"
+   },
+   {
+    "ts": 1777864081,
+    "baslik": "AKSUE Aksu Enerji ve Ticaret solo bilanço 2026 3 aylık net zararı 21.593.090 TL (Önceki: 15.093.882 TL net zarar)"
+   },
+   {
+    "ts": 1772464349,
+    "baslik": "AKSUE Aksu Enerji ve Tic. solo bilanço 2025 Yıllık net zararı 37,472,653 TL (Önceki: 10,967,777 TL net zarar)"
+   },
+   {
+    "ts": 1772078378,
+    "baslik": "SPK Bülteni diğer başvuru sonuçları - Aksu Enerji"
+   },
+   {
+    "ts": 1768812407,
+    "baslik": "KAP: AKSUE  [ ] AKSU ENERJİ VE TİCARET A.Ş.  Esas Sözleşme Tadili"
+   },
+   {
+    "ts": 1768569572,
+    "baslik": "KAP: AKSUE  [ ] AKSU ENERJİ VE TİCARET A.Ş.  Özel Durum Açıklaması (Genel)"
+   },
+   {
+    "ts": 1768569562,
+    "baslik": "KAP: AKSUE  [ ] AKSU ENERJİ VE TİCARET A.Ş.  Kayıtlı Sermaye Tavanı İşlemlerine İlişkin Bildirim"
+   },
+   {
+    "ts": 1767863721,
+    "baslik": "KAP:   [AKSUE ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1767168438,
+    "baslik": "KAP:   [AKSUE ALGYO AVOD CEMZY DOKTA DUNYH ERCB GARFA GENTS HATSN ISKPL MOBTL MOGAN RAYSG SELVA TCKRC TGSAS VERUS YGGYO ] BORSA İSTANBUL A.Ş"
+   }
+  ],
+  "2026-11-24|IZMDC": [
+   {
+    "ts": 1793978341,
+    "baslik": "IZMDC İzmir Demir Çelik Sanayi konsolide bilanço 2026 9 aylık net zararı 2,247,271,109 TL (Önceki: 953,316,025 TL net zarar)"
+   },
+   {
+    "ts": 1793591971,
+    "baslik": "İDÇ Liman İşletmeleri'nin halka arz sürecinde, Bulls Yatırım ile imzalanan Halka Arza Aracılık Yetki Sözleşmesi sona erdirildi, halka arz sü"
+   },
+   {
+    "ts": 1792992179,
+    "baslik": "Eylül ayında Dahilde İşleme İzin Belgesi alan BİST firmaları"
+   },
+   {
+    "ts": 1787066177,
+    "baslik": "IZMDC İzmir Demir Çelik Sanayi konsolide bilanço 2026 6 aylık net zararı 263,007,433 TL (Önceki: 859,414,257 TL net zarar)"
+   },
+   {
+    "ts": 1785124842,
+    "baslik": "VBTS Kapsamında IZMDC.E Payları Seans Başından 26 Ağustos Seans Sonuna Kadar Açığa Satışa ve Kredili İşlemlere Konu Edilemeyecektir"
+   },
+   {
+    "ts": 1778513346,
+    "baslik": "IZMDC İzmir Demir Çelik Sanayi konsolide bilanço 2026 3 aylık net zararı 547,642,419 TL (Önceki: 799,748,676 TL net zarar)"
+   },
+   {
+    "ts": 1776657538,
+    "baslik": "Mart ayında Dahilde İşleme İzin Belgesi alan BİST firmaları"
+   },
+   {
+    "ts": 1773639591,
+    "baslik": "Şubat ayında Dahilde İşleme İzin Belgesi alan BİST firmaları"
+   },
+   {
+    "ts": 1773245212,
+    "baslik": "IZMDC İzmir Demir Çelik Sanayi konsolide bilanço 2025 Yıllık net zararı 1,884,059,380 TL (Önceki: 2,803,423,237 TL net zarar)"
+   },
+   {
+    "ts": 1772626061,
+    "baslik": "İzmir Demir Çelik bağlı ortaklığı İDÇ Liman İşletmeleri'nin halka arz sürecine ilişkin Bulls Yatırım Menkul ile \"Halka Arza Aracılık Yetki S"
+   },
+   {
+    "ts": 1769496550,
+    "baslik": "KAP: IZMDC  [ ] İZMİR DEMİR ÇELİK SANAYİ A.Ş.  Şirket Genel Bilgi Formu"
+   },
+   {
+    "ts": 1769436026,
+    "baslik": "KAP: IZMDC  [ ] İZMİR DEMİR ÇELİK SANAYİ A.Ş.  Özel Durum Açıklaması (Genel)"
    }
   ]
  },
