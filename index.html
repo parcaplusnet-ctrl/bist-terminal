@@ -787,7 +787,9 @@ let SP=[];function onLive(d){LIVE=d;const was=liveOn;liveOn=d&&d.durum==="tarani
   const B=$("best");B.innerHTML="";(d.en_iyi||[]).slice(0,10).forEach((p,i)=>{const r=el("div");r.append(el("span",null,`${i+1}. ${p.kod}`),el("b","num",num(p.puan??p.skor)));B.appendChild(r)})}
  else if(was)load()}
 
-function load(){fetch("veri.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;D=j;eskiDuzelt(D);applyFiyat();render()}).catch(()=>txt($("tT"),"Tarama verisi okunamadı, sayfayı yenileyin."))}
+/* ilk çizim: kartlar önce eski (tarama anı) rakamla çizilip sonra canlı fiyatla değişmesin diye TradingView ilk yanıtı en fazla 2,5 sn beklenir */
+let ILK=false;function canliBekle(){if(ILK)return Promise.resolve();return new Promise(res=>{const t0=Date.now();(function k(){const h=(TV||TVERR>0)&&window.XUL&&window.VXL;if(h||Date.now()-t0>2500){ILK=true;res()}else setTimeout(k,50)})()})}
+function load(){fetch("veri.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;return canliBekle().then(()=>{D=j;eskiDuzelt(D);applyFiyat();render()})}).catch(()=>txt($("tT"),"Tarama verisi okunamadı, sayfayı yenileyin."))}
 load();setInterval(()=>{if(!liveOn)load()},60000);setInterval(()=>{if(LIVE)onLive(LIVE);txt($("nxt"),nextScan())},60000);
 (async()=>{try{const db=await window.claude?.use?.("db");if(!db)return;db.doc("canli/durum").onSnapshot(s=>{if(s.exists)onLive(s.data())},()=>{});db.doc("canli/fiyat").onSnapshot(s=>{if(s.exists)onFiyat(s.data())},()=>{});db.doc("canli/lab").onSnapshot(s=>{if(s.exists){LC=s.data();labSec()}},()=>{})}catch(e){}})();
 /* GitHub: Claude veritabanı yok; canlı belgeler depodaki canli/*.json dosyalarından okunur (eşitleme görevi günceller) */
