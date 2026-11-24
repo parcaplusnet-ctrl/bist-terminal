@@ -2102,7 +2102,7 @@
    ]
   }
  },
- "guncelleme": "24.11 15:21",
+ "guncelleme": "24.11 16:25",
  "gun_sayisi": 5,
  "nedenler": {
   "BURVA": {
@@ -3839,6 +3839,120 @@
    {
     "ts": 1773383489,
     "baslik": "Alarko Holding, bağı ortaklığı Alarko GYO'nın sermayesinin %5,02'lik kısmını temsil eden geri alınan payların nakden ve peşin olarak Alarko "
+   }
+  ],
+  "2026-11-24|NETGL": [
+   {
+    "ts": 1793386107,
+    "baslik": "NETGL Net Global Endüstriyel Yatırımlar solo bilanço 2026 9 aylık net karı 15,546,785 TL (Önceki: 173,688,235 TL net kar)"
+   },
+   {
+    "ts": 1793103043,
+    "baslik": "Net Global, DSİ 10. Bölge Müdürlüğü tarafından gerçekleştirilen “Kralkızı-Dicle P-4 Pompaj Sulaması Malzeme Temini 3 Kısım ihalesini kazandı"
+   },
+   {
+    "ts": 1792593129,
+    "baslik": "Net Global, \"Amasya Aydınca Barajı Sulaması PE Boru Alımı 2 Kısım\" işinin sözleşmesini tarihinde imzaladı"
+   }
+  ],
+  "2026-11-24|EGGUB": [
+   {
+    "ts": 1793947719,
+    "baslik": "Bilanço analizi -  EGGUB(PhillipCapital)"
+   },
+   {
+    "ts": 1793891970,
+    "baslik": "EGGUB Ege Gübre Sanayii konsolide bilanço 2026 9 aylık net karı 318,207,070 TL (Önceki: 547,258,738 TL net kar)"
+   },
+   {
+    "ts": 1787152917,
+    "baslik": "EGGUB Ege Gübre Sanayii konsolide bilanço 2026 6 aylık net karı 279,401,196 TL (Önceki: 334,704,086 TL net kar)"
+   },
+   {
+    "ts": 1774583889,
+    "baslik": "Ege Gübre'nin kar payı dağıtım teklifi belli oldu"
+   },
+   {
+    "ts": 1772776755,
+    "baslik": "Bilanço analizi - EGGUB (PhillipCapital)"
+   },
+   {
+    "ts": 1772735871,
+    "baslik": "EGGUB Ege Gübre Sanayii konsolide bilanço 2025 Yıllık net karı 715,392,921 TL (Önceki: 331,846,180 TL net kar)"
+   },
+   {
+    "ts": 1768546953,
+    "baslik": "KAP:   [EGGUB ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
+   },
+   {
+    "ts": 1762493134,
+    "baslik": "Bilanço analizi - EGGUB (Marbaş Menkul Değerler )"
+   },
+   {
+    "ts": 1762488010,
+    "baslik": "EGGUB Ege Gübre Sanayii konsolide bilanço 2025 9 aylık net karı 438,635,714 TL (Önceki: 245,762,945 TL net kar)"
+   },
+   {
+    "ts": 1755238972,
+    "baslik": "Bilanço analizi - Ege Gübre (Marbaş Menkul Değerler )"
+   },
+   {
+    "ts": 1755238275,
+    "baslik": "Bilanço analizi -  Ege Gübre (Marbaş Menkul Değerler )"
+   },
+   {
+    "ts": 1755230360,
+    "baslik": "EGGUB Ege Gübre Sanayii konsolide bilanço 2025 6 aylık net karı 256,672,319 TL (Önceki: 65,183,109 TL net kar)"
+   }
+  ],
+  "2026-11-24|AKSA": [
+   {
+    "ts": 1795406416,
+    "baslik": "Aksa Akrilik, bağlı ortaklığı Aksa Carbon'un Euronext'te olası bir halka arz imkanına yönelik ön hazırlık çalışmalarını gerçekleştirmek üzer"
+   },
+   {
+    "ts": 1793883537,
+    "baslik": "Ak Yatırım AKSA için 14.5 TL hedef fiyat belirledi ve NÖTR tavsiyesini korudu. (Önceki hedef fiyat: 15.7 TL)"
+   },
+   {
+    "ts": 1793883254,
+    "baslik": "Bilanço Analizi - Aksa(Akbank Ekonomik Araştırmalar ve Ak Yatırım)"
+   },
+   {
+    "ts": 1793880080,
+    "baslik": "Analist Toplantı Notu-AKSA  (PhillipCapital)"
+   },
+   {
+    "ts": 1793875213,
+    "baslik": "Toplantı Notu -AKSA  (Deniz Yatırım)"
+   },
+   {
+    "ts": 1793867574,
+    "baslik": "Toplantı Notu-AKSA (İnfo Yatırım)"
+   },
+   {
+    "ts": 1793866707,
+    "baslik": "Bilanço analizi -AKSA (Anadolu Yatırım)"
+   },
+   {
+    "ts": 1793861464,
+    "baslik": "Deniz Yatırım AKSA için 15.5 TL hedef fiyat belirledi ve AL tavsiyesini korudu. (Önceki hedef fiyat: 15.5 TL)"
+   },
+   {
+    "ts": 1793861350,
+    "baslik": "Bilanço analizi - AKSA(Deniz Yatırım)"
+   },
+   {
+    "ts": 1793858714,
+    "baslik": "Bilanço analizi - AKSA(Gedik Yatırım)"
+   },
+   {
+    "ts": 1793856053,
+    "baslik": "Model Portföy güncellemesi - AKSA çıkarıyor, ENJSA ekliyoruz (Gedik Yatırım)"
+   },
+   {
+    "ts": 1793807961,
+    "baslik": "AKSA 2026 3. çeyrek net karı 367.38 milyon TL  (Matriks haber anketi medyan beklenti: 717.42 milyon TL net kar )"
    }
   ]
  },
