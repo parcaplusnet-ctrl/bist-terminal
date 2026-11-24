@@ -166,5 +166,47 @@
    "ornek": 10257,
    "durum": "test"
   }
+ },
+ {
+  "id": "sessiz_toparlanma",
+  "aciklama": "Son 5 günde -%5 ve üstü düşüş sonrası yeşil mum, günü üst %30 diliminde kapattı, hacim ortalamanın altında",
+  "kod": "ek(\"sessiz_toparlanma\", \"Son 5 günde -%5 ve üstü düşüş sonrası yeşil mum, günü üst %30 diliminde kapattı, hacim ortalamanın altında\", lambda d: (d.ret5 <= -0.05) & (d.clpos >= 0.7) & (d.govde > 0) & (d.rv < 1.0))",
+  "tarih": "24.11",
+  "ilk_olcum": {
+   "oran": 0.2565,
+   "stop": 0.4519,
+   "fark": 0.0238,
+   "getiri_fark": -0.063,
+   "ornek": 9668,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "bant_alt_hacim_donus",
+  "aciklama": "Fiyat Bollinger alt bandına yakınken (%B 0,15 altı) hacimli (1,5 kat) ve günü üst %40 diliminde kapattı",
+  "kod": "ek(\"bant_alt_hacim_donus\", \"Fiyat Bollinger alt bandına yakınken (%B 0,15 altı) hacimli (1,5 kat) ve günü üst %40 diliminde kapattı\", lambda d: (d.pctb <= 0.15) & (d.clpos >= 0.6) & (d.rv >= 1.5))",
+  "tarih": "24.11",
+  "ilk_olcum": {
+   "oran": 0.2614,
+   "stop": 0.4808,
+   "fark": 0.0287,
+   "getiri_fark": -0.125,
+   "ornek": 1431,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "yon_pozitif_sikisma",
+  "aciklama": "Trend gücü zayıf (ADX 20 altı), yön göstergesi pozitif (+DI üstün) ve Bollinger bantları 120 günün en dar seviyesinde",
+  "kod": "ek(\"yon_pozitif_sikisma\", \"Trend gücü zayıf (ADX 20 altı), yön göstergesi pozitif (+DI üstün) ve Bollinger bantları 120 günün en dar seviyesinde\", lambda d: (d.adx < 20) & (d.di_fark > 5) & (d.bbw_min120 > 0))",
+  "tarih": "24.11",
+  "ilk_olcum": {
+   "oran": 0.2294,
+   "stop": 0.3019,
+   "fark": -0.0033,
+   "getiri_fark": 0.251,
+   "ornek": 4011,
+   "durum": "test"
+  }
  }
 ]

@@ -22,5 +22,11 @@
   "tarih": "23.11",
   "bulgu": "Özellik laboratuvarı: 468 özellik ölçüldü, 7 kullanılıyor, durum değişikliği yok; bugün 0 hisse kullanılan özellikleri taşıyor. En iyi yeni kombinasyon: Günlük RSI 70-80 arası + Supertrend bugün yukarı döndü (+%5 oranı %34, taban %23, 257 örnek).",
   "degisiklik": "Yeni özellikler: zayif_gun_guclu_hisse (+%5 oranı %23, fark -0.7 puan, durum test); ema_sikisma_hacimli_yesil (+%5 oranı %27, fark +3.9 puan, durum test); lider_sektor_hacimli (+%5 oranı %26, fark +3.0 puan, durum test)"
+ },
+ {
+  "no": 5,
+  "tarih": "24.11",
+  "bulgu": "Özellik laboratuvarı: tur 12, 1869 grafik (günlük/1S/4S 623 şer), 511 özellik ölçüldü, 7 tanesi kullanılıyor (hepsi geniş alım + hareket/oynaklık kombinasyonları), 462 test, 25 elendi, 17 az örnek; durum değişikliği yok. En iyi kombinasyon: geniş alım + ATR %8 üstü + günlük +%5/+%9,5 (+%5 oranı %41,7, taban %23,3, getiri farkı +0,48).",
+  "degisiklik": "3 yeni özellik önerildi: sessiz_toparlanma (fark +2,4, ileri test +4,9, getiri farkı -0,06), bant_alt_hacim_donus (fark +2,9, ileri test +11,9 ama getiri farkı -0,13 ve 339 test örneği), yon_pozitif_sikisma (fark -0,3, getiri farkı +0,25, ileri test -6,8 az örnek). Üçü de test aşamasında; onay bekliyor."
  }
 ]
