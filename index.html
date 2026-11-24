@@ -365,19 +365,6 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
    <div class="tw kay" tabindex="0" aria-label="Özellik tablosu, kaydırılabilir"><table id="ozT"></table></div>
    <div class="note">Her özelliği taşıyan hisselerin 2 işlem günü içinde +%5 yapma oranı tüm hisselerin ortalamasıyla (taban) karşılaştırılır. Fark +10 puan ve üstü: kullanılıyor · -3 ve altı: elendi · arası: test.</div>
   </section>
-  <section class="sec" id="glgSek" hidden><div class="sh"><h2>Gölge deney · model ilk %1, radar filtresi olmadan</h2><p id="glgTag">—</p></div>
-   <div class="kasa glg6">
-    <div class="k"><small>Gölge · sonuçlanan</small><b id="glgN">—</b><em id="glgNd">—</em></div>
-    <div class="k"><small>Gölge · isabet</small><b id="glgI">—</b><em id="glgId">—</em></div>
-    <div class="k"><small>Gölge · stop</small><b id="glgS">—</b><em id="glgSd">—</em></div>
-    <div class="k"><small>Gerçek seçim · sonuçlanan</small><b id="glgN2">—</b><em id="glgN2d">—</em></div>
-    <div class="k"><small>Gerçek seçim · isabet</small><b id="glgI2">—</b><em id="glgI2d">—</em></div>
-    <div class="k"><small>Gerçek seçim · stop</small><b id="glgS2">—</b><em id="glgS2d">—</em></div>
-   </div>
-   <p class="note" style="border-top:0" id="glgNot">—</p>
-   <div class="tw kay" tabindex="0" aria-label="Gölge deney kayıtları, kaydırılabilir"><table id="glgT"></table></div>
-   <div class="note">Gölge deney seçimi, kasayı ve öğrenme aşaması sayacını etkilemez. Amaç: radar puanı ve uygun filtresi, model ilk kademesine değer katıyor mu? Az örnekle sonuç çıkarılmaz; karar için en az 30 sonuçlanan gölge kayıt beklenir. Yatırım tavsiyesi değildir.</div>
-  </section>
   <section class="sec" id="bykSek" hidden><div class="sh"><h2>Büyük yükselişler · 10 günde +%20 ve üzeri</h2><p id="bykTag">—</p></div>
    <div class="kasa glg6">
     <div class="k"><small>Dönem</small><b id="bykD">—</b><em id="bykDd">—</em></div>
@@ -439,6 +426,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
    <div class="ltabs" role="tablist" aria-label="Laboratuvar bölümleri">
     <button class="ltab" role="tab" type="button" data-l="og" aria-selected="true">Öğrenme<span class="c" id="cOg"></span></button>
     <button class="ltab" role="tab" type="button" data-l="gk" aria-selected="false">Gölge kasa</button>
+    <button class="ltab" role="tab" type="button" data-l="gd" aria-selected="false">Gölge deney</button>
     <button class="ltab" role="tab" type="button" data-l="pj" aria-selected="false">Haftalık projeksiyon</button>
     <button class="ltab" role="tab" type="button" data-l="en" aria-selected="false">Endeks katmanları</button>
     <button class="ltab" role="tab" type="button" data-l="dis" aria-selected="false">Dış etkenler</button>
@@ -448,6 +436,20 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
    <div id="l-en" role="tabpanel" hidden><div class="sh"><h2>Endeks katmanları · BIST 30 / 50 / 100</h2><p id="bTag">—</p></div>
     <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="bHip">—</p>
     <div class="tw"><table id="bRows"></table></div></div>
+   <div id="l-gd" role="tabpanel" hidden><div class="sh"><h2>Gölge deney · model ilk %1, radar filtresi olmadan</h2><p id="glgTag">—</p></div>
+   <div class="kasa glg6">
+    <div class="k"><small>Gölge · sonuçlanan</small><b id="glgN">—</b><em id="glgNd">—</em></div>
+    <div class="k"><small>Gölge · isabet</small><b id="glgI">—</b><em id="glgId">—</em></div>
+    <div class="k"><small>Gölge · stop</small><b id="glgS">—</b><em id="glgSd">—</em></div>
+    <div class="k"><small>Gerçek seçim · sonuçlanan</small><b id="glgN2">—</b><em id="glgN2d">—</em></div>
+    <div class="k"><small>Gerçek seçim · isabet</small><b id="glgI2">—</b><em id="glgI2d">—</em></div>
+    <div class="k"><small>Gerçek seçim · stop</small><b id="glgS2">—</b><em id="glgS2d">—</em></div>
+   </div>
+   <p class="note" style="border-top:0" id="glgNot">—</p>
+   <div class="tw kay" tabindex="0" aria-label="Gölge deney kayıtları, kaydırılabilir"><table id="glgT"></table></div>
+   <div class="note">Gölge deney seçimi, kasayı ve öğrenme aşaması sayacını etkilemez. Amaç: radar puanı ve uygun filtresi, model ilk kademesine değer katıyor mu? Az örnekle sonuç çıkarılmaz; karar için en az 30 sonuçlanan gölge kayıt beklenir. Yatırım tavsiyesi değildir.</div>
+  
+   </div>
    <div id="l-dis" role="tabpanel" hidden><div class="sh"><h2>Dış etkenler</h2><p>gün · hafta · ay</p></div><div class="tw"><table id="sMk"></table></div></div>
    <div id="l-gk" role="tabpanel" hidden>  <div class="sh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p></div>
   <div class="kasa gk">
@@ -615,7 +617,7 @@ function kripto(K){if(!K)return;const b=K.btc||{},g=K.grup||{},T=K.tahminler||[]
 
 /* laboratuvar */
 const P0=v=>v==null?"—":"%"+Math.round(v*100),F0=v=>v==null?"—":(v>0?"+":"")+Math.round(v*100);
-function glgSek(G){const sek=$("glgSek");if(!sek)return;if(!G||!G.ozet){sek.hidden=true;return}sek.hidden=false;
+function glgSek(G){const sek=$("l-gd");if(!sek)return;if(!G||!G.ozet){txt($("glgTag"),"gölge deney verisi yok");return}
  const O=G.ozet,pc=v=>v==null?"—":"%"+Math.round(v*100),f2=v=>v==null?"—":(v>=0?"+":"")+Number(v).toFixed(2).replace(".",",")+"%";
  txt($("glgTag"),`güncelleme ${O.guncelleme||"—"} · ${O.kademe||""}`);
  const a=O.golge||{},b=O.radar_filtreli||{};
