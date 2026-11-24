@@ -288,21 +288,6 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   <div class="note">Her yeni seçime kasanın %10'u yatırılır, en fazla 10 pozisyon. Alım yalnızca seans saatlerinde (10:00 - 18:00) yapılır, 18:00 sonrası taramadan portföye hisse alınmaz. Hedefte (+%5) ya da stopta satılır, komisyon dahildir.</div>
  </section>
 
- <section class="sec" id="gkC">
-  <div class="sh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p></div>
-  <div class="kasa gk">
-   <div class="k"><small>Son işlem günü rejimi</small><b id="gkRj">—</b><em id="gkRjL">—</em></div>
-   <div class="k"><small>Kasa · başlangıçtan beri</small><b id="gkKs">—</b><em id="gkKsL">—</em></div>
-   <div class="k"><small>Kasa - endeks farkı</small><b id="gkFk">—</b><em>puan, aynı dönemde</em></div>
-   <div class="k"><small>Düşüş günlerinde</small><b id="gkDs">—</b><em id="gkDsL">—</em></div>
-   <div class="k"><small>Filtresiz gölge kasa</small><b id="gkGl">—</b><em id="gkGlL">—</em></div>
-  </div>
-  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Rejime göre sonuçlar</h2><p id="gkRT">—</p></div>
-  <div class="tw gkT"><table id="gkR"></table></div>
-  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Günlük seyir</h2><p id="gkGT">—</p></div>
-  <div class="tw gkT"><table id="gkG"></table></div>
-  <div class="note" id="gkN">Gölge kasa mevcut kasayı etkilemez, yalnızca ölçer. Her işlem günü endeks değişimine ve yükselen hisse oranına göre yükseliş, yatay ya da düşüş olarak etiketlenir. Rastgele seçim tabanı, son 5 yılda likit her hissenin o günün kapanışından alınıp 2 işlem günü tutulmasının sonucudur (+%5 hedef, -%3 stop, komisyon dahil; aynı gün ikisi de görünürse stop sayılır). Sistemin seçimleri bu tabanla kıyaslanır. Filtresiz gölge kasa, radar seçimlerinin tamamını (kalite kapısı ve seans saati olmadan) kasa kurallarıyla yeniden oynatır. Örnek sayısı azken sonuç çıkarılmaz; yatay ve yükseliş günleri biriktikçe tablo dolar.</div>
- </section>
 
  <section class="kpis" aria-label="Özet">
   <div class="k"><small>BIST · takibe alınan</small><b id="kAll">—</b><em id="kAllL">toplam seçim</em></div>
@@ -453,6 +438,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   <section class="sec" id="labSek">
    <div class="ltabs" role="tablist" aria-label="Laboratuvar bölümleri">
     <button class="ltab" role="tab" type="button" data-l="og" aria-selected="true">Öğrenme<span class="c" id="cOg"></span></button>
+    <button class="ltab" role="tab" type="button" data-l="gk" aria-selected="false">Gölge kasa</button>
     <button class="ltab" role="tab" type="button" data-l="pj" aria-selected="false">Haftalık projeksiyon</button>
     <button class="ltab" role="tab" type="button" data-l="en" aria-selected="false">Endeks katmanları</button>
     <button class="ltab" role="tab" type="button" data-l="dis" aria-selected="false">Dış etkenler</button>
@@ -463,6 +449,21 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
     <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="bHip">—</p>
     <div class="tw"><table id="bRows"></table></div></div>
    <div id="l-dis" role="tabpanel" hidden><div class="sh"><h2>Dış etkenler</h2><p>gün · hafta · ay</p></div><div class="tw"><table id="sMk"></table></div></div>
+   <div id="l-gk" role="tabpanel" hidden>  <div class="sh"><h2>Gölge kasa · sermaye koruma ve piyasa rejimi</h2><p id="gkT">ölçüm bekleniyor</p></div>
+  <div class="kasa gk">
+   <div class="k"><small>Son işlem günü rejimi</small><b id="gkRj">—</b><em id="gkRjL">—</em></div>
+   <div class="k"><small>Kasa · başlangıçtan beri</small><b id="gkKs">—</b><em id="gkKsL">—</em></div>
+   <div class="k"><small>Kasa - endeks farkı</small><b id="gkFk">—</b><em>puan, aynı dönemde</em></div>
+   <div class="k"><small>Düşüş günlerinde</small><b id="gkDs">—</b><em id="gkDsL">—</em></div>
+   <div class="k"><small>Filtresiz gölge kasa</small><b id="gkGl">—</b><em id="gkGlL">—</em></div>
+  </div>
+  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Rejime göre sonuçlar</h2><p id="gkRT">—</p></div>
+  <div class="tw gkT"><table id="gkR"></table></div>
+  <div class="sh" style="border-top:1px solid var(--line)"><h2 style="font-size:14px">Günlük seyir</h2><p id="gkGT">—</p></div>
+  <div class="tw gkT"><table id="gkG"></table></div>
+  <div class="note" id="gkN">Gölge kasa mevcut kasayı etkilemez, yalnızca ölçer. Her işlem günü endeks değişimine ve yükselen hisse oranına göre yükseliş, yatay ya da düşüş olarak etiketlenir. Rastgele seçim tabanı, son 5 yılda likit her hissenin o günün kapanışından alınıp 2 işlem günü tutulmasının sonucudur (+%5 hedef, -%3 stop, komisyon dahil; aynı gün ikisi de görünürse stop sayılır). Sistemin seçimleri bu tabanla kıyaslanır. Filtresiz gölge kasa, radar seçimlerinin tamamını (kalite kapısı ve seans saati olmadan) kasa kurallarıyla yeniden oynatır. Örnek sayısı azken sonuç çıkarılmaz; yatay ve yükseliş günleri biriktikçe tablo dolar.</div>
+ 
+   </div>
   </section>
  </div>
 
@@ -799,7 +800,7 @@ tvDongu();
 let RJ=null;
 const gP=(v,d)=>v==null||isNaN(v)?"—":(v>=0?"+":"")+Number(v).toFixed(d==null?1:d).replace(".",",")+"%";
 const gRj={dusus:["Düşüş","bad"],yatay:["Yatay","warn"],yukselis:["Yükseliş","ok"],karma:["Karma","warn"]};
-function gk(){const sec=$("gkC");if(!sec)return;if(!RJ||!RJ.ozet){txt($("gkT"),"ölçüm bekleniyor");return}
+function gk(){const sec=$("l-gk");if(!sec)return;if(!RJ||!RJ.ozet){txt($("gkT"),"ölçüm bekleniyor");return}
  const O=RJ.ozet,B=RJ.bugun||{},R=RJ.rejim||{};txt($("gkT"),`ölçüm · kasayı etkilemez · güncelleme ${RJ.zaman||"—"}`);
  {const b=$("gkRj");b.textContent="";const r=gRj[B.rejim];if(r)b.append(el("span","ch "+r[1],r[0]));else b.textContent="—";txt($("gkRjL"),B.gun?`${B.gun} · endeks ${gP(B.endeks,2)} · %${B.genislik} yükselen`:"—")}
  txt($("gkKs"),gP(O.kasa_toplam));$("gkKs").className=cls(O.kasa_toplam);txt($("gkKsL"),`endeks ${gP(O.endeks_toplam)} · ${O.dönem_gun} işlem günü`);
