@@ -2102,7 +2102,7 @@
    ]
   }
  },
- "guncelleme": "24.11 14:21",
+ "guncelleme": "24.11 15:21",
  "gun_sayisi": 5,
  "nedenler": {
   "BURVA": {
@@ -3789,6 +3789,56 @@
    {
     "ts": 1789444774,
     "baslik": "VBTS kapsamında CITAS.E, CATES.E ve SELEC.E payları seans başından 14/ Ekim seans sonuna kadar açığa satışa ve kredili işlemlere konu edilem"
+   }
+  ],
+  "2026-11-24|ALGYO": [
+   {
+    "ts": 1793118421,
+    "baslik": "ALGYO Alarko Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 9 aylık net karı 600,624,206 TL (Önceki: 586,718,366 TL net kar)"
+   },
+   {
+    "ts": 1786136784,
+    "baslik": "ALGYO Alarko Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 6 aylık net karı 395,523,448 TL (Önceki: 127,026,497 TL net kar)"
+   },
+   {
+    "ts": 1781582375,
+    "baslik": "Alarko GYO sermaye artış kararı aldı"
+   },
+   {
+    "ts": 1780923831,
+    "baslik": "ÇED Duyurusu -Alarko Gayrimenkul Yatırım Ortaklığı"
+   },
+   {
+    "ts": 1778485751,
+    "baslik": "Bilanço analizi-ALGYO  (İnfo Yatırım)"
+   },
+   {
+    "ts": 1778471983,
+    "baslik": "VBTS kapsamında ALGYO.E, DOFRB.E ve TRILC.E payları seans başından 10 Haziran seans sonuna kadar açığa satışa ve kredili işlemlere konu edil"
+   },
+   {
+    "ts": 1778264306,
+    "baslik": "ALGYO Alarko Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2026 3 aylık net karı 57,488,849 TL (Önceki: 90,899,628 TL net kar)"
+   },
+   {
+    "ts": 1778264094,
+    "baslik": "ALGYO Alarko Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 3 aylık net karı 57,488,849 TL (Önceki: 90,899,628 TL net kar)"
+   },
+   {
+    "ts": 1777003116,
+    "baslik": "Borsa İstanbul yatırımcı bazında tedbir uygulaması"
+   },
+   {
+    "ts": 1775015993,
+    "baslik": "Alarko GYO'nın kar payı dağıtım teklifi belli oldu"
+   },
+   {
+    "ts": 1774324687,
+    "baslik": "Alarko GYO, bağlı ortaklığı Mosalarko OJSC şirketindeki paylarının tamamının Alsim Alarko Sanayi Tesisleri'ne satılmasına karar verdi"
+   },
+   {
+    "ts": 1773383489,
+    "baslik": "Alarko Holding, bağı ortaklığı Alarko GYO'nın sermayesinin %5,02'lik kısmını temsil eden geri alınan payların nakden ve peşin olarak Alarko "
    }
   ]
  },
