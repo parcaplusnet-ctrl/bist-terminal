@@ -208,5 +208,33 @@
    "ornek": 4011,
    "durum": "test"
   }
+ },
+ {
+  "id": "tepe_hacimli_kapanis",
+  "aciklama": "Fiyat yıllık tepeye %5'ten yakın, hacim ortalamanın 1,5 katı ve üstü, gün yükseğine yakın kapanış",
+  "kod": "ek(\"tepe_hacimli_kapanis\", \"Fiyat yıllık tepeye %5'ten yakın, hacim ortalamanın 1,5 katı ve üstü, gün yükseğine yakın kapanış\", lambda d: (d.dist250 >= -0.05) & (d.rv >= 1.5) & (d.clpos >= 0.8))",
+  "tarih": "25.11",
+  "ilk_olcum": {
+   "oran": 0.3293,
+   "stop": 0.4802,
+   "fark": 0.0968,
+   "getiri_fark": 0.218,
+   "ornek": 3942,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "dusus_sonrasi_bosluk",
+  "aciklama": "3 günlük düşüş serisinden sonra yukarı boşlukla açılıp yeşil kapanış",
+  "kod": "ek(\"dusus_sonrasi_bosluk\", \"3 günlük düşüş serisinden sonra yukarı boşlukla açılıp yeşil kapanış\", lambda d: (d.seri_asagi.shift(1) >= 3) & (d.bosluk >= 0.01) & (d.govde > 0))",
+  "tarih": "25.11",
+  "ilk_olcum": {
+   "oran": 0.2668,
+   "stop": 0.4606,
+   "fark": 0.0343,
+   "getiri_fark": -0.036,
+   "ornek": 3272,
+   "durum": "test"
+  }
  }
 ]
