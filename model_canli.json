@@ -1,8 +1,25 @@
 {
  "surum": "model_canli",
- "zaman": "25.11 11:08",
+ "zaman": "25.11 21:49",
  "gun": 0,
- "gunler": [],
+ "bekleyen": 1,
+ "gunler": [
+  {
+   "gun": "2026-11-25",
+   "saat": "18:17",
+   "n": 0,
+   "puanlanan": 271,
+   "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
+  }
+ ],
  "bantlar": {},
- "durum": "model skoru arşive yeni yazılmaya başladı, ilk sonuç ertesi iki işlem günü sonra"
+ "rejim": {},
+ "en_iyi3_fark": null,
+ "ic": {
+  "gun": 0,
+  "ort": null,
+  "t": null
+ },
+ "ozet": "henüz sonuçlanan gün yok",
+ "yontem": "Her günün son taramasındaki model skoru, sonraki 2 işlem günü +%5 hedef / -%3 stop (aynı gün ikisi de görünürse stop, komisyon dahil) ile sınanır. Skor sonuçtan önce arşive yazıldığı için ileri testtir. Hisseler aynı gün birbirine bağlı olduğundan istatistik gün bazındadır; birkaç gün anlamlı sonuç vermez."
 }
