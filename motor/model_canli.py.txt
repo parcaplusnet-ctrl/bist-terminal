@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""Kalite modelinin CANLI doğrulaması (25.11): modelin her taramada tüm puanlanan evrene verdiği skor gözlem arşivine yazılır (sütun "ms").
+Burada her günün SON taramasındaki (kapanışa yakın, 17:16-18:16) skor, o gün SONRAKİ 2 işlem gününün günlük mumlarıyla sınanır: +%5 hedef mi, -%3 stop mu
+(aynı gün ikisi de görünürse stop sayılır: kötümser; komisyon gidiş-dönüş dahil). Skor, sonuç bilinmeden önce yazıldığı için bu gerçek ileri (out-of-sample) testtir.
+Neden gerekli: kalite kapısıyla seçilen hisse günde 1-2 tane; öğrenme aşaması 30 sonuç bekler. Aynı model günde ~40 hisseyi puanlar; bu betik o örnekleri de toplar
+(aynı güne ait hisseler birbirine bağlıdır: istatistik gün bazında, günler bağımsız sayılır).
+Çıktı model_canli.json: skor dilimlerine (en iyi 1, 3, 5, 10, alt yarı, tümü) göre hedef/stop/ortalama getiri, günlük sıra korelasyonu, günlük döküm.
+Kullanım: python3 -I model_canli.py --lab lab.py --arsiv arsiv --cikti model_canli.json [--veri veri.json]"""
+import argparse, glob, importlib.util, json, math, os, sys, time, datetime as dt
+import numpy as np, pandas as pd
+
+ap = argparse.ArgumentParser(); ap.add_argument("--lab", default="lab.py"); ap.add_argument("--arsiv", default="arsiv"); ap.add_argument("--cikti", default="model_canli.json")
+ap.add_argument("--veri", default="veri.json"); ap.add_argument("--rejim", default="rejim.json"); a = ap.parse_args()
+sp = importlib.util.spec_from_file_location("lab", a.lab); lab = importlib.util.module_from_spec(sp); sys.modules["lab"] = lab; sp.loader.exec_module(lab)
+HEDEF, STOP, KOM = 0.05, 0.03, 0.001
+t0 = time.time()
+try: REJ = {x["gun"]: x["rejim"] for x in json.load(open(a.rejim, encoding="utf-8")).get("gunler", [])}   # "DD.MM" -> dusus|yatay|yukselis
+except Exception: REJ = {}
+def rej_of(d): return REJ.get(d[8:10] + "." + d[5:7])
+
+# ---- arşivden her günün son model skorlu taraması
+GUN = {}
+for yol in sorted(glob.glob(os.path.join(a.arsiv, "gozlem_bist_*.json"))):
+    try: G = json.load(open(yol, encoding="utf-8"))
+    except Exception: continue
+    C = G.get("cols") or []
+    if "ms" not in C: continue
+    ik, ip, im = C.index("kod"), C.index("fiyat"), C.index("ms")
+    T = [t for t in G.get("taramalar", []) if t.get("rows") and sum(1 for r in t["rows"] if len(r) > im and r[im] is not None) >= 10]
+    if not T: continue
+    t = sorted(T, key=lambda x: x.get("ts", 0))[-1]
+    GUN[G["tarih"]] = {"saat": t.get("saat"), "satir": [(r[ik], float(r[ip]), float(r[im])) for r in t["rows"] if len(r) > im and r[im] is not None and r[ip]]}
+print(f"MODEL CANLI: {len(GUN)} günde model skoru var {sorted(GUN)}")
+if not GUN:
+    json.dump({"surum": "model_canli", "zaman": dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m %H:%M"), "gun": 0, "gunler": [], "bantlar": {}, "durum": "model skoru arşive yeni yazılmaya başladı, ilk sonuç ertesi iki işlem günü sonra"},
+              open(a.cikti, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print("MODEL CANLI: henüz veri yok"); sys.exit(0)
+
+kods = sorted({k for g in GUN.values() for k, _, _ in g["satir"]})
+P = lab.indir(kods, "1d", "3mo")
+def gun(ix): return pd.DatetimeIndex(ix).tz_localize(None).normalize()
+for k in P: P[k].index = gun(P[k].index); P[k] = P[k][~P[k].index.duplicated(keep="last")]
+print(f"MODEL CANLI: {len(P)} hisse günlük mum, {int(time.time()-t0)} sn")
+
+def sonuc(df, d, giris):
+    """d gününden SONRAKİ ilk iki işlem günü: (kod, getiri) ya da None (henüz iki gün yok)."""
+    S = df[df.index > pd.Timestamp(d)]
+    if len(S) < 2: return None
+    hd, sp_ = giris * (1 + HEDEF), giris * (1 - STOP)
+    for i in range(2):
+        r = S.iloc[i]
+        if r["l"] <= sp_: return ("s", min(sp_, float(r["o"])) / giris - 1 - 2 * KOM)    # açılış stopun altındaysa açılıştan çıkış (boşluk)
+        if r["h"] >= hd: return ("h", HEDEF - 2 * KOM)
+    return ("z", float(S.iloc[1]["c"]) / giris - 1 - 2 * KOM)
+
+KAT = {"en iyi 1": (0, 1), "en iyi 3": (0, 3), "en iyi 5": (0, 5), "en iyi 10": (0, 10), "alt yarı": (-0.5, None), "tümü": (0, None)}
+gunler = []; hepsi = {k: [] for k in KAT}; ic = []
+for d in sorted(GUN):
+    sat = []
+    for kod, fy, ms in GUN[d]["satir"]:
+        if kod not in P: continue
+        r = sonuc(P[kod], d, fy)
+        if r: sat.append((kod, ms, r[0], r[1]))
+    n0 = len(GUN[d]["satir"])
+    if len(sat) < 10: gunler.append({"gun": d, "saat": GUN[d]["saat"], "n": len(sat), "puanlanan": n0, "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"}); continue
+    sat.sort(key=lambda x: -x[1]); n = len(sat); g = {"gun": d, "saat": GUN[d]["saat"], "n": n, "puanlanan": n0, "rejim": rej_of(d)}
+    for ad, (bas, adet) in KAT.items():
+        if ad == "alt yarı": L = sat[n // 2:]
+        elif adet is None: L = sat
+        else: L = sat[:adet]
+        hepsi[ad].append(L)
+        g[ad] = {"n": len(L), "hedef": round(sum(1 for x in L if x[2] == "h") / len(L) * 100, 1), "stop": round(sum(1 for x in L if x[2] == "s") / len(L) * 100, 1), "ort": round(float(np.mean([x[3] for x in L])) * 100, 2)}
+    s_ = pd.Series([x[1] for x in sat]).rank(); r_ = pd.Series([x[3] for x in sat]).rank(); ic.append(float(s_.corr(r_))); g["ic"] = round(ic[-1], 3)
+    g["durum"] = "sonuçlandı"; gunler.append(g)
+
+bantlar = {}
+for ad, LL in hepsi.items():
+    X = [x for L in LL for x in L]
+    if not X: continue
+    gun_ort = [float(np.mean([x[3] for x in L])) * 100 for L in LL]      # günlük ortalamalar; günler bağımsız sayılır
+    sd = float(np.std(gun_ort, ddof=1)) if len(gun_ort) > 2 else None
+    bantlar[ad] = {"gun": len(LL), "n": len(X), "hedef": round(sum(1 for x in X if x[2] == "h") / len(X) * 100, 1), "stop": round(sum(1 for x in X if x[2] == "s") / len(X) * 100, 1),
+                   "ort": round(float(np.mean([x[3] for x in X])) * 100, 2), "gun_ort": round(float(np.mean(gun_ort)), 2), "gun_sd": None if sd is None else round(sd, 2)}
+# rejim bazında (en iyi 3 ve tümü): modelin hangi piyasa rejiminde değer kattığı
+rejb = {}
+bit_gun = [g for g in gunler if g.get("durum") == "sonuçlandı"]
+for i_, g_ in enumerate(bit_gun):
+    r_ = g_.get("rejim") or "bilinmiyor"; x = rejb.setdefault(r_, {"gun": 0, "ust3": [], "tumu": []}); x["gun"] += 1
+    x["ust3"].append(float(np.mean([y[3] for y in hepsi["en iyi 3"][i_]])) * 100); x["tumu"].append(float(np.mean([y[3] for y in hepsi["tümü"][i_]])) * 100)
+rejb = {k: {"gun": v["gun"], "en_iyi3": round(float(np.mean(v["ust3"])), 2), "tumu": round(float(np.mean(v["tumu"])), 2), "fark": round(float(np.mean(v["ust3"]) - np.mean(v["tumu"])), 2)} for k, v in rejb.items()}
+fark = None
+if "en iyi 3" in hepsi and len(hepsi["en iyi 3"]) >= 2:
+    f = [float(np.mean([x[3] for x in a_])) * 100 - float(np.mean([x[3] for x in b_])) * 100 for a_, b_ in zip(hepsi["en iyi 3"], hepsi["tümü"])]
+    sd = float(np.std(f, ddof=1)) if len(f) > 2 else None
+    fark = {"gun": len(f), "ort": round(float(np.mean(f)), 2), "t": None if not sd else round(float(np.mean(f)) / (sd / math.sqrt(len(f))), 2)}
+icr = {"gun": len(ic), "ort": None if not ic else round(float(np.mean(ic)), 3), "t": None if len(ic) < 3 or not np.std(ic, ddof=1) else round(float(np.mean(ic)) / (float(np.std(ic, ddof=1)) / math.sqrt(len(ic))), 2)}
+bit = [g for g in gunler if g.get("durum") == "sonuçlandı"]
+ozet = (f"{len(bit)} günün modeli sonuçlandı" if bit else "henüz sonuçlanan gün yok") + (f"; en iyi 3 hisse tüm puanlananlara göre günde ortalama {fark['ort']:+.2f} puan" if fark else "")
+cikti = {"surum": "model_canli", "zaman": dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m %H:%M"), "gun": len(bit), "bekleyen": len(gunler) - len(bit),
+         "gunler": gunler, "bantlar": bantlar, "rejim": rejb, "en_iyi3_fark": fark, "ic": icr, "ozet": ozet,
+         "yontem": "Her günün son taramasındaki model skoru, sonraki 2 işlem günü +%5 hedef / -%3 stop (aynı gün ikisi de görünürse stop, komisyon dahil) ile sınanır. Skor sonuçtan önce arşive yazıldığı için ileri testtir. Hisseler aynı gün birbirine bağlı olduğundan istatistik gün bazındadır; birkaç gün anlamlı sonuç vermez."}
+json.dump(cikti, open(a.cikti, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+print(f"MODEL CANLI: {ozet}; sıra korelasyonu {icr}")
+for ad, b in bantlar.items(): print("  ", ad, b)

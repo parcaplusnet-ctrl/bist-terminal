@@ -432,6 +432,7 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
     <button class="ltab" role="tab" type="button" data-l="gd" aria-selected="false">Gölge deney</button>
     <button class="ltab" role="tab" type="button" data-l="pj" aria-selected="false">Haftalık projeksiyon</button>
     <button class="ltab" role="tab" type="button" data-l="sk" aria-selected="false">Sektör hesabı v1-v2</button>
+    <button class="ltab" role="tab" type="button" data-l="mk" aria-selected="false">Model canlı sınama</button>
     <button class="ltab" role="tab" type="button" data-l="en" aria-selected="false">Endeks katmanları</button>
     <button class="ltab" role="tab" type="button" data-l="dis" aria-selected="false">Dış etkenler</button>
    </div>
@@ -442,6 +443,11 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
     <div class="sh" style="border-top:1px solid var(--line)"><h2>v2 parçaları · geçmiş sıra korelasyonu</h2><p>sonraki haftanın göreli getirisiyle, ortalama</p></div>
     <div class="tw"><table id="skB"></table></div>
     <p class="note" id="skN">—</p></div>
+   <div id="l-mk" role="tabpanel" hidden><div class="sh"><h2>Model canlı sınama · tüm puanlanan hisseler, ileri test</h2><p id="mkTag">—</p></div>
+    <div class="tw"><table id="mkT"></table></div>
+    <div class="sh" style="border-top:1px solid var(--line)"><h2>Günlük döküm</h2><p>her günün son taramasındaki skor, sonraki 2 işlem günü</p></div>
+    <div class="tw"><table id="mkG"></table></div>
+    <p class="note" id="mkN">—</p></div>
    <div id="l-en" role="tabpanel" hidden><div class="sh"><h2>Endeks katmanları · BIST 30 / 50 / 100</h2><p id="bTag">—</p></div>
     <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="bHip">—</p>
     <div class="tw"><table id="bRows"></table></div></div>
@@ -834,6 +840,18 @@ function s2Lab(){if(!S2||!$("skT"))return;const K=S2.karsilastirma||{},T=S2.test
  txt($("skN"),(dec?`Karar gerekçesi: ${k.neden} `:"")+"Karar kuralı: 4 canlı hafta dolunca ortalama sıra korelasyonu yüksek olan kalır (fark 0,05 altındaysa ilk 3 + son 3 isabeti, o da eşitse v1 kalır). Kaybeden sürüm sayfadan kaldırılır. Sıra korelasyonu 0 rastgele, +1 kusursuz demektir; 0,10 altı ayırt edici değildir. "+(S2.not||"")+" ABD sektörleri v1 ile devam eder.")}
 function s2Yukle(){fetch("sektor2.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.sektorler){S2=j;try{bistCiz();s2Lab()}catch(e){console.error(e)}}}).catch(()=>{})}
 s2Yukle();setInterval(s2Yukle,600000);
+/* model canlı sınama (model_canli.json: motor/model_canli.py üretir, gece görevi yeniler) */
+let MC=null;
+function mkCiz(){if(!MC||!$("mkT"))return;const B=MC.bantlar||{},F=MC.en_iyi3_fark,I=MC.ic||{};
+ txt($("mkTag"),`${MC.gun||0} gün sonuçlandı${MC.bekleyen?` · ${MC.bekleyen} gün bekliyor`:""} · ${MC.zaman||""}`);
+ const O=["en iyi 1","en iyi 3","en iyi 5","en iyi 10","alt yarı","tümü"].filter(k=>B[k]);
+ if(!O.length){table($("mkT"),[["Dilim","l"],"Gün","Örnek","Hedef %5","Stop %3","Ort. getiri"],[]);table($("mkG"),[["Gün","l"]],[]);txt($("mkN"),(MC.durum||"Henüz sonuçlanan gün yok.")+" Model skoru her taramada arşive yazılıyor; ilk sonuç skorun yazıldığı günden sonraki 2 işlem günü tamamlanınca gelir.");return}
+ table($("mkT"),[["Model skoru dilimi","l"],"Gün","Örnek","Hedef %5","Stop %3","Ort. getiri"],O.map(k=>r=>{const b=B[k];cell(r,k,"l");cell(r,b.gun,"num");cell(r,b.n,"num");cell(r,pc(b.hedef),"num");cell(r,pc(b.stop),"num");cell(r,f2(b.ort),"num "+cls(b.ort))}));
+ table($("mkG"),[["Gün","l"],"Puanlanan","En iyi 1","En iyi 3","Tümü","Sıra korelasyonu"],(MC.gunler||[]).slice().reverse().map(g=>r=>{cell(r,g.gun+" "+(g.saat||""),"l");cell(r,g.puanlanan,"num");if(g.durum!=="sonuçlandı"){const c=cell(r,g.durum,"l wrapt");c.colSpan=4;return}
+  cell(r,f2(g["en iyi 1"].ort),"num "+cls(g["en iyi 1"].ort));cell(r,f2(g["en iyi 3"].ort),"num "+cls(g["en iyi 3"].ort));cell(r,f2(g["tümü"].ort),"num "+cls(g["tümü"].ort));cell(r,f2(g.ic),"num "+cls(g.ic))}));
+ txt($("mkN"),(MC.ozet?MC.ozet+". ":"")+(F&&F.t!=null?`En iyi 3 ile tümü arasındaki günlük fark t değeri ${num(F.t)} (2 üstü anlamlı). `:"")+(I.ort!=null?`Ortalama günlük sıra korelasyonu ${f2(I.ort)} (${I.gun} gün). `:"")+(MC.rejim&&Object.keys(MC.rejim).length?"Rejim bazında en iyi 3 eksi tümü (günlük ortalama getiri farkı): "+Object.entries(MC.rejim).map(([k,v])=>`${{dusus:"düşüş",yatay:"yatay",yukselis:"yükseliş"}[k]||k} ${f2(v.fark)} (${v.gun} gün)`).join(", ")+". ":"")+(MC.yontem||""))}
+function mkYukle(){fetch("model_canli.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j){MC=j;try{mkCiz()}catch(e){console.error(e)}}}).catch(()=>{})}
+mkYukle();setInterval(mkYukle,600000);
 let RJ=null;
 const gP=(v,d)=>v==null||isNaN(v)?"—":(v>=0?"+":"")+Number(v).toFixed(d==null?1:d).replace(".",",")+"%";
 const gRj={dusus:["Düşüş","bad"],yatay:["Yatay","warn"],yukselis:["Yükseliş","ok"],karma:["Karma","warn"]};

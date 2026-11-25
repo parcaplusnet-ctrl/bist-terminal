@@ -769,6 +769,13 @@ def cmd_adaylar(a):
     if a.piyasa == "bist" and a.girdi and os.path.exists(a.girdi):  # öğrenme döngüsü otomatik: gözlem arşivi + öğren (MOTOR.md §6)
         try:
             a.arsiv = getattr(a, "arsiv", None) or "arsiv"
+            try:   # 25.11: kalite modelinin tüm evren skoru gözlem arşivine yazılır (canlı doğrulama motor/model_canli.py okur)
+                if KK:
+                    Bf = json.load(open(a.girdi))
+                    for s_ in Bf.get("tum", []): s_["ms"] = KK.get(s_["kod"])
+                    json.dump(Bf, open(a.girdi, "w"), ensure_ascii=False)
+                    print(f"MODEL SKORU ARŞİVE: {sum(1 for s_ in Bf.get('tum', []) if s_.get('ms') is not None)} hisse")
+            except Exception as e: print("UYARI: model skoru arşive eklenemedi:", e)
             cmd_gozlem(a); cmd_ogren(a)
         except Exception as e: print("UYARI: gözlem/öğren adımı başarısız:", e)
         try: cmd_ozlab(a)  # özellik laboratuvarı: her grafik taramasından sonra güncellenir
@@ -825,7 +832,7 @@ def cmd_kaydet(a):
 # 1-2 işlem günü sonra gerçekleşen hareketle eşleştirilip "neden yükseldi/düştü" öğrenilir.
 GZ_COLS = ["kod", "fiyat", "ch", "rv", "puan", "rsi", "rsi1s", "rsi4s", "mt", "uygun", "asiri", "g_trend",
            "RSI-MACD", "Trend", "Hacim", "Uyum", "Dip", "Risk", "tk1S", "tk4S", "tkG", "pw", "p1m", "cfo", "h1m", "l1m",
-           "sektor", "katman", "mcap_mlr", "why", "likit_mn"] + [a for a, _ in GZ_EK]
+           "sektor", "katman", "mcap_mlr", "why", "likit_mn"] + [a for a, _ in GZ_EK] + ["ms"]   # ms = kalite modeli skoru (25.11: tüm evren, canlı doğrulama için)
 
 def cmd_gozlem(a):
     """cikti/<piyasa>.json → arsiv/gozlem_<piyasa>_YYYY-MM-DD.json içine bu taramanın tüm hisse anlık görüntüsünü ekler."""
@@ -854,7 +861,7 @@ def _gz_satir(s):
             pk.get("RSI-MACD"), pk.get("Trend"), pk.get("Hacim"), pk.get("Uyum"), pk.get("Dip"), pk.get("Risk"),
             (tk.get("1S") or [None] * 3)[2], (tk.get("4S") or [None] * 3)[2], (tk.get("G") or [None] * 3)[2],
             oz.get("pw"), oz.get("p1m"), oz.get("cfo"), oz.get("h1m"), oz.get("l1m"),
-            s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")] + (s.get("gz") or [None] * len(GZ_EK))
+            s.get("sektor"), s.get("katman"), r2((s.get("mcap") or 0) / 1e9), "|".join(s.get("why") or []), s.get("likit_mn")] + (s.get("gz") or [None] * len(GZ_EK)) + [s.get("ms")]
 
 def _hareket_kurallari():
     """Kullanıcının onayladığı hareket laboratuvarı kuralları (rules.json hareket_kurallari). Yoksa boş: seçime etkisi yoktur."""
