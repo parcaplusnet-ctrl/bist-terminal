@@ -8,6 +8,11 @@
      "zaman": "18.11 13:10",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 1
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -30,6 +35,11 @@
      "zaman": "18.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 2
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -116,6 +126,11 @@
      "zaman": "18.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 2
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -127,6 +142,11 @@
      "zaman": "18.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 2
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -159,6 +179,11 @@
      "zaman": "24.11 18:21",
      "durum": "İleri test bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -391,6 +416,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -445,6 +475,11 @@
      "zaman": "18.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 2
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -595,6 +630,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -622,6 +662,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -649,6 +694,11 @@
      "zaman": "18.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 2
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -676,6 +726,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -821,6 +876,11 @@
      "zaman": "24.11 18:21",
      "durum": "Kanıt yok",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -885,6 +945,11 @@
      "zaman": "24.11 18:21",
      "durum": "Kanıt yok",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -992,6 +1057,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1008,6 +1078,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1035,6 +1110,11 @@
      "zaman": "19.11 18:23",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 3
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1110,6 +1190,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1126,6 +1211,11 @@
      "zaman": "24.11 18:21",
      "durum": "Kanıt yok",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1244,6 +1334,11 @@
      "zaman": "24.11 18:21",
      "durum": "İleri test bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1319,6 +1414,11 @@
      "zaman": "19.11 18:23",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 3
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1818,6 +1918,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1914,6 +2019,11 @@
      "zaman": "24.11 18:21",
      "durum": "İleri test bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1973,6 +2083,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -1989,6 +2104,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2005,6 +2125,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2016,6 +2141,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2032,6 +2162,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2064,6 +2199,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2075,6 +2215,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2086,6 +2231,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2097,6 +2247,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2108,6 +2263,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2119,6 +2279,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2130,6 +2295,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2141,6 +2311,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2157,6 +2332,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2168,6 +2348,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2179,6 +2364,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2190,6 +2380,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2233,6 +2428,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2297,6 +2497,11 @@
      "zaman": "24.11 18:21",
      "durum": "Onay bekliyor",
      "gun_sayisi": 6
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2324,6 +2529,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2335,6 +2545,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2362,6 +2577,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2373,6 +2593,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2384,6 +2609,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2395,6 +2625,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2406,6 +2641,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2417,6 +2657,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2428,6 +2673,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2439,6 +2689,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2450,6 +2705,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2461,6 +2721,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2472,6 +2737,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2483,6 +2753,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2494,6 +2769,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2505,6 +2785,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2516,6 +2801,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2527,6 +2817,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Elendi (ileri test)",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2538,6 +2833,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2549,6 +2849,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2560,6 +2865,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Onay bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2571,6 +2881,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2582,6 +2897,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2593,6 +2913,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2604,6 +2929,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2615,6 +2945,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "Kanıt yok",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2626,6 +2961,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2637,6 +2977,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2648,6 +2993,11 @@
      "zaman": "23.11 18:22",
      "durum": "Veri biriktiriliyor",
      "gun_sayisi": 5
+    },
+    {
+     "zaman": "25.11 18:20",
+     "durum": "İleri test bekliyor",
+     "gun_sayisi": 7
     }
    ]
   },
@@ -2707,84 +3057,32 @@
    ]
   }
  },
- "guncelleme": "25.11 17:21",
- "gun_sayisi": 6,
+ "guncelleme": "25.11 18:20",
+ "gun_sayisi": 7,
  "nedenler": {
-  "BURVA": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
   "CATES": {
    "tarih": "2026-11-24",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "RALYH": {
-   "tarih": "2026-11-20",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "IHEVA": {
    "tarih": "2026-11-23",
    "neden": "olumsuz: 9 aylık net zarar 176 mn TL (önceki 74,5 mn) - haber eski, bugüne bağlanamadı"
   },
-  "TRHOL": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "KZGYO": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "BSOKE": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "ZGYO": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
   "IHYAY": {
    "tarih": "2026-11-23",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "TKNKA": {
-   "tarih": "2026-11-20",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "ISVEA": {
    "tarih": "2026-11-23",
    "neden": "olumsuz: 09.11 SPK Trive Yatırım faaliyetini durdurdu (dolaylı, zayıf); 9 aylık kâr 54,7 mn TL ile artmış"
   },
-  "FZLGY": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "IZFAS": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
   "PRZMA": {
    "tarih": "2026-11-23",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "ODINE": {
-   "tarih": "2026-11-20",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "DUNYH": {
    "tarih": "2026-11-24",
    "neden": "haber yok: teknik ya da spekülatif hareket"
-  },
-  "SONME": {
-   "tarih": "2026-11-20",
-   "neden": "haber yok: teknik ya da spekülatif hareket (19.11 ÇED duyurusu çıktı, doğrudan fiyat nedeni belli değil)"
-  },
-  "ANELE": {
-   "tarih": "2026-11-20",
-   "neden": "olumsuz: 19.11 VBTS kapsamında 18 Aralık'a kadar açığa satış ve kredili işlem yasağı kararı"
-  },
-  "KARCL": {
-   "tarih": "2026-11-20",
-   "neden": "olumsuz: 19.11 SPK suç duyurusu kararı sonrası şirket açıklaması, yönetim ve ortaklar kararda yer almıyor dedi"
   },
   "CGCAM": {
    "tarih": "2026-11-24",
@@ -4972,6 +5270,56 @@
    {
     "ts": 1783078069,
     "baslik": "TGS Dış ticaret/Nukan:  TGS'nin büyümesine paralel ihracat rakamlarının da arttığını görüyoruz- BloombergHT"
+   }
+  ],
+  "2026-11-25|SAFKR": [
+   {
+    "ts": 1794245681,
+    "baslik": "SAFKR Safkar Ege Soğutmacılık Klima Soğuk Hava Tesisleri İhracat İthalat Sanayi ve Tic. konsolide bilanço 2026 9 aylık net karı 61,023,816 T"
+   },
+   {
+    "ts": 1786996586,
+    "baslik": "SAFKR Safkar Ege Soğutmacılık Klima Soğuk Hava Tesisleri İhracat İthalat Sanayi ve Tic. konsolide bilanço 2026 6 aylık net karı 24,981,042 T"
+   },
+   {
+    "ts": 1783483153,
+    "baslik": "VBTS kapsamında KGYO.E, PASEU.E, MARKA.E ve SAFKR.E payları seans başından 7 Ağustos seans sonuna kadar açığa satışa ve kredili işlemlere ko"
+   },
+   {
+    "ts": 1773806367,
+    "baslik": "SPK Bülteni diğer başvuru sonuçları - Safkar"
+   },
+   {
+    "ts": 1772814889,
+    "baslik": "SAFKR Safkar Ege Soğutmacılık Klima Soğuk Hava Tesisleri İhracat İthalat Sanayi ve Tic. konsolide bilanço 2025 Yıllık net karı 162,964,414 T"
+   },
+   {
+    "ts": 1769780457,
+    "baslik": "KAP:   [BARMA BUCIM CEMZY EGEGY GZNMI HDFGS ISBTR ISCTR SAFKR TEZOL VRGYO ] MERKEZİ KAYIT KURULUŞU A.Ş.  Borsada İşlem Gören Tipe Dönüşüm Du"
+   },
+   {
+    "ts": 1769777659,
+    "baslik": "KAP: SAFKR  [ ] SAFKAR EGE SOĞUTMACILIK KLİMA SOĞUK HAVA TESİSLERİ İHRACAT İTHALAT SANAYİ VE TİCARET A.Ş.  Kayıtlı Sermaye Tavanı İşlemlerin"
+   },
+   {
+    "ts": 1769696265,
+    "baslik": "KAP:   [AKBNK BARMA CASA EFOR ENDAE FRMPL GARAN GIPTA GZNMI HLGYO KLMSN KZBGY OZATD PSGYO SAFKR SNKRN TARKM TATEN TNZTP TRENJ VKGYO YBTAS ZG"
+   },
+   {
+    "ts": 1769613279,
+    "baslik": "KAP:   [ALARK ALFAS BARMA BEGYO BLCYT BNTAS BVSAN CASA CELHA CEMAS CEMZY CEOEM CWENE DGNMO DOHOL DSTKF ECOGR ENERY ENPRA ERCB EREGL FADE FEN"
+   },
+   {
+    "ts": 1769429792,
+    "baslik": "KAP: SAFKR  [ ] SAFKAR EGE SOĞUTMACILIK KLİMA SOĞUK HAVA TESİSLERİ İHRACAT İTHALAT SANAYİ VE TİCARET A.Ş.  Bağımsız Denetim Kuruluşunun Beli"
+   },
+   {
+    "ts": 1769150597,
+    "baslik": "KAP: SAFKR  [ ] SAFKAR EGE SOĞUTMACILIK KLİMA SOĞUK HAVA TESİSLERİ İHRACAT İTHALAT SANAYİ VE TİCARET A.Ş.  Yeni İş İlişkisi"
+   },
+   {
+    "ts": 1767884356,
+    "baslik": "KAP:   [SAFKR ] BORSA İSTANBUL BISTECH DEVRE KESİCİ UYGULAMASI  Devre Kesici Uygulaması"
    }
   ]
  },
