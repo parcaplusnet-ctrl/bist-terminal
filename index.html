@@ -164,6 +164,7 @@ details.ad[open] summary::after{transform:rotate(90deg)}
 .scene .cap{position:absolute;left:16px;top:12px;z-index:2;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}.scene .cap b{color:var(--fg)}
 .rrg2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;padding:12px 16px}
 .rrgw{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px 10px 4px;min-width:0}
+.svbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut)}.svbar .btn.on{color:var(--up);border-color:var(--up)}
 .rrgh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--mut)}.rrgh b{font:700 14px var(--cond);color:var(--fg)}
 .rrgw svg{display:block;width:100%;height:auto}
 .rrgw .ax{font:500 9.5px var(--mono);fill:var(--mut)}.rrgw .ql{font:700 10px var(--sans);letter-spacing:.1em}.rrgw .bl{font:600 9px var(--mono);fill:var(--fg);pointer-events:none}
@@ -417,7 +418,8 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
   </section>
   <section class="sec"><div class="sh"><h2>Sektör rotasyonu · para nereye gidiyor</h2><p id="sTag">—</p></div>
    <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="sHip">—</p>
-   <div class="rrg2"><div class="rrgw"><div class="rrgh"><b>BIST</b><span>kıyas: BIST Tüm · balon = hacim payı · renk = net akış</span></div><svg id="rrgB" viewBox="0 0 440 300" role="img" aria-label="BIST sektör rotasyon haritası"></svg></div><div class="rrgw"><div class="rrgh"><b>ABD</b><span>kıyas: S&amp;P 500 · balon = hacim payı · renk = net akış</span></div><svg id="rrgU" viewBox="0 0 440 300" role="img" aria-label="ABD sektör rotasyon haritası"></svg></div></div>
+   <div class="svbar" id="svb" hidden></div>
+   <div class="rrg2"><div class="rrgw"><div class="rrgh"><b>BIST</b><span id="rrgBS">kıyas: BIST Tüm · balon = hacim payı · renk = net akış</span></div><svg id="rrgB" viewBox="0 0 440 300" role="img" aria-label="BIST sektör rotasyon haritası"></svg></div><div class="rrgw"><div class="rrgh"><b>ABD</b><span>kıyas: S&amp;P 500 · balon = hacim payı · renk = net akış</span></div><svg id="rrgU" viewBox="0 0 440 300" role="img" aria-label="ABD sektör rotasyon haritası"></svg></div></div>
    <div class="split" style="padding:12px 16px">
     <div class="tw"><table id="tbB"></table></div><div class="tw"><table id="tbU"></table></div>
    </div>
@@ -429,11 +431,17 @@ tr.grp td{background:rgba(255,255,255,.035);color:var(--mut);font:600 11px "IBM 
     <button class="ltab" role="tab" type="button" data-l="gk" aria-selected="false">Gölge kasa</button>
     <button class="ltab" role="tab" type="button" data-l="gd" aria-selected="false">Gölge deney</button>
     <button class="ltab" role="tab" type="button" data-l="pj" aria-selected="false">Haftalık projeksiyon</button>
+    <button class="ltab" role="tab" type="button" data-l="sk" aria-selected="false">Sektör hesabı v1-v2</button>
     <button class="ltab" role="tab" type="button" data-l="en" aria-selected="false">Endeks katmanları</button>
     <button class="ltab" role="tab" type="button" data-l="dis" aria-selected="false">Dış etkenler</button>
    </div>
    <div id="l-og" role="tabpanel"><div class="sh ogrSh"><h2>Öğrenme · bulgular ve kural değişiklikleri</h2><p id="lTag">—</p><button class="btn" type="button" data-hg="ogr" title="Son 10 önemli değişiklik ve kararı görsel olarak kopyala">Görsel kopyala</button></div><div id="learn" tabindex="0" aria-label="Öğrenme günlüğü, kaydırılabilir"></div></div>
    <div id="l-pj" role="tabpanel" hidden><div class="sh"><h2>Önümüzdeki hafta projeksiyonu</h2><p id="sPjT">—</p></div><div class="tw"><table id="sPj"></table></div></div>
+   <div id="l-sk" role="tabpanel" hidden><div class="sh"><h2>Sektör hesabı · v1 anlık ve v2 yumuşatılmış, hangisi daha iyi</h2><p id="skTag">—</p></div>
+    <div class="tw"><table id="skT"></table></div>
+    <div class="sh" style="border-top:1px solid var(--line)"><h2>v2 parçaları · geçmiş sıra korelasyonu</h2><p>sonraki haftanın göreli getirisiyle, ortalama</p></div>
+    <div class="tw"><table id="skB"></table></div>
+    <p class="note" id="skN">—</p></div>
    <div id="l-en" role="tabpanel" hidden><div class="sh"><h2>Endeks katmanları · BIST 30 / 50 / 100</h2><p id="bTag">—</p></div>
     <p class="note" style="border-top:0;border-bottom:1px solid var(--line)" id="bHip">—</p>
     <div class="tw"><table id="bRows"></table></div></div>
@@ -721,8 +729,8 @@ const QC={Lider:"ok",Toparlanan:"new",Zayıflayan:"warn",Geride:"bad"};
 function pjGec(p){try{const m=String(p.kontrol).match(/(\d+)\.(\d+)/);if(!m)return false;const n=new Date(Date.now()+3*36e5),k=Date.UTC(n.getUTCFullYear(),+m[2]-1,+m[1]+1),b=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate());return b>=k}catch(e){return false}}
 function sektor(SL){if(!SL)return;const n=Date.now(),sa=(n-tsDM(SL.tarama)+3*36e5)/36e5;txt($("sTag"),`son güncelleme ${SL.tarama}${sa>=24?" · güncel değil":""} · ${SL.veri||""}`);txt($("sHip"),"Hipotez: "+(SL.hipotez||"—"));
  const st=(T,M,ad)=>{if(!M)return;const k=M.kiyas||{};table(T,[[ad,"l"],["Kadran","l"],"1 hafta göreli","Para kayması","Net akış","Skor"],(M.sektorler||[]).slice().sort((a,b)=>b.proj-a.proj).map(s=>r=>{cell(r,s.ad,"l");cell(r,el("span","ch "+(QC[s.kadran]||""),s.kadran),"l");const rw=s.hafta-(k.hafta||0);cell(r,(rw>0?"+":"")+num(rw),"num "+cls(rw));cell(r,(s.kayma>0?"+":"")+num(s.kayma),"num "+cls(s.kayma));cell(r,num(s.net_akis),"num");cell(r,num(s.proj),"num")}))};
- try{rrg($("rrgB"),SL.bist,false);rrg($("rrgU"),SL.abd,true)}catch(e){}
- st($("tbB"),SL.bist,"BIST sektörü");st($("tbU"),SL.abd,"ABD sektörü");
+ SLAST=SL;SLST=st;try{rrg($("rrgU"),SL.abd,true);bistCiz()}catch(e){console.error(e)}
+ st($("tbU"),SL.abd,"ABD sektörü");
  const P=SL.projeksiyon||[],dn=P.filter(p=>p.sonuc==="Doğru"||p.sonuc==="Yanlış");txt($("sPjT"),dn.length?`isabet %${Math.round(dn.filter(p=>p.sonuc==="Doğru").length/dn.length*100)} · ${dn.length} sonuç`:`kontrol ${(P[P.length-1]||{}).kontrol||"—"}`);
  table($("sPj"),[["Sektör","l"],["Piyasa","l"],["Beklenti","l"],"Skor",["Ara durum","l"],["Sonuç","l"]],P.map(p=>r=>{cell(r,p.ad,"l");cell(r,p.piyasa,"l mut");cell(r,el("span","ch "+(p.tur==="güçlü"?"ok":p.tur==="zayıf"?"bad":""),p.beklenti||p.tur),"l");cell(r,num(p.skor),"num");cell(r,p.ara!=null?`${p.ara>0?"+":""}${num(p.ara)} puan · ${p.ara_yon==="doğru"?"beklenen yönde":"ters yönde"}`:"—","l mut");cell(r,p.sonuc==="Bekliyor"?(pjGec(p)?`ölçüm gecikti (${p.kontrol})`:`kontrol ${p.kontrol}`):p.sonuc,"l")}));
  table($("sMk"),[["Gösterge","l"],"Değer","Gün","Hafta","Ay"],(SL.makro||[]).map(m=>r=>{cell(r,m.ad,"l");cell(r,num(m.v),"num");[m.gun,m.hafta,m.ay].forEach(v=>cell(r,(v>0?"+":"")+num(v)+"%","num "+cls(v)))}));
@@ -800,6 +808,32 @@ tvDongu();
 
 
 /* gölge kasa ve rejim (rejim.json: motor/rejim.py üretir, gece görevi yeniler) */
+/* sektör hesabı v2 (sektor2.json: motor/sektor2.py üretir, gece görevi yeniler) */
+let S2=null,SV="v2",SLAST=null,SLST=null;
+const f2=v=>v==null?"—":(v>0?"+":"")+num(v),pc=v=>v==null?"—":"%"+num(v);
+function s2Etkin(){const k=S2&&S2.karar&&S2.karar.surum;return k==="v1"||k==="v2"?k:(S2?SV:"v1")}
+function bistCiz(){const SL=SLAST;if(!SL)return;const v=s2Etkin(),sp=$("rrgBS");
+ if(v==="v2"&&S2&&(S2.sektorler||[]).length){rrg($("rrgB"),{sektorler:S2.sektorler},false,true);txt(sp,"v2 · 5 günlük akış · kesik çizgi = son 5 hafta (ilk 3, son 3, üzerine gelinen) · renk = net akış");
+  table($("tbB"),[["BIST sektörü · v2","l"],["Kadran","l"],"Göreli güç","İvme","Net akış 5g","Skor"],S2.sektorler.map(s=>r=>{cell(r,s.ad,"l");const c=cell(r,el("span","ch "+(QC[s.kadran]||""),s.kadran),"l");if(s.aday)c.title=s.aday+" kadranına geçiş onay bekliyor (sonraki çalışmada aynı kalırsa değişir)";cell(r,f2(s.rs),"num "+cls(s.rs));cell(r,f2(s.ivme),"num "+cls(s.ivme));cell(r,num(s.net_akis),"num "+cls(s.net_akis));cell(r,num(s.skor),"num")}))}
+ else{rrg($("rrgB"),SL.bist,false);txt(sp,"v1 · kıyas: BIST Tüm · balon = hacim payı · renk = net akış");if(SLST)SLST($("tbB"),SL.bist,"BIST sektörü")}
+ s2Bar()}
+function s2Bar(){const b=$("svb");if(!b)return;if(!S2){b.hidden=true;return}b.hidden=false;b.innerHTML="";const k=S2.karar||{},kz=S2.karsilastirma||{},dec=k.surum==="v1"||k.surum==="v2";
+ b.appendChild(el("span",null,dec?`BIST hesabı: ${k.surum==="v2"?"v2 yumuşatılmış":"v1 anlık"} · karar ${k.tarih}: ${k.neden}`:`BIST hesabı · canlı karşılaştırma ${kz.hafta||0}/${kz.gereken||4} hafta, dolunca iyi olan kalır, diğeri kaldırılır:`));
+ if(!dec)[["v2","v2 yumuşatılmış"],["v1","v1 anlık"]].forEach(([v,a])=>{const x=el("button","btn"+(SV===v?" on":""),a);x.type="button";x.onclick=()=>{SV=v;bistCiz()};b.appendChild(x)});
+ b.appendChild(el("span",null,"ABD: v1"))}
+function s2Lab(){if(!S2||!$("skT"))return;const K=S2.karsilastirma||{},T=S2.test||{},k=S2.karar||{},dec=k.surum==="v1"||k.surum==="v2";
+ txt($("skTag"),(dec?`karar verildi: ${k.surum} kalır (${k.tarih})`:`canlı ${K.hafta||0}/${K.gereken||4} hafta · karar bekliyor`)+` · veri günü ${S2.veri_gunu||"—"} · ${S2.zaman||""}`);
+ const sat=(g,a,b,c,d)=>[g,a,b,c,d],R=[];
+ const kz=(g,o)=>{if(!o)return;R.push([g+" · sıra korelasyonu",f2(o.v1&&o.v1.ic),f2(o.v2&&o.v2.ic)]);R.push([g+" · ilk 3 sektör isabeti",pc(o.v1&&o.v1.ust3),pc(o.v2&&o.v2.ust3)]);R.push([g+" · son 3 sektör isabeti",pc(o.v1&&o.v1.alt3),pc(o.v2&&o.v2.alt3)])};
+ kz(`Canlı (${K.hafta||0} hafta)`,K.hafta?K:null);
+ [["son_104","Geçmiş son 104 hafta"],["son_26","Geçmiş son 26 hafta"]].forEach(([a,g])=>{const t=T[a];if(!t)return;R.push([g+" · sıra korelasyonu",f2(t.ic.v1),f2(t.ic.v2)]);R.push([g+" · t değeri (2 üstü anlamlı)",t.t.v1==null?"—":num(t.t.v1),t.t.v2==null?"—":num(t.t.v2)]);R.push([g+" · ilk 3 sektör isabeti",pc(t.ust3.v1),pc(t.ust3.v2)]);R.push([g+" · son 3 sektör isabeti",pc(t.alt3.v1),pc(t.alt3.v2)])});
+ if(T.kadran_degisim)R.push(["Kadran değiştiren sektör oranı (haftadan haftaya, son 26 hafta)",pc(T.kadran_degisim.v1),pc(T.kadran_degisim.v2)]);
+ table($("skT"),[["Ölçüt","l"],"v1 anlık","v2 yumuşatılmış"],R.map(x=>r=>{cell(r,x[0],"l wrapt");cell(r,x[1],"num "+(x[1].startsWith("-")?"dn":""));cell(r,x[2],"num "+(x[2].startsWith("-")?"dn":""))}));
+ const I=(T.son_104||{}).ic||{},J=(T.son_26||{}).ic||{},AD={net5:"Net akış (5 gün)",ivme:"İvme",rs:"Göreli güç",kayma:"Para kayması (5 gün)",uyum:"Uyum"},AG=S2.agirlik||{},AK={net5:"net",ivme:"ivme",rs:"rs",kayma:"kayma",uyum:"uyum"};
+ table($("skB"),[["Parça","l"],"Skor ağırlığı","Son 104 hafta","Son 26 hafta"],Object.keys(AD).map(a=>r=>{cell(r,AD[a],"l");cell(r,num(AG[AK[a]]),"num");cell(r,f2(I[a]),"num "+cls(I[a]));cell(r,f2(J[a]),"num "+cls(J[a]))}));
+ txt($("skN"),(dec?`Karar gerekçesi: ${k.neden} `:"")+"Karar kuralı: 4 canlı hafta dolunca ortalama sıra korelasyonu yüksek olan kalır (fark 0,05 altındaysa ilk 3 + son 3 isabeti, o da eşitse v1 kalır). Kaybeden sürüm sayfadan kaldırılır. Sıra korelasyonu 0 rastgele, +1 kusursuz demektir; 0,10 altı ayırt edici değildir. "+(S2.not||"")+" ABD sektörleri v1 ile devam eder.")}
+function s2Yukle(){fetch("sektor2.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.sektorler){S2=j;try{bistCiz();s2Lab()}catch(e){console.error(e)}}}).catch(()=>{})}
+s2Yukle();setInterval(s2Yukle,600000);
 let RJ=null;
 const gP=(v,d)=>v==null||isNaN(v)?"—":(v>=0?"+":"")+Number(v).toFixed(d==null?1:d).replace(".",",")+"%";
 const gRj={dusus:["Düşüş","bad"],yatay:["Yatay","warn"],yukselis:["Yükseliş","ok"],karma:["Karma","warn"]};
@@ -915,15 +949,18 @@ setTimeout(tur,1500);setInterval(tur,60000)})();
 const QK={Lider:"L",Toparlanan:"T",Zayıflayan:"Z",Geride:"G"};
 const UK={"ElectronicTechnology":"ELK","Communications":"İLT","Non-EnergyMinerals":"MAD","RetailTrade":"PER","ConsumerServices":"TKH","ProducerManufacturing":"İML","HealthTechnology":"SĞT","DistributionServices":"DAĞ","Utilities":"KAM","ProcessIndustries":"PRO","ConsumerNon-Durables":"DTK","CommercialServices":"TİC","HealthServices":"SĞH","IndustrialServices":"END","Miscellaneous":"DİĞ","Finance":"FİN","Transportation":"ULŞ","TechnologyServices":"TEK","ConsumerDurables":"DYT","EnergyMinerals":"ENJ"};
 const kis=(s,us)=>us?(UK[s.kod]||s.kod.slice(0,3)):s.kod.replace(/^X/,"");
-function rrg(svg,M,us){if(!svg||!M)return;const S=M.sektorler||[];const ns="http://www.w3.org/2000/svg";svg.innerHTML="";const W=440,H=300,l=40,r=14,t=24,b=34,pw=W-l-r,ph=H-t-b;
+function rrg(svg,M,us,iz){if(!svg||!M)return;const S=M.sektorler||[];const ns="http://www.w3.org/2000/svg";svg.innerHTML="";const W=440,H=300,l=40,r=14,t=24,b=34,pw=W-l-r,ph=H-t-b;
  const nice=v=>{const c=[1,2,2.5,5,10,15,20,25,30];for(const x of c)if(v<=x)return x;return Math.ceil(v/10)*10};const X=nice(Math.max(...S.map(s=>Math.abs(s.rs)))*1.08),Y=nice(Math.max(...S.map(s=>Math.abs(s.ivme)))*1.08);
  const sx=v=>l+(v+X)/(2*X)*pw,sy=v=>t+(Y-v)/(2*Y)*ph;const el=(n,a,p)=>{const e=document.createElementNS(ns,n);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
  [["Lider",sx(0),t,"rgba(53,225,162,.07)","var(--g)","end",sx(X)-6,t+14],["Toparlanan",l,t,"rgba(70,194,255,.07)","var(--b)","start",l+6,t+14],["Geride",l,sy(0),"rgba(255,93,109,.06)","var(--r)","start",l+6,t+ph-6],["Zayıflayan",sx(0),sy(0),"rgba(246,186,76,.06)","var(--y)","end",sx(X)-6,t+ph-6]].forEach(([n,x0,y0,f,c,an,tx,ty])=>{el("rect",{x:x0,y:y0,width:pw/2,height:ph/2,fill:f});const q=el("text",{x:tx,y:ty,"text-anchor":an,class:"ql",fill:c});q.textContent=n.toLocaleUpperCase("tr-TR")});
  [-X,-X/2,0,X/2,X].forEach(v=>{el("line",{x1:sx(v),x2:sx(v),y1:t,y2:t+ph,stroke:v===0?"rgba(151,168,187,.45)":"rgba(151,168,187,.12)","stroke-width":1});const a=el("text",{x:sx(v),y:t+ph+14,"text-anchor":"middle",class:"ax"});a.textContent=(v>0?"+":"")+num(v)});
  [-Y,-Y/2,0,Y/2,Y].forEach(v=>{el("line",{x1:l,x2:l+pw,y1:sy(v),y2:sy(v),stroke:v===0?"rgba(151,168,187,.45)":"rgba(151,168,187,.12)","stroke-width":1});const a=el("text",{x:l-6,y:sy(v)+3,"text-anchor":"end",class:"ax"});a.textContent=(v>0?"+":"")+num(v)});
  const xl=el("text",{x:l+pw,y:H-2,"text-anchor":"end",class:"ax"});xl.textContent="göreli güç · 1 ay (puan) →";const yl=el("text",{x:l,y:12,class:"ax"});yl.textContent="↑ ivme";
+ const TG={};const kx=v=>Math.min(l+pw,Math.max(l,sx(v))),ky=v=>Math.min(t+ph,Math.max(t,sy(v)));
+ if(iz)S.forEach((s,si)=>{const z=s.iz||[];if(z.length<2)return;const c=s.net_akis>=0?"53,225,162":"255,93,109",on=si<3||si>=S.length-3;const g=el("g",{});g.style.opacity=on?".9":"0";g.style.transition="opacity .15s";g.style.pointerEvents="none";TG[s.kod]=[g,on];el("polyline",{points:z.map(p=>kx(p.rs).toFixed(1)+","+ky(p.iv).toFixed(1)).join(" "),fill:"none",stroke:`rgba(${c},.5)`,"stroke-width":1.4,"stroke-linejoin":"round","stroke-dasharray":"3 2"},g);z.slice(0,-1).forEach((p,k)=>el("circle",{cx:kx(p.rs),cy:ky(p.iv),r:1.4+k*.35,fill:`rgba(${c},.7)`},g))});
  S.slice().sort((a,b)=>b.pay-a.pay).forEach((s,i)=>{const g=el("g",{class:"bub"});g.style.animationDelay=`${i*40}ms,${(i%7)*.5}s`;const rad=4+Math.sqrt(Math.max(.01,s.pay))*2.4,cx=sx(s.rs),cy=sy(s.ivme),c=s.net_akis>=0?"53,225,162":"255,93,109";
   el("circle",{cx,cy,r:rad,fill:`rgba(${c},.35)`,stroke:`rgba(${c},.95)`,"stroke-width":1.3},g);if(s.pay>=1.5||Math.abs(s.rs)>X*.3||Math.abs(s.ivme)>Y*.3){const tx=el("text",{x:cx,y:cy-rad-3,"text-anchor":"middle",class:"bl"},g);tx.textContent=kis(s,us)}
+  if(TG[s.kod]){g.addEventListener("mouseenter",()=>{TG[s.kod][0].style.opacity=".95"});g.addEventListener("mouseleave",()=>{TG[s.kod][0].style.opacity=TG[s.kod][1]?".9":"0"})}
   const ti=el("title",{},g);ti.textContent=`${s.ad} · ${s.kadran}\ngöreli güç ${num(s.rs)} · ivme ${num(s.ivme)}\nhacim payı %${num(s.pay)} (kayma ${s.kayma>0?"+":""}${num(s.kayma)}) · net akış ${num(s.net_akis)}\nuyum %${Math.round(s.uyum*100)} · ${s.n} hisse`;svg.appendChild(g)})}
 </script>
 <script>

@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""Sektör rotasyonu v2 - yumuşatılmış ve hafızalı hesap (25.11, kullanıcı kararı). Yalnızca BIST. Çıktı: sektor2.json (sayfa okur).
+v1 (mevcut): ivme, para kayması, net akış ve uyum tek günün anlık verisinden; sektör getirisi piyasa değeri ağırlıklı, tek hisse sınırı yok.
+v2 (bu dosya), 5 yıllık günlük mumlardan:
+ 1) Hisse tavanı: sektör içinde tek hissenin ağırlığı en fazla %25 (10 hisseden az sektörde ağırlık yarı yarıya eşit ağırlığa çekilir).
+ 2) Göreli güç: sektör endeksinin kıyas endeksine oranının 21 günlük değişimi, son 5 günün ortalaması (yumuşatılmış). İvme: bu değerin 5 günlük değişimi (RRG mantığı).
+ 3) Akış: net akış ve para kayması son 5 işlem gününün hacim ağırlıklı toplamından; para kayması son 5 günün pazar payı eksi önceki 20 günün payı.
+ 4) Skor ağırlıkları: net akış 1, ivme 0,5, göreli güç 0,5, para kayması 0,25, uyum 0,25 (z-puanı toplamı).
+ 5) Kadran dayanıklılığı: kadran ancak iki ardışık çalışmada aynı yeni kadranda kalırsa değişir (önceki durum sektor2.json içinde tutulur).
+ 6) Kuyruk: her sektör için son 5 haftanın (göreli güç, ivme) noktaları.
+Geçmiş sınaması: aynı günlük veriyle v1 benzeri (anlık) hesap ile v2, son N haftada sonraki haftanın göreli getirisini ne kadar sıraladı (Spearman, ilk 3 isabeti).
+Canlı karşılaştırma: her cuma gecesi iki sürümün skoru kaydedilir; sonraki cuma aynı ölçüyle (kendi günlük sektör serisi) sonuçlanır. 4 hafta dolunca kazanan otomatik seçilir.
+Kullanım: python3 -I sektor2.py --lab lab.py --radar radar.py --veri veri.json --onceki sektor2.json --cikti sektor2.json"""
+import argparse, importlib.util, json, math, sys, time, os, datetime as dt
+import numpy as np, pandas as pd
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--lab", default="lab.py"); ap.add_argument("--radar", default="radar.py"); ap.add_argument("--veri", default="veri.json")
+ap.add_argument("--onceki", default="sektor2.json"); ap.add_argument("--cikti", default="sektor2.json")
+ap.add_argument("--sinir", type=int, default=0); ap.add_argument("--test_hafta", type=int, default=104)
+ap.add_argument("--karar_hafta", type=int, default=4); ap.add_argument("--bugun", default="")
+a = ap.parse_args()
+
+def yukle(yol, ad):
+    sp = importlib.util.spec_from_file_location(ad, yol); m = importlib.util.module_from_spec(sp); sys.modules[ad] = m; sp.loader.exec_module(m); return m
+lab = yukle(a.lab, "lab"); RAD = yukle(a.radar, "radar_mod")
+t0 = time.time()
+TAVAN, YUM, KARAR_HAFTA = 0.25, 0.5, a.karar_hafta
+AGIRLIK = {"net": 1.0, "ivme": 0.5, "rs": 0.5, "kayma": 0.25, "uyum": 0.25}
+
+def oku(yol):
+    try: return json.load(open(yol, encoding="utf-8"))
+    except Exception: return {}
+ONC = oku(a.onceki); VERI = oku(a.veri)
+
+# ------------------------------------------------------------ üyelik ve piyasa değeri
+cols = ["name", "market_cap_basic", "indexes"]
+j = RAD.scan("turkey", {"filter": [{"left": "type", "operation": "equal", "right": "stock"}, {"left": "exchange", "operation": "equal", "right": "BIST"}],
+                        "markets": ["turkey"], "columns": cols, "range": [0, 1500]})
+UY = {}; MC = {}
+for o in RAD.rows(j, cols):
+    ix = [i.get("proname", "") for i in (o.get("indexes") or [])]
+    s = next((s for s in RAD.BIST_SEK if "BIST:" + s in ix), None)
+    if s and o.get("market_cap_basic"): UY[o["name"]] = s; MC[o["name"]] = float(o["market_cap_basic"])
+kods = sorted(UY)
+if a.sinir: kods = kods[:a.sinir]
+G = lab.indir(kods, "1d", "5y")
+if len(G) < 200: print(f"SEKTÖR2: veri alınamadı ({len(G)} hisse)"); sys.exit(1)
+def gun(ix): return pd.DatetimeIndex(ix).tz_localize(None).normalize()
+for k in G: G[k].index = gun(G[k].index); G[k] = G[k][~G[k].index.duplicated(keep="last")]
+C = pd.DataFrame({k: v["c"] for k, v in G.items()}).sort_index()
+V = pd.DataFrame({k: v["v"] for k, v in G.items()}).reindex(C.index)
+RET = C.pct_change(fill_method=None).clip(-0.5, 0.5)
+TUR = (C * V).where(C.notna())
+SIGN = np.sign(RET)
+print(f"SEKTÖR2: {len(G)} hisse, {len(C)} gün, son gün {C.index[-1].date()}, {int(time.time()-t0)} sn")
+if a.bugun: BUGUN = pd.Timestamp(a.bugun)
+else: BUGUN = C.index[-1]
+
+# ------------------------------------------------------------ ağırlıklar (tavan %25)
+def tavanla(w, tav):
+    w = np.array(w, float); w = w / w.sum()
+    for _ in range(50):
+        fazla = w > tav + 1e-12
+        if not fazla.any(): break
+        w[fazla] = tav; ser = ~fazla
+        if not ser.any(): break
+        w[ser] = w[ser] / w[ser].sum() * (1 - tav * fazla.sum())
+    return w
+SEK = {}
+for k in C.columns: SEK.setdefault(UY[k], []).append(k)
+SEK = {s: L for s, L in SEK.items() if len(L) >= 4}
+W = {}
+for s, L in SEK.items():
+    w = tavanla([MC[k] for k in L], TAVAN); n = len(L)
+    if n < 10: w = YUM * w + (1 - YUM) * np.ones(n) / n
+    W[s] = pd.Series(w, index=L)
+TUM = list(C.columns)
+WB = pd.Series(tavanla([MC[k] for k in TUM], 0.05), index=TUM)
+print(f"SEKTÖR2: {len(SEK)} sektör, kıyas {len(TUM)} hisse")
+
+def agirlikli(R, w):
+    M = R[w.index]; ok = M.notna()
+    ww = ok.mul(w, axis=1); tot = ww.sum(axis=1)
+    return (M.fillna(0) * ww).sum(axis=1) / tot.replace(0, np.nan)
+RS = pd.DataFrame({s: agirlikli(RET, W[s]) for s in SEK}).fillna(0)
+RB = agirlikli(RET, WB).fillna(0)
+L_s = (1 + RS).cumprod(); L_b = (1 + RB).cumprod()
+ORAN = L_s.div(L_b, axis=0)
+
+# ------------------------------------------------------------ yumuşatılmış göstergeler (v2)
+rel21 = (ORAN / ORAN.shift(21) - 1) * 100
+rs2 = rel21.rolling(5).mean()
+iv2 = rs2 - rs2.shift(5)
+DS = pd.DataFrame({s: TUR[SEK[s]].sum(axis=1, min_count=1) for s in SEK}).fillna(0)       # sektör günlük ciro
+NS = pd.DataFrame({s: (TUR[SEK[s]] * SIGN[SEK[s]]).sum(axis=1, min_count=1) for s in SEK}).fillna(0)
+DT = DS.sum(axis=1)
+net5 = NS.rolling(5).sum() / DS.rolling(5).sum().replace(0, np.nan)
+pay5 = DS.rolling(5).sum().div(DT.rolling(5).sum().replace(0, np.nan), axis=0)
+pay20 = (DS.rolling(20).sum().shift(5)).div(DT.rolling(20).sum().shift(5).replace(0, np.nan), axis=0)
+kay5 = (pay5 - pay20) * 100
+R5 = (C / C.shift(5) - 1)
+uy5 = pd.DataFrame({s: ((np.sign(R5[SEK[s]]).mul(np.sign((L_s[s] / L_s[s].shift(5) - 1)), axis=0)) > 0).where(R5[SEK[s]].notna()).mean(axis=1) for s in SEK})
+
+def z(df, tarih):
+    x = df.loc[tarih]; sd = x.std(ddof=0)
+    return (x - x.mean()) / (sd if sd and sd == sd else 1)
+def skor_v2(t):
+    return AGIRLIK["net"] * z(net5, t) + AGIRLIK["ivme"] * z(iv2, t) + AGIRLIK["rs"] * z(rs2, t) + AGIRLIK["kayma"] * z(kay5, t) + AGIRLIK["uyum"] * z(uy5, t)
+
+# ------------------------------------------------------------ v1 benzeri (anlık, günlük veriyle yeniden kurulmuş)
+rs1 = (L_s / L_s.shift(21) - 1).sub(L_b / L_b.shift(21) - 1, axis=0) * 100
+hf = (L_s / L_s.shift(5) - 1).sub(L_b / L_b.shift(5) - 1, axis=0) * 100
+mom1 = hf - rs1 / 4.3
+pay_g = DS.div(DT, axis=0)
+kay1 = (pay_g - pay_g.rolling(10).mean().shift(1)) * 100
+net1 = NS / DS.replace(0, np.nan)
+uy1 = pd.DataFrame({s: ((SIGN[SEK[s]].mul(np.sign(RS[s]), axis=0)) > 0).where(RET[SEK[s]].notna()).mean(axis=1) for s in SEK})
+def skor_v1(t): return z(mom1, t) + z(kay1, t) + 0.5 * z(net1, t) + 0.5 * z(uy1, t)
+
+# ------------------------------------------------------------ haftalık tarihler ve ileri getiri
+IDX = C.index
+haftalik = pd.Series(IDX, index=IDX).groupby([IDX.isocalendar().year.values, IDX.isocalendar().week.values]).last().values
+haftalik = pd.DatetimeIndex(haftalik)
+def ileri(t0_, t1_):
+    r = (L_s.loc[t1_] / L_s.loc[t0_] - 1) - (L_b.loc[t1_] / L_b.loc[t0_] - 1)
+    return r * 100
+def spearman(x, y):
+    d = pd.concat([x, y], axis=1).dropna()
+    return float(d.iloc[:, 0].rank().corr(d.iloc[:, 1].rank())) if len(d) >= 8 else None
+def ortalama(L): L = [v for v in L if v is not None]; return (sum(L) / len(L)) if L else None
+def tstat(L):
+    L = [v for v in L if v is not None]
+    if len(L) < 5: return None
+    sd = float(np.std(L, ddof=1)); return float(np.mean(L) / (sd / math.sqrt(len(L)))) if sd else None
+
+def test_calis(nh):
+    ic = {"v1": [], "v2": [], "net5": [], "ivme": [], "rs": [], "kayma": [], "uyum": []}; ust = {"v1": [], "v2": []}; alt = {"v1": [], "v2": []}
+    uzun = haftalik[(haftalik > IDX[60])]; uzun = uzun[:-1]
+    uzun = uzun[-nh:]
+    for t in uzun:
+        n_ = haftalik[haftalik.get_loc(t) + 1]; fw = ileri(t, n_)
+        S1, S2 = skor_v1(t), skor_v2(t)
+        ic["v1"].append(spearman(S1, fw)); ic["v2"].append(spearman(S2, fw))
+        for ad, df in (("net5", net5), ("ivme", iv2), ("rs", rs2), ("kayma", kay5), ("uyum", uy5)): ic[ad].append(spearman(df.loc[t], fw))
+        for ad, S in (("v1", S1), ("v2", S2)):
+            top = S.sort_values(ascending=False).index[:3]; bot = S.sort_values().index[:3]
+            ust[ad].append(float((fw[top] > 0).mean())); alt[ad].append(float((fw[bot] < 0).mean()))
+    n = len(uzun)
+    ozet = lambda L: None if ortalama(L) is None else round(ortalama(L), 3)
+    return {"hafta": n, "ilk": str(uzun[0].date()) if n else None, "son": str(uzun[-1].date()) if n else None,
+            "ic": {k: ozet(v) for k, v in ic.items()}, "t": {k: (None if tstat(v) is None else round(tstat(v), 2)) for k, v in ic.items() if k in ("v1", "v2")},
+            "ust3": {k: (None if ortalama(v) is None else round(ortalama(v) * 100, 1)) for k, v in ust.items()},
+            "alt3": {k: (None if ortalama(v) is None else round(ortalama(v) * 100, 1)) for k, v in alt.items()}}
+TEST = {"son_104": test_calis(a.test_hafta), "son_26": test_calis(26)}
+# kadran değişim oranı (haftadan haftaya): v1 benzeri anlık ve v2 ham (histerezissiz)
+def kad(rs_, iv_, t): return ((rs_.loc[t] >= 0).astype(int) * 2 + (iv_.loc[t] >= 0).astype(int))
+def degisim(rs_, iv_):
+    L = []
+    for t0_, t1_ in zip(haftalik[-27:-1], haftalik[-26:]): L.append(float((kad(rs_, iv_, t0_) != kad(rs_, iv_, t1_)).mean()))
+    return round(ortalama(L) * 100, 1)
+TEST["kadran_degisim"] = {"v1": degisim(rs1, mom1), "v2": degisim(rs2, iv2)}
+print("SEKTÖR2 TEST son 104 hafta:", json.dumps(TEST["son_104"], ensure_ascii=False))
+print("SEKTÖR2 TEST son 26 hafta :", json.dumps(TEST["son_26"], ensure_ascii=False)); print("SEKTÖR2 kadran değişim %:", TEST["kadran_degisim"])
+
+# ------------------------------------------------------------ bugünkü görünüm
+t = BUGUN
+def kadran_ham(r_, i_): return ("Lider" if i_ >= 0 else "Zayıflayan") if r_ >= 0 else ("Toparlanan" if i_ >= 0 else "Geride")
+oncek = {x["kod"]: x for x in (ONC.get("sektorler") or [])}
+S2 = skor_v2(t); out = []
+for s in SEK:
+    ham = kadran_ham(float(rs2.loc[t, s]), float(iv2.loc[t, s])); o = oncek.get(s)
+    kadran, aday, say = ham, None, 0
+    if o and o.get("kadran"):
+        if ham == o["kadran"]: kadran, aday, say = ham, None, 0
+        elif o.get("aday") == ham and (o.get("say") or 0) >= 1: kadran, aday, say = ham, None, 0                      # ikinci ardışık çalışma: değişim onaylanır
+        elif o.get("aday") == ham: kadran, aday, say = o["kadran"], ham, (o.get("say") or 0) + 1
+        else: kadran, aday, say = o["kadran"], ham, 1
+    iz = []
+    for k in range(4, -1, -1):
+        ti = IDX[max(IDX.get_loc(t) - 5 * k, 0)]
+        iz.append({"g": str(ti.date()), "rs": round(float(rs2.loc[ti, s]), 2), "iv": round(float(iv2.loc[ti, s]), 2)})
+    w = W[s]
+    out.append({"kod": s.replace(" ", ""), "ad": RAD.SEK_AD.get(s, s), "n": len(SEK[s]), "rs": round(float(rs2.loc[t, s]), 2), "ivme": round(float(iv2.loc[t, s]), 2),
+                "kadran": kadran, "kadran_ham": ham, "aday": aday, "say": say, "net_akis": round(float(net5.loc[t, s]), 2), "kayma": round(float(kay5.loc[t, s]), 2),
+                "uyum": round(float(uy5.loc[t, s]), 2), "pay": round(float(pay5.loc[t, s]) * 100, 2), "skor": round(float(S2[s]), 2),
+                "hafta": round(float(hf.loc[t, s]), 2), "ay": round(float(rs1.loc[t, s]), 2), "en_buyuk": round(float(w.max()) * 100, 1), "iz": iz})
+out.sort(key=lambda x: -x["skor"])
+kiy = {"hafta": round(float(((L_b.loc[t] / L_b.shift(5).loc[t]) - 1) * 100), 2), "ay": round(float(((L_b.loc[t] / L_b.shift(21).loc[t]) - 1) * 100), 2)}
+
+# ------------------------------------------------------------ canlı karşılaştırma (cuma kaydı)
+HAF = list(ONC.get("haftalar") or [])
+kayit = {h["tarih"]: h for h in HAF}
+# 1) bekleyen haftaları sonuçlandır
+for h in HAF:
+    if h.get("realized"): continue
+    bt = pd.Timestamp(h["tarih"]); sonraki = haftalik[haftalik > bt]
+    if len(sonraki) and sonraki[0] <= t and bt in L_s.index:
+        n_ = sonraki[0]; fw = ileri(bt, n_)
+        h["bitis"] = str(n_.date()); h["realized"] = {k: round(float(v), 2) for k, v in fw.items()}
+        for sur in ("v1", "v2"):
+            sc = pd.Series(h[sur]); ic_ = spearman(sc, fw)
+            top = sc.sort_values(ascending=False).index[:3]; bot = sc.sort_values().index[:3]
+            h["sonuc_" + sur] = {"ic": None if ic_ is None else round(ic_, 3), "ust3": round(float((fw.reindex(top) > 0).mean()) * 100, 1), "alt3": round(float((fw.reindex(bot) < 0).mean()) * 100, 1)}
+# 2) bugün cumaysa yeni haftayı kaydet (v1 skoru canlı radar anlık görüntüsünden)
+if t.weekday() == 4 and str(t.date()) not in kayit:
+    v1c = {x["kod"]: x.get("proj") for x in (((VERI.get("sektor_lab") or {}).get("bist") or {}).get("sektorler") or []) if x.get("proj") is not None}
+    ortak = [s for s in S2.index if s.replace(" ", "") in v1c]
+    if len(ortak) >= 15:
+        HAF.append({"tarih": str(t.date()), "v1": {s: round(float(v1c[s.replace(" ", "")]), 2) for s in ortak}, "v2": {s: round(float(S2[s]), 3) for s in ortak}, "realized": None})
+        print(f"SEKTÖR2: hafta kaydedildi {t.date()} ({len(ortak)} sektör)")
+    else: print("SEKTÖR2: v1 skoru bulunamadı, hafta kaydedilmedi")
+HAF = HAF[-30:]
+bitti = [h for h in HAF if h.get("realized")]
+def ort(ad, alan): return ortalama([h["sonuc_" + ad][alan] for h in bitti])
+KARS = {"hafta": len(bitti), "gereken": KARAR_HAFTA,
+        "v1": {"ic": None if not bitti else round(ort("v1", "ic"), 3), "ust3": None if not bitti else round(ort("v1", "ust3"), 1), "alt3": None if not bitti else round(ort("v1", "alt3"), 1)},
+        "v2": {"ic": None if not bitti else round(ort("v2", "ic"), 3), "ust3": None if not bitti else round(ort("v2", "ust3"), 1), "alt3": None if not bitti else round(ort("v2", "alt3"), 1)}}
+# 3) karar: 4 hafta dolunca. Önce ortalama sıra korelasyonu (fark >= 0,05), eşitse üst-3 + alt-3 isabeti, hâlâ eşitse mevcut v1 kalır.
+def vir(x): return f"{x:+.2f}".replace(".", ",")
+KARAR = ONC.get("karar") or {"surum": "bekliyor"}
+if KARAR.get("surum") == "bekliyor" and len(bitti) >= KARAR_HAFTA:
+    d_ic = KARS["v2"]["ic"] - KARS["v1"]["ic"]
+    if abs(d_ic) >= 0.05: kaz = "v2" if d_ic > 0 else "v1"; neden = f"ortalama sıra korelasyonu v1 {vir(KARS['v1']['ic'])}, v2 {vir(KARS['v2']['ic'])}"
+    else:
+        i1 = KARS["v1"]["ust3"] + KARS["v1"]["alt3"]; i2 = KARS["v2"]["ust3"] + KARS["v2"]["alt3"]
+        if abs(i2 - i1) >= 2: kaz = "v2" if i2 > i1 else "v1"; neden = f"sıra korelasyonu yakın ({vir(KARS['v1']['ic'])} / {vir(KARS['v2']['ic'])}); ilk 3 + son 3 isabeti v1 %{i1/2:.0f}, v2 %{i2/2:.0f}"
+        else: kaz = "v1"; neden = "iki ölçüt de eşit çıktı; mevcut v1 korundu"
+    zayif = " İki sürüm de ayırt edici değil (ortalama sıra korelasyonu 0,10 altında); kazanan yalnızca göreli olarak daha iyi." if max(KARS["v1"]["ic"], KARS["v2"]["ic"]) < 0.10 else ""
+    KARAR = {"surum": kaz, "tarih": str(t.date()), "hafta": len(bitti), "neden": neden + "." + zayif, "v1": KARS["v1"], "v2": KARS["v2"]}
+    print("SEKTÖR2 KARAR:", json.dumps(KARAR, ensure_ascii=False))
+
+# ------------------------------------------------------------ projeksiyon (v2 skoruyla; yalnızca karar v2 ise sayfada ve görevde kullanılır)
+proj = []
+for tur, L_, bek in (("güçlü", out[:3], "endeksten iyi"), ("zayıf", out[::-1][:3], "endeksten kötü")):
+    for x in L_: proj.append({"piyasa": "BIST", "kod": x["kod"], "ad": x["ad"], "tur": tur, "kadran": x["kadran"], "skor": x["skor"], "beklenti": bek})
+
+cikti = {"surum": "v2", "zaman": dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%d.%m %H:%M"), "veri_gunu": str(t.date()),
+         "yontem": "v2: hisse tavanı %25 (10 hisseden azda eşit ağırlığa yarı çekim), göreli güç 21 günlük oran değişimi 5 gün ortalama, ivme 5 günlük değişim, net akış ve para kayması 5 günlük, kadran iki ardışık çalışmada onaylanır.",
+         "agirlik": AGIRLIK, "kiyas": kiy, "sektorler": out, "projeksiyon": proj, "test": TEST, "haftalar": HAF, "karsilastirma": KARS, "karar": KARAR,
+         "not": "Geçmiş sınama bugünkü sektör üyeliği ve piyasa değeriyle günlük veriden kurulur; v1 benzeri hesap canlı v1'in (seans içi anlık veri) günlük karşılığıdır, birebir aynısı değildir."}
+json.dump(cikti, open(a.cikti, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+print(f"SEKTÖR2: {len(out)} sektör, canlı hafta {len(bitti)}/{KARAR_HAFTA}, karar {KARAR.get('surum')}, {int(time.time()-t0)} sn")
+for x in out[:5]: print("  ", x["kod"], x["kadran"], "skor", x["skor"], "rs", x["rs"], "iv", x["ivme"], "net5", x["net_akis"])
