@@ -236,5 +236,33 @@
    "ornek": 3272,
    "durum": "test"
   }
+ },
+ {
+  "id": "sakin_hacim_patlamasi",
+  "aciklama": "Oynaklık düşükken (ATR %3 altı) hacim 2 katına çıkıp gün yükseğine yakın kapanış",
+  "kod": "ek(\"sakin_hacim_patlamasi\", \"Oynaklık düşükken (ATR %3 altı) hacim 2 katına çıkıp gün yükseğine yakın kapanış\", lambda d: (d.atrp < 0.03) & (d.rv >= 2) & (d.clpos >= 0.7))",
+  "tarih": "26.11",
+  "ilk_olcum": {
+   "oran": 0.2559,
+   "stop": 0.2748,
+   "fark": 0.0235,
+   "getiri_fark": 0.468,
+   "ornek": 1430,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "lider_sektor_geri_kalan",
+  "aciklama": "Sektörü son 20 günde ilk 5'te, hisse yıllık tepenin %15+ altında ve yeşil mum",
+  "kod": "ek(\"lider_sektor_geri_kalan\", \"Sektörü son 20 günde ilk 5'te, hisse yıllık tepenin %15+ altında ve yeşil mum\", lambda d: (d.sek_sira <= 5) & (d.dist250 <= -0.15) & (d.govde > 0.01))",
+  "tarih": "26.11",
+  "ilk_olcum": {
+   "oran": 0.2679,
+   "stop": 0.4009,
+   "fark": 0.0355,
+   "getiri_fark": 0.15,
+   "ornek": 19278,
+   "durum": "test"
+  }
  }
 ]

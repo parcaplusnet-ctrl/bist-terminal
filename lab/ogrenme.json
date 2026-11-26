@@ -34,5 +34,11 @@
   "tarih": "25.11",
   "bulgu": "Özellik laboratuvarı: tur 14, 554 özellik ölçüldü, 8 kullanılıyor, 27 elendi; durum değişikliği yok (8 kullanılıyor aynı). Bu turda 23 yeni özellik denendi; en iyisi: Fiyat yıllık tepeye %5'ten yakın, hacim ortalamanın 1,5 katı ve üstü, gün yükseğine yakın kapanış + Supertrend bugün yukarı döndü (+%5 oranı %37, taban %23, 158 örnek).",
   "degisim": "Yeni özellikler: tepe_hacimli_kapanis (oran %33, taban %23, fark +%9,7, test: elenmeye yakın değil ama ileri test -%3,2), dusus_sonrasi_bosluk (oran %27, getiri farkı negatif); ikisi de test aşamasında."
+ },
+ {
+  "no": 7,
+  "tarih": "26.11",
+  "bulgu": "Özellik laboratuvarı: tur 16, 597 özellik ölçüldü, 8 tanesi kullanılıyor (hepsi genis_alim + gün +%5/+%9,5 kombinasyonları), 28 elendi, 17 az örnek. Bugün hiçbir hisse kullanılan özellikleri taşımadı (lab puanı 0 hisse). Durum değişimi yok.",
+  "degisim": "2 yeni özellik önerildi: sakin_hacim_patlamasi (+%5 oranı %25,6, stop %27,5, fark +2,4 puan, 1430 örnek, test) ve lider_sektor_geri_kalan (+%5 oranı %26,8, stop %40,1, fark +3,6 puan, 19278 örnek, test)."
  }
 ]
