@@ -3057,7 +3057,7 @@
    ]
   }
  },
- "guncelleme": "26.11 17:22",
+ "guncelleme": "26.11 21:46",
  "gun_sayisi": 7,
  "nedenler": {
   "CATES": {
@@ -3074,7 +3074,7 @@
   },
   "ISVEA": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: VBTS ile açığa satış ve kredili işlem yasağı (24.11)"
+   "neden": "olumsuz: VBTS tedbiri (açığa satış ve kredili işlem yasağı) 24.11'de duyuruldu"
   },
   "PRZMA": {
    "tarih": "2026-11-23",
@@ -3082,7 +3082,7 @@
   },
   "DUNYH": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: VBTS ile açığa satış ve kredili işlem yasağı (25.11 - 24.12)"
+   "neden": "olumsuz: VBTS tedbiri (açığa satış ve kredili işlem yasağı) duyuruldu"
   },
   "CGCAM": {
    "tarih": "2026-11-24",
@@ -3154,7 +3154,7 @@
   },
   "LYDHO": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: VBTS ile açığa satış ve kredili işlem yasağı (25.11 - 24.12)"
+   "neden": "olumsuz: VBTS tedbiri (açığa satış ve kredili işlem yasağı) duyuruldu"
   },
   "BRKO": {
    "tarih": "2026-11-24",
@@ -3218,11 +3218,11 @@
   },
   "KATMR": {
    "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket (son haber 09.11 bilanço, net kâr düşmüş)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "TGSAS": {
    "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket (son haber 09.11 bilanço, zarardan kâra)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "SAFKR": {
    "tarih": "2026-11-25",
@@ -3238,7 +3238,7 @@
   },
   "VANGD": {
    "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket (18.11 Dr Nar Gıda devri haberi var, bugünle bağı belirsiz)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "SEGMN": {
    "tarih": "2026-11-25",
@@ -3246,15 +3246,15 @@
   },
   "PENTA": {
    "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket (04.11 ciro +%26 artış haberi eski)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "GENIL": {
    "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket (16.11 Seleda Biyogaz alımı eski)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "EFOR": {
    "tarih": "2026-11-25",
-   "neden": "olumlu: 2 milyar TL pay geri alım programı (18.11), olası destek"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "BFREN": {
    "tarih": "2026-11-25",
@@ -3266,11 +3266,11 @@
   },
   "ODINE": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: VBTS ile açığa satış ve kredili işlem yasağı (25.11 - 24.12)"
+   "neden": "olumsuz: VBTS tedbiri (açığa satış ve kredili işlem yasağı) duyuruldu"
   },
   "KARTN": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: VBTS tedbiri (10.11) ve endeks düşüşü"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "TKNKA": {
    "tarih": "2026-11-25",
@@ -3278,7 +3278,11 @@
   },
   "PASEU": {
    "tarih": "2026-11-25",
-   "neden": "olumsuz: Pasifik Grubu hakkındaki iddialar (19.11)"
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ENDAE": {
+   "tarih": "2026-11-25",
+   "neden": "olumlu: Romanya'da üç proje devralımı için doğrudan yabancı yatırım komisyonu onayı alındı"
   }
  },
  "surpriz_haber": {
@@ -5650,77 +5654,77 @@
  "karar_gunlugu": [],
  "oto_seri": {
   "1 ay=≥+%25": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "modül Hacim=+|modül RSI-MACD=+": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "modül Hacim=+|teknik 1S=Al": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "gün=<-%3": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "gün=<-%3|hafta=<-%5": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "1 ay zirve=zirveye >%15|gün=<-%3": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "gün=<-%3|puan=<3": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "3P kriter=0-3|gün=<-%3": {
-   "gun": "2026-11-25",
-   "sayi": 2
+   "gun": "2026-11-26",
+   "sayi": 3
   },
   "1 ay=≥+%25|günlük trend=aşağı": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|günlük trend=aşağı": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|teknik G=Sat": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|puan=<3": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|teknik 4S=Sat": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|3P kriter=0-3": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|likidite (günlük ciro)=≥100 mn": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "1 ay=+%10/+%25|teknik 1S=Sat": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "likidite (günlük ciro)=<5 mn": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   },
   "likidite (günlük ciro)=<5 mn|teknik 4S=Güçlü Sat": {
-   "gun": "2026-11-25",
-   "sayi": 1
+   "gun": "2026-11-26",
+   "sayi": 2
   }
  },
- "oto_son": "25.11 21:46"
+ "oto_son": "26.11 21:46"
 }
