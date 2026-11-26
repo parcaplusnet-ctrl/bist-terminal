@@ -1,14 +1,21 @@
 {
  "surum": "model_canli",
- "zaman": "25.11 21:49",
+ "zaman": "26.11 21:49",
  "gun": 0,
- "bekleyen": 1,
+ "bekleyen": 2,
  "gunler": [
   {
    "gun": "2026-11-25",
    "saat": "18:17",
    "n": 0,
    "puanlanan": 271,
+   "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
+  },
+  {
+   "gun": "2026-11-26",
+   "saat": "17:17",
+   "n": 0,
+   "puanlanan": 234,
    "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
   }
  ],
