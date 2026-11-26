@@ -3057,7 +3057,7 @@
    ]
   }
  },
- "guncelleme": "26.11 13:21",
+ "guncelleme": "26.11 15:21",
  "gun_sayisi": 7,
  "nedenler": {
   "CATES": {
@@ -5534,6 +5534,16 @@
    {
     "ts": 1750764504,
     "baslik": "KAP: DURDO  [ ] DURAN DOĞAN BASIM VE AMBALAJ SANAYİ A.Ş.  Genel Kurul İşlemlerine İlişkin Bildirim"
+   }
+  ],
+  "2026-11-26|KPEKS": [
+   {
+    "ts": 1792727976,
+    "baslik": "BIST Temettü ve BIST Temettü 25 endeksleri dönemsel değişiklikleri açıklandı"
+   },
+   {
+    "ts": 1787300768,
+    "baslik": "Borsa İstanbul’da gong Kapeks Kimya Sanayi için çaldı"
    }
   ]
  },
