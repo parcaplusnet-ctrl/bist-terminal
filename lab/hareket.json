@@ -3057,7 +3057,7 @@
    ]
   }
  },
- "guncelleme": "27.11 16:21",
+ "guncelleme": "27.11 17:20",
  "gun_sayisi": 7,
  "nedenler": {
   "CATES": {
@@ -5864,6 +5864,56 @@
    {
     "ts": 1789709284,
     "baslik": "Günlük Bülten (A1 Capital)"
+   }
+  ],
+  "2026-11-27|SEGYO": [
+   {
+    "ts": 1795406416,
+    "baslik": "VBTS kapsamında OZATD.E, IEYHO.E, SEGYO.E, ALKLC.E ve TEHOL.E payları seans başından seans sonuna kadar açığa satışa ve kredili işlemlere ko"
+   },
+   {
+    "ts": 1793805515,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2026 9 aylık net zararı 717,247,736 TL (Önceki: 527,023,276 TL net zarar)"
+   },
+   {
+    "ts": 1793805383,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 9 aylık net zararı 696,467,212 TL (Önceki: 518,654,438 TL net zarar)"
+   },
+   {
+    "ts": 1785946512,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2026 6 aylık net zararı 626,505,596 TL (Önceki: 369,041,477 TL net zarar)"
+   },
+   {
+    "ts": 1785946440,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 6 aylık net zararı 607,242,248 TL (Önceki: 363,030,449 TL net zarar)"
+   },
+   {
+    "ts": 1778167109,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2026 3 aylık net zararı 393,754,363 TL (Önceki: 214,689,002 TL net zarar)"
+   },
+   {
+    "ts": 1778167015,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı solo bilanço 2026 3 aylık net zararı 389,538,263 TL (Önceki: 213,471,348 TL net zarar)"
+   },
+   {
+    "ts": 1774411120,
+    "baslik": "Şeker GYO: Şirketimizin Şeker Kule'de sahip olduğu 26 adet bağımsız bölüm üzerinde bulunan ipotekler kaldırılmıştır"
+   },
+   {
+    "ts": 1771521571,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı konsolide bilanço 2025 Yıllık net zararı 1,274,228,342 TL (Önceki: 457,737,370 TL net zarar)"
+   },
+   {
+    "ts": 1771521423,
+    "baslik": "SEGYO Şeker Gayrimenkul Yatırım Ortaklığı solo bilanço 2025 Yıllık net zararı 1,256,683,804 TL (Önceki: 457,537,482 TL net zarar)"
+   },
+   {
+    "ts": 1771387175,
+    "baslik": "VBTS kapsamında SEGYO.E payları seans başından 17 Mart seans sonuna kadar açığa satışa ve kredili işlemlere konu edilemeyecek"
+   },
+   {
+    "ts": 1769782395,
+    "baslik": "KAP: SEGYO  [ ] ŞEKER GAYRİMENKUL YATIRIM ORTAKLIĞI A.Ş.  Özel Durum Açıklaması (Genel)"
    }
   ]
  },
