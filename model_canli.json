@@ -1,15 +1,53 @@
 {
  "surum": "model_canli",
- "zaman": "26.11 21:49",
- "gun": 0,
+ "zaman": "27.11 21:49",
+ "gun": 1,
  "bekleyen": 2,
  "gunler": [
   {
    "gun": "2026-11-25",
    "saat": "18:17",
-   "n": 0,
+   "n": 271,
    "puanlanan": 271,
-   "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
+   "rejim": "dusus",
+   "en iyi 1": {
+    "n": 1,
+    "hedef": 0.0,
+    "stop": 0.0,
+    "ort": 3.31
+   },
+   "en iyi 3": {
+    "n": 3,
+    "hedef": 0.0,
+    "stop": 66.7,
+    "ort": -2.37
+   },
+   "en iyi 5": {
+    "n": 5,
+    "hedef": 20.0,
+    "stop": 60.0,
+    "ort": -2.31
+   },
+   "en iyi 10": {
+    "n": 10,
+    "hedef": 30.0,
+    "stop": 60.0,
+    "ort": -1.34
+   },
+   "alt yarı": {
+    "n": 136,
+    "hedef": 34.6,
+    "stop": 21.3,
+    "ort": 1.39
+   },
+   "tümü": {
+    "n": 271,
+    "hedef": 35.1,
+    "stop": 29.5,
+    "ort": 1.0
+   },
+   "ic": -0.092,
+   "durum": "sonuçlandı"
   },
   {
    "gun": "2026-11-26",
@@ -17,16 +55,85 @@
    "n": 0,
    "puanlanan": 234,
    "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
+  },
+  {
+   "gun": "2026-11-27",
+   "saat": "18:17",
+   "n": 0,
+   "puanlanan": 285,
+   "durum": "sonuç bekliyor (sonraki 2 işlem günü tamamlanmadı)"
   }
  ],
- "bantlar": {},
- "rejim": {},
+ "bantlar": {
+  "en iyi 1": {
+   "gun": 1,
+   "n": 1,
+   "hedef": 0.0,
+   "stop": 0.0,
+   "ort": 3.31,
+   "gun_ort": 3.31,
+   "gun_sd": null
+  },
+  "en iyi 3": {
+   "gun": 1,
+   "n": 3,
+   "hedef": 0.0,
+   "stop": 66.7,
+   "ort": -2.37,
+   "gun_ort": -2.37,
+   "gun_sd": null
+  },
+  "en iyi 5": {
+   "gun": 1,
+   "n": 5,
+   "hedef": 20.0,
+   "stop": 60.0,
+   "ort": -2.31,
+   "gun_ort": -2.31,
+   "gun_sd": null
+  },
+  "en iyi 10": {
+   "gun": 1,
+   "n": 10,
+   "hedef": 30.0,
+   "stop": 60.0,
+   "ort": -1.34,
+   "gun_ort": -1.34,
+   "gun_sd": null
+  },
+  "alt yarı": {
+   "gun": 1,
+   "n": 136,
+   "hedef": 34.6,
+   "stop": 21.3,
+   "ort": 1.39,
+   "gun_ort": 1.39,
+   "gun_sd": null
+  },
+  "tümü": {
+   "gun": 1,
+   "n": 271,
+   "hedef": 35.1,
+   "stop": 29.5,
+   "ort": 1.0,
+   "gun_ort": 1.0,
+   "gun_sd": null
+  }
+ },
+ "rejim": {
+  "dusus": {
+   "gun": 1,
+   "en_iyi3": -2.37,
+   "tumu": 1.0,
+   "fark": -3.37
+  }
+ },
  "en_iyi3_fark": null,
  "ic": {
-  "gun": 0,
-  "ort": null,
+  "gun": 1,
+  "ort": -0.092,
   "t": null
  },
- "ozet": "henüz sonuçlanan gün yok",
+ "ozet": "1 günün modeli sonuçlandı",
  "yontem": "Her günün son taramasındaki model skoru, sonraki 2 işlem günü +%5 hedef / -%3 stop (aynı gün ikisi de görünürse stop, komisyon dahil) ile sınanır. Skor sonuçtan önce arşive yazıldığı için ileri testtir. Hisseler aynı gün birbirine bağlı olduğundan istatistik gün bazındadır; birkaç gün anlamlı sonuç vermez."
 }
