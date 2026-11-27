@@ -3498,7 +3498,7 @@
    ]
   }
  },
- "guncelleme": "27.11 18:20",
+ "guncelleme": "27.11 21:46",
  "gun_sayisi": 8,
  "nedenler": {
   "CATES": {
@@ -3566,7 +3566,7 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "ARMGD": {
-   "tarih": "2026-11-24",
+   "tarih": "2026-11-27",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "KLNMA": {
@@ -3586,7 +3586,7 @@
    "neden": "olumlu: 24.11 ARD Grup yapay zekâ destekli güvenlik cihazları ile toplu taşıma dijital dönüşüm projesi işi duyurusu (20.11 siber güvenlik sözleşmesi de var)"
   },
   "KATMR": {
-   "tarih": "2026-11-25",
+   "tarih": "2026-11-27",
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "TGSAS": {
@@ -3626,8 +3626,8 @@
    "neden": "haber yok: teknik ya da spekülatif hareket"
   },
   "BFREN": {
-   "tarih": "2026-11-25",
-   "neden": "haber yok: teknik ya da spekülatif hareket"
+   "tarih": "2026-11-27",
+   "neden": "haber yok: gün içi belirgin haber yok (son haber 16.11 bilanço, 9 ay net kâr artışı)"
   },
   "ATEKS": {
    "tarih": "2026-11-25",
@@ -3652,6 +3652,74 @@
   "ENDAE": {
    "tarih": "2026-11-25",
    "neden": "olumlu: Romanya'da üç proje devralımı için doğrudan yabancı yatırım komisyonu onayı alındı"
+  },
+  "OTTO": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "NETGL": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "A1CAP": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "AZTEK": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "BSOKE": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ESCAR": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "IMASM": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "ELITE": {
+   "tarih": "2026-11-27",
+   "neden": "haber yok: teknik ya da spekülatif hareket"
+  },
+  "IEYHO": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 23.11 VBTS tedbiri (açığa satış ve kredili işlem yasağı)"
+  },
+  "KARCL": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 25.11 VBTS tedbiri, SPK suç duyurusu gündemi"
+  },
+  "OZATD": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 23.11 VBTS tedbiri"
+  },
+  "MANAS": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 19.11 VBTS tedbiri"
+  },
+  "DSTKF": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 23.11 kayyum atandı, VBTS tedbiri"
+  },
+  "LYDYE": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 24.11 VBTS tedbiri"
+  },
+  "ALKLC": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 23.11 VBTS tedbiri ve iddialara açıklama"
+  },
+  "DOGUB": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 25.11 VBTS emir paketi tedbiri"
+  },
+  "SVGYO": {
+   "tarih": "2026-11-27",
+   "neden": "olumsuz: 26.11 SPK piyasa dolandırıcılığı suç duyurusu, 25.11 VBTS tedbiri"
   }
  },
  "surpriz_haber": {
@@ -6325,77 +6393,81 @@
  "karar_gunlugu": [],
  "oto_seri": {
   "1 ay=≥+%25": {
-   "gun": "2026-11-26",
-   "sayi": 3
+   "gun": "2026-11-27",
+   "sayi": 4
   },
   "modül Hacim=+|modül RSI-MACD=+": {
-   "gun": "2026-11-26",
-   "sayi": 3
+   "gun": "2026-11-27",
+   "sayi": 4
   },
   "modül Hacim=+|teknik 1S=Al": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "gün=<-%3": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "gün=<-%3|hafta=<-%5": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "1 ay zirve=zirveye >%15|gün=<-%3": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "gün=<-%3|puan=<3": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "3P kriter=0-3|gün=<-%3": {
-   "gun": "2026-11-26",
-   "sayi": 3
-  },
-  "1 ay=≥+%25|günlük trend=aşağı": {
-   "gun": "2026-11-26",
-   "sayi": 2
+   "gun": "2026-11-27",
+   "sayi": 4
   },
   "1 ay=+%10/+%25|günlük trend=aşağı": {
-   "gun": "2026-11-26",
-   "sayi": 2
-  },
-  "1 ay=+%10/+%25|teknik G=Sat": {
-   "gun": "2026-11-26",
-   "sayi": 2
-  },
-  "1 ay=+%10/+%25|puan=<3": {
-   "gun": "2026-11-26",
-   "sayi": 2
+   "gun": "2026-11-27",
+   "sayi": 3
   },
   "1 ay=+%10/+%25|teknik 4S=Sat": {
-   "gun": "2026-11-26",
-   "sayi": 2
-  },
-  "1 ay=+%10/+%25|3P kriter=0-3": {
-   "gun": "2026-11-26",
-   "sayi": 2
+   "gun": "2026-11-27",
+   "sayi": 3
   },
   "1 ay=+%10/+%25|likidite (günlük ciro)=≥100 mn": {
-   "gun": "2026-11-26",
-   "sayi": 2
+   "gun": "2026-11-27",
+   "sayi": 3
   },
-  "1 ay=+%10/+%25|teknik 1S=Sat": {
-   "gun": "2026-11-26",
-   "sayi": 2
+  "1 ay=≥+%25|modül Dip=0": {
+   "gun": "2026-11-27",
+   "sayi": 1
   },
-  "likidite (günlük ciro)=<5 mn": {
-   "gun": "2026-11-26",
-   "sayi": 2
+  "modül Hacim=+|teknik 4S=Al": {
+   "gun": "2026-11-27",
+   "sayi": 1
   },
-  "likidite (günlük ciro)=<5 mn|teknik 4S=Güçlü Sat": {
-   "gun": "2026-11-26",
-   "sayi": 2
+  "RSI G=55-65|teknik 4S=Al": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "modül Hacim=+|puan=3-5": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "modül Dip=+|modül Hacim=+": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=≥100 mn|modül RSI-MACD=+": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=≥100 mn|teknik 1S=Al": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "1 ay=+%10/+%25|modül Hacim=+": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye >%15|1 ay=+%10/+%25": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "RSI 1S=50-70|modül Trend=0": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "likidite (günlük ciro)=<5 mn|teknik 1S=Güçlü Sat": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "1 ay zirve=zirveye >%15|gün=+%1/+%3": {
+   "gun": "2026-11-27",
+   "sayi": 1
+  },
+  "hacim=0,5-0,8x|teknik G=Sat": {
+   "gun": "2026-11-27",
+   "sayi": 1
   }
  },
- "oto_son": "26.11 21:46"
+ "oto_son": "27.11 21:46"
 }
