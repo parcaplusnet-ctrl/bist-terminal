@@ -264,5 +264,47 @@
    "ornek": 19278,
    "durum": "test"
   }
+ },
+ {
+  "id": "mfi_dip_obv_artan",
+  "aciklama": "MFI 30 altı (para çıkışı) ama OBV 10 günde artıyor (gizli alım) ve gün yeşil",
+  "kod": "ek(\"mfi_dip_obv_artan\", \"MFI 30 altı (para çıkışı) ama OBV 10 günde artıyor (gizli alım) ve gün yeşil\", lambda d: (d.mfi < 30) & (d.obv_10 > 0) & (d.govde > 0))",
+  "tarih": "27.11",
+  "ilk_olcum": {
+   "oran": 0.2474,
+   "stop": 0.3869,
+   "fark": 0.015,
+   "getiri_fark": 0.089,
+   "ornek": 2910,
+   "durum": "test"
+  }
+ },
+ {
+  "id": "sessiz_trend_devam",
+  "aciklama": "EMA20 ve EMA50 üstünde, RSI 50-65, oynaklık %3 altı, hacim ortalamanın altı (sakin yükseliş trendi)",
+  "kod": "ek(\"sessiz_trend_devam\", \"EMA20 ve EMA50 üstünde, RSI 50-65, oynaklık %3 altı, hacim ortalamanın altı (sakin yükseliş trendi)\", lambda d: (d.ema20 < 0) & (d.ema50 < 0) & (d.rsi >= 50) & (d.rsi < 65) & (d.atrp < 0.03) & (d.rv < 1))",
+  "tarih": "27.11",
+  "ilk_olcum": {
+   "oran": 0.1322,
+   "stop": 0.2206,
+   "fark": -0.1002,
+   "getiri_fark": 0.012,
+   "ornek": 7385,
+   "durum": "elendi"
+  }
+ },
+ {
+  "id": "genis_satis_guclu_kapanis",
+  "aciklama": "Hisselerin %35'ten azı yükselirken hisse alt banda yakın ama gün yükseğine yakın kapattı",
+  "kod": "ek(\"genis_satis_guclu_kapanis\", \"Hisselerin %35'ten azı yükselirken hisse alt banda yakın ama gün yükseğine yakın kapattı\", lambda d: (d.genislik < 0.35) & (d.pctb < 0.2) & (d.clpos >= 0.6), kaynak=\"P\")",
+  "tarih": "27.11",
+  "ilk_olcum": {
+   "oran": 0.2156,
+   "stop": 0.4419,
+   "fark": -0.0168,
+   "getiri_fark": -0.235,
+   "ornek": 4897,
+   "durum": "test"
+  }
  }
 ]

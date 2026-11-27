@@ -40,5 +40,11 @@
   "tarih": "26.11",
   "bulgu": "Özellik laboratuvarı: tur 16, 597 özellik ölçüldü, 8 tanesi kullanılıyor (hepsi genis_alim + gün +%5/+%9,5 kombinasyonları), 28 elendi, 17 az örnek. Bugün hiçbir hisse kullanılan özellikleri taşımadı (lab puanı 0 hisse). Durum değişimi yok.",
   "degisim": "2 yeni özellik önerildi: sakin_hacim_patlamasi (+%5 oranı %25,6, stop %27,5, fark +2,4 puan, 1430 örnek, test) ve lider_sektor_geri_kalan (+%5 oranı %26,8, stop %40,1, fark +3,6 puan, 19278 örnek, test)."
+ },
+ {
+  "no": 8,
+  "tarih": "27.11",
+  "bulgu": "Özellik laboratuvarı: tur 18, 616 özellik ölçüldü (558 test, 8 kullanılıyor, 29 elendi, 21 az örnek); kullanılıyor olanlar hep \"geniş alım günü\" kombinasyonları, bugün hiçbir hisse bunları taşımadığı için lab puanı üreten hisse yok.",
+  "degisiklik": "3 yeni özellik önerildi: mfi_dip_obv_artan (fark +1,5, ileri test +15,0, durum test), sessiz_trend_devam (fark -10,0, elendi), genis_satis_guclu_kapanis (fark -1,7, getiri farkı -0,235, test)."
  }
 ]
